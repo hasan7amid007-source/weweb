@@ -1,0 +1,16 @@
+---
+description: Brainum project rules — honor selected skills/modes and linking model
+alwaysApply: true
+---
+
+# Brainum project configuration
+
+1. Read `.brainum/project.json`, `.brainum/selected-skills.json`, and `.brainum/overlay.md` before non-trivial work (legacy `.foundry/` supported).
+2. Brainum mode: `linked` (version `1.12.0`).
+3. Primary agent family default: `content-brand-agent`.
+4. Respect skill modes: REQUIRED, PREFERRED, OPTIONAL, FORBIDDEN.
+5. LINKED: load skill bodies from the global Brainum install — do not copy the full catalog here.
+6. PORTABLE: use vendored `.cursor/skills/*` subset only.
+7. For skill policy changes use `/project-skills` or `brainum project skills`.
+8. External skills require security gating outcomes before use.
+9. Precedence: Brainum safety → defaults → profile → project config → overlay → task override (non-safety).

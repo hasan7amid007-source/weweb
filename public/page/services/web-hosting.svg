@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-labelledby="title">
+  <title id="title">Web Hosting</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#120e1c"/>
+      <stop offset="55%" stop-color="#1a0f3a"/>
+      <stop offset="100%" stop-color="#3b00c5"/>
+    </linearGradient>
+    <linearGradient id="rack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a2340"/>
+      <stop offset="100%" stop-color="#15101f"/>
+    </linearGradient>
+    <linearGradient id="tealG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4fd0dc"/>
+      <stop offset="100%" stop-color="#1b8a94"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="800" fill="url(#bg)"/>
+  <rect width="1280" height="800" fill="url(#grid)"/>
+  <circle cx="1080" cy="120" r="220" fill="#5b2ef5" opacity="0.2"/>
+  <circle cx="120" cy="700" r="260" fill="#26a4b0" opacity="0.12"/>
+  <circle cx="980" cy="680" r="120" fill="#ff018f" opacity="0.1"/>
+
+  <!-- Left status panel -->
+  <g filter="url(#soft)" transform="translate(88 150)">
+    <rect width="300" height="500" rx="22" fill="url(#rack)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+    <rect width="300" height="64" rx="22" fill="#1d1730"/>
+    <rect y="44" width="300" height="20" fill="#1d1730"/>
+    <text x="28" y="40" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="18" font-weight="600">Cluster Status</text>
+    <g transform="translate(28 96)">
+      <rect width="244" height="72" rx="12" fill="rgba(38,164,176,0.12)" stroke="#26a4b0" stroke-width="1.2"/>
+      <circle cx="28" cy="36" r="8" fill="#26a4b0"/>
+      <text x="52" y="28" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="600">Edge Node EU</text>
+      <text x="52" y="50" fill="rgba(255,255,255,0.55)" font-family="Poppins, Arial, sans-serif" font-size="13">Latency 18ms · Healthy</text>
+    </g>
+    <g transform="translate(28 188)">
+      <rect width="244" height="72" rx="12" fill="rgba(91,46,245,0.12)" stroke="#5b2ef5" stroke-width="1.2"/>
+      <circle cx="28" cy="36" r="8" fill="#5b2ef5"/>
+      <text x="52" y="28" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="600">CDN Layer</text>
+      <text x="52" y="50" fill="rgba(255,255,255,0.55)" font-family="Poppins, Arial, sans-serif" font-size="13">42 PoPs · Synced</text>
+    </g>
+    <g transform="translate(28 280)">
+      <rect width="244" height="72" rx="12" fill="rgba(248,233,55,0.1)" stroke="#f8e937" stroke-width="1.2"/>
+      <circle cx="28" cy="36" r="8" fill="#f8e937"/>
+      <text x="52" y="28" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="600">Backups</text>
+      <text x="52" y="50" fill="rgba(255,255,255,0.55)" font-family="Poppins, Arial, sans-serif" font-size="13">Daily · Encrypted</text>
+    </g>
+    <g transform="translate(28 380)">
+      <text x="0" y="0" fill="rgba(255,255,255,0.45)" font-family="Poppins, Arial, sans-serif" font-size="12" letter-spacing="1.5">CPU LOAD</text>
+      <rect y="16" width="244" height="10" rx="5" fill="rgba(255,255,255,0.08)"/>
+      <rect y="16" width="168" height="10" rx="5" fill="url(#tealG)"/>
+      <text x="0" y="54" fill="rgba(255,255,255,0.45)" font-family="Poppins, Arial, sans-serif" font-size="12" letter-spacing="1.5">STORAGE</text>
+      <rect y="70" width="244" height="10" rx="5" fill="rgba(255,255,255,0.08)"/>
+      <rect y="70" width="112" height="10" rx="5" fill="#ff018f"/>
+    </g>
+  </g>
+
+  <!-- Main server rack -->
+  <g filter="url(#soft)" transform="translate(440 130)">
+    <rect width="520" height="540" rx="24" fill="url(#rack)" stroke="rgba(255,255,255,0.14)" stroke-width="1.5"/>
+    <rect width="520" height="540" rx="24" fill="url(#glass)"/>
+    <text x="36" y="48" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="20" font-weight="600">Dedicated Rack · HH-01</text>
+    <text x="360" y="48" fill="#26a4b0" font-family="Poppins, Arial, sans-serif" font-size="14" font-weight="600">LIVE</text>
+
+    <!-- Blade 1 -->
+    <g transform="translate(28 76)">
+      <rect width="464" height="100" rx="14" fill="#1a1528" stroke="rgba(38,164,176,0.55)" stroke-width="1.5"/>
+      <circle cx="34" cy="50" r="7" fill="#26a4b0"/>
+      <circle cx="58" cy="50" r="7" fill="#f8e937"/>
+      <circle cx="82" cy="50" r="7" fill="rgba(255,255,255,0.2)"/>
+      <rect x="112" y="28" width="220" height="12" rx="6" fill="rgba(255,255,255,0.2)"/>
+      <rect x="112" y="52" width="160" height="8" rx="4" fill="rgba(255,255,255,0.1)"/>
+      <rect x="112" y="70" width="190" height="8" rx="4" fill="rgba(255,255,255,0.08)"/>
+      <g transform="translate(360 22)">
+        <rect width="78" height="56" rx="10" fill="rgba(38,164,176,0.15)"/>
+        <path d="M18 38V18h8v20M34 38V12h8v26M50 38V22h8v16" stroke="#26a4b0" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </g>
+    <!-- Blade 2 -->
+    <g transform="translate(28 196)">
+      <rect width="464" height="100" rx="14" fill="#1a1528" stroke="rgba(91,46,245,0.55)" stroke-width="1.5"/>
+      <circle cx="34" cy="50" r="7" fill="#5b2ef5"/>
+      <circle cx="58" cy="50" r="7" fill="#26a4b0"/>
+      <circle cx="82" cy="50" r="7" fill="#f8e937"/>
+      <rect x="112" y="28" width="240" height="12" rx="6" fill="rgba(255,255,255,0.2)"/>
+      <rect x="112" y="52" width="140" height="8" rx="4" fill="rgba(255,255,255,0.1)"/>
+      <rect x="112" y="70" width="200" height="8" rx="4" fill="rgba(255,255,255,0.08)"/>
+      <g transform="translate(360 22)">
+        <rect width="78" height="56" rx="10" fill="rgba(91,46,245,0.15)"/>
+        <path d="M18 38V18h8v20M34 38V12h8v26M50 38V22h8v16" stroke="#5b2ef5" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </g>
+    <!-- Blade 3 -->
+    <g transform="translate(28 316)">
+      <rect width="464" height="100" rx="14" fill="#1a1528" stroke="rgba(255,1,143,0.5)" stroke-width="1.5"/>
+      <circle cx="34" cy="50" r="7" fill="#ff018f"/>
+      <circle cx="58" cy="50" r="7" fill="#26a4b0"/>
+      <circle cx="82" cy="50" r="7" fill="rgba(255,255,255,0.2)"/>
+      <rect x="112" y="28" width="200" height="12" rx="6" fill="rgba(255,255,255,0.2)"/>
+      <rect x="112" y="52" width="170" height="8" rx="4" fill="rgba(255,255,255,0.1)"/>
+      <rect x="112" y="70" width="150" height="8" rx="4" fill="rgba(255,255,255,0.08)"/>
+      <g transform="translate(360 22)">
+        <rect width="78" height="56" rx="10" fill="rgba(255,1,143,0.12)"/>
+        <path d="M18 38V18h8v20M34 38V12h8v26M50 38V22h8v16" stroke="#ff018f" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </g>
+    <!-- Footer metrics -->
+    <g transform="translate(28 450)">
+      <rect width="140" height="58" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)"/>
+      <text x="70" y="26" text-anchor="middle" fill="#f8e937" font-family="Poppins, Arial, sans-serif" font-size="20" font-weight="700">99.9%</text>
+      <text x="70" y="46" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Poppins, Arial, sans-serif" font-size="11">UPTIME</text>
+      <rect x="156" width="140" height="58" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)"/>
+      <text x="226" y="26" text-anchor="middle" fill="#26a4b0" font-family="Poppins, Arial, sans-serif" font-size="20" font-weight="700">SSD</text>
+      <text x="226" y="46" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Poppins, Arial, sans-serif" font-size="11">NVMe RAID</text>
+      <rect x="312" width="152" height="58" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)"/>
+      <text x="388" y="26" text-anchor="middle" fill="#ff018f" font-family="Poppins, Arial, sans-serif" font-size="20" font-weight="700">24/7</text>
+      <text x="388" y="46" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Poppins, Arial, sans-serif" font-size="11">SUPPORT</text>
+    </g>
+  </g>
+
+  <!-- Cloud node -->
+  <g filter="url(#soft)" transform="translate(1000 220)">
+    <rect width="220" height="280" rx="20" fill="#171023" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+    <ellipse cx="110" cy="90" rx="78" ry="36" fill="url(#tealG)" opacity="0.95"/>
+    <ellipse cx="70" cy="98" rx="42" ry="24" fill="#4fd0dc" opacity="0.7"/>
+    <ellipse cx="150" cy="98" rx="48" ry="26" fill="#1b8a94" opacity="0.8"/>
+    <text x="110" y="170" text-anchor="middle" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="16" font-weight="600">Cloud Sync</text>
+    <text x="110" y="198" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-family="Poppins, Arial, sans-serif" font-size="13">Auto-scale ready</text>
+    <rect x="40" y="224" width="140" height="28" rx="14" fill="#5b2ef5"/>
+    <text x="110" y="243" text-anchor="middle" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="12" font-weight="600">Deploy</text>
+  </g>
+</svg>

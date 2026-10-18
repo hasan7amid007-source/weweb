@@ -1,0 +1,162 @@
+{
+  "currentIdentity": {
+    "kind": "unknown",
+    "known": false,
+    "value": null
+  },
+  "kind": "verification.truth-state",
+  "projectId": null,
+  "records": [
+    {
+      "artifactIdentity": {
+        "identitySource": "none",
+        "kind": "unknown",
+        "known": false,
+        "reason": "no_identity_source_declared",
+        "value": null
+      },
+      "check": "typecheck",
+      "environment": "local",
+      "evidence": {
+        "evidenceClass": "MACHINE",
+        "provider": null,
+        "refs": [],
+        "source": "other"
+      },
+      "evidenceRefs": [],
+      "freshness": "UNKNOWN",
+      "kind": "verification.truth-record",
+      "layer": "SOURCE",
+      "metadata": {
+        "availability": "UNSUPPORTED",
+        "providerSuccess": false,
+        "providerSuccessNeVerifiedResult": true,
+        "requestId": "verify-1792354693845-typecheck",
+        "stage": "resolve",
+        "verificationRequestId": "verification-loop"
+      },
+      "provider": null,
+      "ran": false,
+      "scope": "PROJECT",
+      "status": "UNKNOWN",
+      "subject": "C:\\Users\\H2\\Desktop\\WEWEB",
+      "subjectType": "PROJECT",
+      "timestamp": "2026-10-18T20:18:13.936Z",
+      "verificationId": "vtruth-106d7c28b7d5e3f1d58a0bd2"
+    },
+    {
+      "artifactIdentity": {
+        "identitySource": "none",
+        "kind": "unknown",
+        "known": false,
+        "reason": "no_identity_source_declared",
+        "value": null
+      },
+      "check": "lint",
+      "environment": "local",
+      "evidence": {
+        "evidenceClass": "MACHINE",
+        "provider": null,
+        "refs": [],
+        "source": "other"
+      },
+      "evidenceRefs": [],
+      "freshness": "UNKNOWN",
+      "kind": "verification.truth-record",
+      "layer": "SOURCE",
+      "metadata": {
+        "availability": "UNSUPPORTED",
+        "providerSuccess": false,
+        "providerSuccessNeVerifiedResult": true,
+        "requestId": "verify-1792354693845-lint",
+        "stage": "resolve",
+        "verificationRequestId": "verification-loop"
+      },
+      "provider": null,
+      "ran": false,
+      "scope": "PROJECT",
+      "status": "UNKNOWN",
+      "subject": "C:\\Users\\H2\\Desktop\\WEWEB",
+      "subjectType": "PROJECT",
+      "timestamp": "2026-10-18T20:18:14.346Z",
+      "verificationId": "vtruth-6e2bbe3a292ff1423fcbe94f"
+    },
+    {
+      "artifactIdentity": {
+        "identitySource": "none",
+        "kind": "unknown",
+        "known": false,
+        "reason": "no_identity_source_declared",
+        "value": null
+      },
+      "check": "unit-test",
+      "environment": "local",
+      "evidence": {
+        "evidenceClass": "MACHINE",
+        "provider": null,
+        "refs": [],
+        "source": "test_runner"
+      },
+      "evidenceRefs": [],
+      "freshness": "UNKNOWN",
+      "kind": "verification.truth-record",
+      "layer": "SOURCE",
+      "metadata": {
+        "availability": "UNSUPPORTED",
+        "providerSuccess": false,
+        "providerSuccessNeVerifiedResult": true,
+        "requestId": "verify-1792354693845-unit-test",
+        "stage": "resolve",
+        "verificationRequestId": "verification-loop"
+      },
+      "provider": null,
+      "ran": false,
+      "scope": "PROJECT",
+      "status": "UNKNOWN",
+      "subject": "C:\\Users\\H2\\Desktop\\WEWEB",
+      "subjectType": "PROJECT",
+      "timestamp": "2026-10-18T20:18:14.608Z",
+      "verificationId": "vtruth-60968b353af0f6e33fe21b85"
+    },
+    {
+      "artifactIdentity": {
+        "identitySource": "none",
+        "kind": "unknown",
+        "known": false,
+        "reason": "no_identity_source_declared",
+        "value": null
+      },
+      "check": "build",
+      "environment": "local",
+      "evidence": {
+        "evidenceClass": "MACHINE",
+        "provider": null,
+        "refs": [],
+        "source": "other"
+      },
+      "evidenceRefs": [],
+      "freshness": "UNKNOWN",
+      "kind": "verification.truth-record",
+      "layer": "BUILD",
+      "metadata": {
+        "availability": "UNSUPPORTED",
+        "providerSuccess": false,
+        "providerSuccessNeVerifiedResult": true,
+        "requestId": "verify-1792354693845-build",
+        "stage": "resolve",
+        "verificationRequestId": "verification-loop"
+      },
+      "provider": null,
+      "ran": false,
+      "scope": "PROJECT",
+      "status": "UNKNOWN",
+      "subject": "C:\\Users\\H2\\Desktop\\WEWEB",
+      "subjectType": "PROJECT",
+      "timestamp": "2026-10-18T20:18:14.717Z",
+      "verificationId": "vtruth-834430ccca3d0d303217a337"
+    }
+  ],
+  "revision": 4,
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-10-18T20:18:14.763Z"
+}

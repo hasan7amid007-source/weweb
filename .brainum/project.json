@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "brainum": {
+    "mode": "linked",
+    "version": "1.12.0",
+    "resolve": "global",
+    "rootHint": "../agent-foundry"
+  },
+  "foundry": {
+    "mode": "linked",
+    "version": "1.12.0",
+    "resolve": "global",
+    "rootHint": "../agent-foundry",
+    "deprecatedAlias": true
+  },
+  "project": {
+    "name": "WEWEB",
+    "description": "Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device mockups, parallax slider hero, responsive landing, later custom branding",
+    "projectType": "marketing-website"
+  },
+  "identity": {
+    "programmer": "Hasan Hamid",
+    "developer": "Hasan Hamid",
+    "owner": "Hasan Hamid"
+  },
+  "profile": "marketing-website",
+  "skillSelection": {
+    "mode": "recommended"
+  },
+  "name": "WEWEB",
+  "description": "Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device mockups, parallax slider hero, responsive landing, later custom branding",
+  "projectType": "marketing-website",
+  "selectionMode": "RECOMMENDED",
+  "profileId": "marketing-website",
+  "packs": [
+    "engineering-core",
+    "seo-growth",
+    "content-marketing",
+    "analytics",
+    "security"
+  ],
+  "agents": {
+    "primary": "content-brand-agent",
+    "supporting": [
+      "frontend-product-agent",
+      "growth-seo-agent",
+      "analytics-experimentation-agent"
+    ]
+  },
+  "reviews": [
+    "seo-review",
+    "ux-review",
+    "performance-review"
+  ],
+  "verification": [
+    "seo-verification",
+    "webapp-testing",
+    "accessibility-verification"
+  ],
+  "humanGates": [],
+  "intent": {
+    "publicWebsite": true,
+    "authenticatedApp": false,
+    "mobile": false,
+    "ai": false,
+    "integrations": false,
+    "securitySensitive": false,
+    "apiOnly": false,
+    "internal": false,
+    "billing": false,
+    "existingProject": false
+  },
+  "createdAt": "2026-10-18T09:32:16.694Z",
+  "brainumVersion": "1.12.0",
+  "brainumRelativeHint": "../agent-foundry",
+  "foundryRelativeHint": "../agent-foundry"
+}

@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-labelledby="title">
+  <title id="title">Web Development</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#120e1c"/>
+      <stop offset="55%" stop-color="#1a0f3a"/>
+      <stop offset="100%" stop-color="#3b00c5"/>
+    </linearGradient>
+    <linearGradient id="editor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1c152c"/>
+      <stop offset="100%" stop-color="#100d18"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="20" stdDeviation="24" flood-color="#000" flood-opacity="0.48"/>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="800" fill="url(#bg)"/>
+  <rect width="1280" height="800" fill="url(#grid)"/>
+  <circle cx="140" cy="680" r="200" fill="#26a4b0" opacity="0.12"/>
+  <circle cx="1160" cy="100" r="180" fill="#ff018f" opacity="0.1"/>
+
+  <!-- IDE window -->
+  <g filter="url(#soft)" transform="translate(80 110)">
+    <rect width="760" height="580" rx="18" fill="url(#editor)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+    <!-- Title bar -->
+    <rect width="760" height="48" rx="18" fill="#221833"/>
+    <rect y="30" width="760" height="18" fill="#221833"/>
+    <circle cx="28" cy="24" r="7" fill="#ff018f"/>
+    <circle cx="50" cy="24" r="7" fill="#f8e937"/>
+    <circle cx="72" cy="24" r="7" fill="#26a4b0"/>
+    <rect x="110" y="14" width="420" height="20" rx="10" fill="rgba(255,255,255,0.06)"/>
+    <text x="128" y="28" fill="rgba(255,255,255,0.45)" font-family="ui-monospace, Consolas, monospace" font-size="12">bditec / web-app · main</text>
+
+    <!-- Sidebar -->
+    <rect y="48" width="180" height="532" fill="#161022"/>
+    <text x="24" y="84" fill="rgba(255,255,255,0.4)" font-family="Poppins, Arial, sans-serif" font-size="11" letter-spacing="1.5">EXPLORER</text>
+    <text x="24" y="118" fill="#26a4b0" font-family="ui-monospace, Consolas, monospace" font-size="13">▾ src</text>
+    <text x="40" y="148" fill="#ff018f" font-family="ui-monospace, Consolas, monospace" font-size="13">● App.tsx</text>
+    <text x="40" y="176" fill="rgba(255,255,255,0.55)" font-family="ui-monospace, Consolas, monospace" font-size="13">○ api.ts</text>
+    <text x="40" y="204" fill="rgba(255,255,255,0.55)" font-family="ui-monospace, Consolas, monospace" font-size="13">○ styles.css</text>
+    <text x="24" y="244" fill="rgba(255,255,255,0.55)" font-family="ui-monospace, Consolas, monospace" font-size="13">▾ public</text>
+    <text x="40" y="274" fill="rgba(255,255,255,0.4)" font-family="ui-monospace, Consolas, monospace" font-size="13">○ favicon.svg</text>
+    <rect x="12" y="300" width="156" height="72" rx="10" fill="rgba(91,46,245,0.2)" stroke="#5b2ef5" stroke-width="1"/>
+    <text x="28" y="332" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="12" font-weight="600">Git clean</text>
+    <text x="28" y="354" fill="rgba(255,255,255,0.5)" font-family="Poppins, Arial, sans-serif" font-size="11">3 files changed</text>
+
+    <!-- Code area -->
+    <g font-family="ui-monospace, Consolas, monospace" font-size="14">
+      <text x="210" y="92" fill="rgba(255,255,255,0.25)">1</text>
+      <text x="240" y="92" fill="#5b2ef5">import</text>
+      <text x="310" y="92" fill="#fff"> { createApp } </text>
+      <text x="450" y="92" fill="#5b2ef5">from</text>
+      <text x="500" y="92" fill="#f8e937"> 'vue'</text>
+
+      <text x="210" y="122" fill="rgba(255,255,255,0.25)">2</text>
+      <text x="240" y="122" fill="#5b2ef5">import</text>
+      <text x="310" y="122" fill="#fff"> App </text>
+      <text x="360" y="122" fill="#5b2ef5">from</text>
+      <text x="410" y="122" fill="#f8e937"> './App.tsx'</text>
+
+      <text x="210" y="152" fill="rgba(255,255,255,0.25)">3</text>
+
+      <text x="210" y="182" fill="rgba(255,255,255,0.25)">4</text>
+      <text x="240" y="182" fill="#26a4b0">const</text>
+      <text x="300" y="182" fill="#fff"> app = createApp(App)</text>
+
+      <text x="210" y="212" fill="rgba(255,255,255,0.25)">5</text>
+      <text x="240" y="212" fill="#fff">app.mount(</text>
+      <text x="340" y="212" fill="#f8e937">'#app'</text>
+      <text x="400" y="212" fill="#fff">)</text>
+
+      <text x="210" y="242" fill="rgba(255,255,255,0.25)">6</text>
+
+      <text x="210" y="272" fill="rgba(255,255,255,0.25)">7</text>
+      <text x="240" y="272" fill="rgba(255,255,255,0.35)">// scalable frontend + API</text>
+
+      <text x="210" y="302" fill="rgba(255,255,255,0.25)">8</text>
+      <text x="240" y="302" fill="#ff018f">export</text>
+      <text x="320" y="302" fill="#26a4b0"> async function</text>
+      <text x="480" y="302" fill="#f8e937"> load()</text>
+      <text x="545" y="302" fill="#fff"> {</text>
+
+      <text x="210" y="332" fill="rgba(255,255,255,0.25)">9</text>
+      <text x="260" y="332" fill="#26a4b0">const</text>
+      <text x="320" y="332" fill="#fff"> data = </text>
+      <text x="400" y="332" fill="#5b2ef5">await</text>
+      <text x="470" y="332" fill="#fff"> api.get()</text>
+
+      <text x="210" y="362" fill="rgba(255,255,255,0.25)">10</text>
+      <text x="260" y="362" fill="#ff018f">return</text>
+      <text x="340" y="362" fill="#fff"> data</text>
+
+      <text x="210" y="392" fill="rgba(255,255,255,0.25)">11</text>
+      <text x="240" y="392" fill="#fff">}</text>
+    </g>
+
+    <!-- Preview strip -->
+    <g transform="translate(210 430)">
+      <rect width="510" height="120" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+      <text x="20" y="32" fill="rgba(255,255,255,0.45)" font-family="Poppins, Arial, sans-serif" font-size="12" letter-spacing="1">PREVIEW</text>
+      <rect x="20" y="48" width="140" height="48" rx="10" fill="#5b2ef5"/>
+      <rect x="176" y="48" width="140" height="48" rx="10" fill="#26a4b0"/>
+      <rect x="332" y="48" width="140" height="48" rx="10" fill="#ff018f"/>
+    </g>
+  </g>
+
+  <!-- Right preview browser -->
+  <g filter="url(#soft)" transform="translate(880 150)">
+    <rect width="340" height="500" rx="16" fill="#171023" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+    <rect width="340" height="44" rx="16" fill="#221833"/>
+    <rect y="28" width="340" height="16" fill="#221833"/>
+    <circle cx="22" cy="22" r="5" fill="#ff018f"/>
+    <circle cx="38" cy="22" r="5" fill="#f8e937"/>
+    <circle cx="54" cy="22" r="5" fill="#26a4b0"/>
+    <rect x="78" y="12" width="220" height="20" rx="10" fill="rgba(255,255,255,0.06)"/>
+    <text x="96" y="26" fill="rgba(255,255,255,0.4)" font-family="Poppins, Arial, sans-serif" font-size="11">bditec.com</text>
+
+    <rect x="24" y="70" width="292" height="36" rx="8" fill="rgba(255,255,255,0.06)"/>
+    <rect x="24" y="124" width="180" height="18" rx="6" fill="#fff" opacity="0.85"/>
+    <rect x="24" y="156" width="240" height="10" rx="5" fill="rgba(255,255,255,0.25)"/>
+    <rect x="24" y="180" width="200" height="10" rx="5" fill="rgba(255,255,255,0.15)"/>
+    <rect x="24" y="220" width="292" height="120" rx="12" fill="rgba(91,46,245,0.35)" stroke="#5b2ef5"/>
+    <rect x="24" y="360" width="136" height="90" rx="12" fill="rgba(38,164,176,0.3)" stroke="#26a4b0"/>
+    <rect x="180" y="360" width="136" height="90" rx="12" fill="rgba(255,1,143,0.25)" stroke="#ff018f"/>
+    <rect x="24" y="470" width="292" height="14" rx="7" fill="#f8e937" opacity="0.85"/>
+  </g>
+</svg>

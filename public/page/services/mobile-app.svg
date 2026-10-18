@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-labelledby="title">
+  <title id="title">Mobile App</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#120e1c"/>
+      <stop offset="55%" stop-color="#1a0f3a"/>
+      <stop offset="100%" stop-color="#3b00c5"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6a3dff"/>
+      <stop offset="100%" stop-color="#1f8f9a"/>
+    </linearGradient>
+    <linearGradient id="screen2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a1f45"/>
+      <stop offset="100%" stop-color="#171023"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="800" fill="url(#bg)"/>
+  <rect width="1280" height="800" fill="url(#grid)"/>
+  <circle cx="180" cy="140" r="180" fill="#ff018f" opacity="0.14"/>
+  <circle cx="1120" cy="660" r="220" fill="#26a4b0" opacity="0.12"/>
+
+  <!-- Left phone (secondary) -->
+  <g filter="url(#soft)" transform="translate(250 130) rotate(-11 155 290)">
+    <rect width="310" height="580" rx="42" fill="#0c0914" stroke="rgba(255,255,255,0.18)" stroke-width="2.5"/>
+    <rect x="14" y="14" width="282" height="552" rx="34" fill="url(#screen2)"/>
+    <rect x="118" y="28" width="74" height="8" rx="4" fill="rgba(255,255,255,0.2)"/>
+    <rect x="36" y="70" width="238" height="36" rx="10" fill="rgba(255,255,255,0.06)"/>
+    <rect x="36" y="128" width="110" height="90" rx="14" fill="rgba(91,46,245,0.45)"/>
+    <rect x="160" y="128" width="114" height="90" rx="14" fill="rgba(38,164,176,0.4)"/>
+    <rect x="36" y="240" width="238" height="14" rx="7" fill="rgba(255,255,255,0.18)"/>
+    <rect x="36" y="268" width="180" height="10" rx="5" fill="rgba(255,255,255,0.1)"/>
+    <rect x="36" y="310" width="238" height="120" rx="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.08)"/>
+    <path d="M60 390 L110 350 L150 370 L200 320 L250 345" fill="none" stroke="#ff018f" stroke-width="3" stroke-linecap="round"/>
+    <rect x="36" y="460" width="238" height="44" rx="12" fill="#5b2ef5"/>
+  </g>
+
+  <!-- Main phone -->
+  <g filter="url(#soft)" transform="translate(520 80)">
+    <rect width="340" height="640" rx="46" fill="#08060f" stroke="rgba(255,255,255,0.28)" stroke-width="2.5"/>
+    <rect x="14" y="14" width="312" height="612" rx="38" fill="url(#screen)"/>
+    <!-- Dynamic island -->
+    <rect x="122" y="28" width="96" height="22" rx="11" fill="#0c0914"/>
+    <circle cx="198" cy="39" r="4" fill="#26a4b0"/>
+    <!-- Status -->
+    <text x="40" y="78" fill="rgba(255,255,255,0.85)" font-family="Poppins, Arial, sans-serif" font-size="13" font-weight="600">9:41</text>
+    <!-- Header -->
+    <text x="40" y="120" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="26" font-weight="700">Dashboard</text>
+    <text x="40" y="148" fill="rgba(255,255,255,0.7)" font-family="Poppins, Arial, sans-serif" font-size="14">Welcome back, team</text>
+    <!-- Profile chip -->
+    <circle cx="290" cy="128" r="22" fill="#fff" opacity="0.92"/>
+    <circle cx="290" cy="122" r="9" fill="#5b2ef5"/>
+    <ellipse cx="290" cy="140" rx="12" ry="8" fill="#5b2ef5"/>
+    <!-- Stats row -->
+    <g transform="translate(32 176)">
+      <rect width="128" height="88" rx="16" fill="rgba(0,0,0,0.22)"/>
+      <text x="18" y="32" fill="rgba(255,255,255,0.6)" font-family="Poppins, Arial, sans-serif" font-size="12">Users</text>
+      <text x="18" y="62" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="24" font-weight="700">12.4k</text>
+      <rect x="148" width="128" height="88" rx="16" fill="rgba(0,0,0,0.22)"/>
+      <text x="166" y="32" fill="rgba(255,255,255,0.6)" font-family="Poppins, Arial, sans-serif" font-size="12">Revenue</text>
+      <text x="166" y="62" fill="#f8e937" font-family="Poppins, Arial, sans-serif" font-size="24" font-weight="700">€48k</text>
+    </g>
+    <!-- Feature list -->
+    <g transform="translate(32 290)">
+      <rect width="276" height="64" rx="14" fill="rgba(255,255,255,0.12)"/>
+      <rect x="16" y="14" width="36" height="36" rx="10" fill="#ff018f"/>
+      <text x="68" y="30" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="14" font-weight="600">Push Notifications</text>
+      <text x="68" y="50" fill="rgba(255,255,255,0.55)" font-family="Poppins, Arial, sans-serif" font-size="12">iOS &amp; Android</text>
+      <rect y="80" width="276" height="64" rx="14" fill="rgba(255,255,255,0.1)"/>
+      <rect x="16" y="94" width="36" height="36" rx="10" fill="#26a4b0"/>
+      <text x="68" y="110" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="14" font-weight="600">Offline Mode</text>
+      <text x="68" y="130" fill="rgba(255,255,255,0.55)" font-family="Poppins, Arial, sans-serif" font-size="12">Sync when online</text>
+      <rect y="160" width="276" height="64" rx="14" fill="rgba(255,255,255,0.1)"/>
+      <rect x="16" y="174" width="36" height="36" rx="10" fill="#f8e937"/>
+      <text x="68" y="190" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="14" font-weight="600">Secure Auth</text>
+      <text x="68" y="210" fill="rgba(255,255,255,0.55)" font-family="Poppins, Arial, sans-serif" font-size="12">Biometrics ready</text>
+    </g>
+    <!-- CTA -->
+    <rect x="32" y="540" width="276" height="48" rx="14" fill="#ff018f"/>
+    <text x="170" y="570" text-anchor="middle" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="700">Open App</text>
+    <rect x="130" y="604" width="80" height="6" rx="3" fill="rgba(255,255,255,0.35)"/>
+  </g>
+
+  <!-- Floating UI chips -->
+  <g filter="url(#soft)" transform="translate(920 180)">
+    <rect width="240" height="86" rx="16" fill="#171023" stroke="rgba(255,255,255,0.12)"/>
+    <circle cx="44" cy="43" r="20" fill="#26a4b0"/>
+    <path d="M36 43l6 6 12-14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="78" y="38" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="600">Build passed</text>
+    <text x="78" y="60" fill="rgba(255,255,255,0.5)" font-family="Poppins, Arial, sans-serif" font-size="12">v2.4.1 · TestFlight</text>
+  </g>
+  <g filter="url(#soft)" transform="translate(960 300)">
+    <rect width="220" height="86" rx="16" fill="#171023" stroke="rgba(255,255,255,0.12)"/>
+    <text x="24" y="38" fill="#f8e937" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="600">Cross-platform</text>
+    <text x="24" y="60" fill="rgba(255,255,255,0.5)" font-family="Poppins, Arial, sans-serif" font-size="12">React Native · Flutter</text>
+  </g>
+  <g filter="url(#soft)" transform="translate(940 420)">
+    <rect width="240" height="86" rx="16" fill="#ff018f"/>
+    <text x="24" y="38" fill="#fff" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="600">App Store ready</text>
+    <text x="24" y="60" fill="rgba(255,255,255,0.8)" font-family="Poppins, Arial, sans-serif" font-size="12">UX · QA · Release</text>
+  </g>
+</svg>

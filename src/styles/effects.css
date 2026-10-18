@@ -1,0 +1,195 @@
+/* Effects ported from Slider Revolution Tech Showcase template page */
+
+/* Animated gradient text — matches SR .animatetxtgradient em[data-text]
+   Always animates (same as Slider Revolution template; decorative shimmer). */
+.animatetxtgradient em {
+  font-style: normal;
+  position: relative;
+  display: inline-block;
+  background-image: linear-gradient(
+    45deg,
+    #5c24ff,
+    #ff2399,
+    #fd6e44,
+    #ff2399,
+    #5c24ff
+  );
+  background-size: 400% 100%;
+  background-position: 0% 0%;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: move-bg 5s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes move-bg {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 400% 0%;
+  }
+}
+
+/* Serif highlight on strong */
+.serifhighlight strong {
+  font-family: 'Bodoni Moda', 'Times New Roman', serif;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 0.7;
+  font-size: 1.15em;
+}
+
+html[dir='rtl'] .serifhighlight strong {
+  font-family: 'Noto Sans Arabic', serif;
+  font-style: normal;
+}
+
+/* Pulsing badge */
+.addpulse {
+  box-shadow: #ff2399 0 0 0 0;
+  animation: pulseanim 1.5s ease infinite;
+}
+
+@keyframes pulseanim {
+  0% {
+    box-shadow: rgba(255, 35, 153, 0.7) 0 0 0 0;
+  }
+  70% {
+    box-shadow: rgba(255, 255, 255, 0) 0 0 0 6px;
+  }
+  100% {
+    box-shadow: rgba(255, 255, 255, 0) 0 0 0 0;
+  }
+}
+
+/* Glowing button border */
+.glowborder,
+.staticglowborder {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+}
+
+.glowborder a,
+.glowborder button,
+.staticglowborder a,
+.staticglowborder button {
+  position: relative;
+}
+
+.glowborder a::before,
+.glowborder a::after,
+.glowborder button::before,
+.glowborder button::after,
+.staticglowborder a::before,
+.staticglowborder a::after,
+.staticglowborder button::before,
+.staticglowborder button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(
+    90deg,
+    #fd6e44,
+    #ff2399,
+    #5c24ff,
+    #3951ff,
+    #24ffe9,
+    #3951ff,
+    #5c24ff,
+    #ff2399,
+    #fd6e44
+  );
+  background-size: 400%;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  animation: glowanim 10s linear infinite;
+  border-radius: 2px;
+  transition:
+    top 0.3s,
+    left 0.3s,
+    width 0.3s,
+    height 0.3s,
+    opacity 0.3s;
+  overflow: hidden;
+}
+
+.glowborder a::after,
+.glowborder button::after {
+  filter: blur(20px);
+  opacity: 0;
+}
+
+.glowborder a:hover::before,
+.glowborder button:hover::before {
+  top: -5px;
+  left: -5px;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+}
+
+.glowborder a:hover::after,
+.glowborder button:hover::after {
+  opacity: 0.5;
+  top: 10px;
+}
+
+.staticglowborder a::after,
+.staticglowborder button::after {
+  filter: blur(30px);
+  opacity: 0.5;
+  top: 10px;
+}
+
+@keyframes glowanim {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 300% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Zoom-in entrance */
+.animated.zoomIn {
+  animation: zoomInFx 0.8s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.animated.zoomIn.delay-100ms {
+  animation-delay: 100ms;
+}
+
+@keyframes zoomInFx {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addpulse,
+  .glowborder a::before,
+  .glowborder a::after,
+  .glowborder button::before,
+  .glowborder button::after,
+  .staticglowborder a::before,
+  .staticglowborder a::after,
+  .staticglowborder button::before,
+  .staticglowborder button::after,
+  .animated.zoomIn {
+    animation: none !important;
+  }
+  /* Note: gradient text motion stays on — matches SR template behavior */
+}

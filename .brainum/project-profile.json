@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "profile": {
+    "id": "marketing-website",
+    "title": "Marketing website",
+    "description": "Public marketing/content site with SEO and brand focus."
+  },
+  "packs": [
+    "engineering-core",
+    "seo-growth",
+    "content-marketing",
+    "analytics",
+    "security"
+  ],
+  "explanations": {
+    "profile": "Profile 'marketing-website' chosen because intent type is marketing-website.",
+    "packs": [
+      {
+        "id": "engineering-core",
+        "why": "Architecture, change impact, and evidence discipline."
+      },
+      {
+        "id": "seo-growth",
+        "why": "Public-surface SEO and conversion growth (never authenticated app indexing)."
+      },
+      {
+        "id": "content-marketing",
+        "why": "Brand, landing copy, and content systems."
+      },
+      {
+        "id": "analytics",
+        "why": "Event taxonomy, KPIs, funnels, and experiment readiness."
+      },
+      {
+        "id": "security",
+        "why": "Threat modeling, authz, secrets, and OWASP hygiene."
+      }
+    ],
+    "agents": {
+      "primary": "Primary agent 'content-brand-agent' owns bootstrap architecture / coordination for this profile.",
+      "supporting": [
+        "frontend-product-agent covers a supporting lane for this profile.",
+        "growth-seo-agent covers a supporting lane for this profile.",
+        "analytics-experimentation-agent covers a supporting lane for this profile."
+      ]
+    },
+    "intent": [
+      "Inferred project type: marketing-website.",
+      "Public website / marketing signals present.",
+      "AI not enabled (no AI signals)."
+    ],
+    "seo": "SEO skills included because a public website is in scope.",
+    "ai": "AI not enabled — no AI signals in intent."
+  }
+}

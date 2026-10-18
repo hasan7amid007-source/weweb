@@ -1,0 +1,256 @@
+/* Triangles Animation — adapted from Lindsay Grizzard (CodePen qRZZmX)
+   via https://freefrontend.com/css-triangle-backgrounds/#triangles-animation-l
+   Primary motion is JS-driven (initTriangleMotion); CSS is fallback. */
+.site-hero .tri-hero-svg {
+  position: absolute;
+  left: -8%;
+  top: -12%;
+  width: auto;
+  height: 130%;
+  min-width: 155%;
+  max-width: none;
+  display: block;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  will-change: transform;
+  animation: tri-mesh-breathe 12s ease-in-out infinite alternate;
+}
+
+/* JS owns group transforms — kill CSS on those nodes to avoid fighting */
+.site-hero .tri-hero-svg.is-js-motion,
+.site-hero .tri-hero-svg.is-js-motion #base0,
+.site-hero .tri-hero-svg.is-js-motion #base1,
+.site-hero .tri-hero-svg.is-js-motion #base2,
+.site-hero .tri-hero-svg.is-js-motion #tri-drift-far,
+.site-hero .tri-hero-svg.is-js-motion #tri-drift-near,
+.site-hero .tri-hero-svg.is-js-motion #tri-drift-top,
+.site-hero .tri-hero-svg.is-js-motion #tri-drift-bottom {
+  animation: none !important;
+}
+
+.site-hero .tri-hero-svg path,
+.site-hero .tri-hero-svg polygon,
+.site-hero .tri-hero-svg polyline,
+.site-hero .tri-hero-svg [class^='st'] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Main cluster — this is the big left mass; must move or hero looks static */
+.site-hero #base0 {
+  animation: tri-base-float-a 10s ease-in-out infinite alternate;
+  transform-origin: 30% 55%;
+  transform-box: view-box;
+}
+
+.site-hero #base1 {
+  animation: tri-base-float-b 14s ease-in-out infinite alternate;
+  transform-origin: 35% 50%;
+  transform-box: view-box;
+}
+
+.site-hero #base2 {
+  animation: tri-base-float-c 11s ease-in-out infinite alternate;
+  transform-origin: 40% 45%;
+  transform-box: view-box;
+}
+
+/* Drift layers */
+.site-hero #tri-drift-far {
+  animation: tri-layer-drift-a 9s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-near {
+  animation: tri-layer-drift-b 7s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-top {
+  animation: tri-layer-drift-c 8s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-bottom {
+  animation: tri-layer-drift-d 10s ease-in-out infinite alternate;
+}
+
+/* Individual shards */
+.site-hero #tri-drift-top .st48,
+.site-hero #tri-drift-top .st52,
+.site-hero #tri-drift-top .st50 {
+  animation: tri-drift-right-up 9s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-top .st33,
+.site-hero #tri-drift-top .st51 {
+  animation: tri-drift-right-up 8s ease-in-out infinite alternate;
+  animation-delay: -2s;
+}
+
+.site-hero #tri-drift-top .st49,
+.site-hero #tri-drift-top .st42 {
+  animation: tri-drift-right-up 7s ease-in-out infinite alternate;
+  animation-delay: -4s;
+}
+
+.site-hero #tri-drift-bottom .st11,
+.site-hero #tri-drift-bottom .st56 {
+  animation: tri-drift-down 8s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-bottom .st53,
+.site-hero #tri-drift-bottom .st54 {
+  animation: tri-drift-right 12s ease-in-out infinite alternate;
+  animation-delay: -1.5s;
+}
+
+.site-hero #tri-drift-bottom .st55,
+.site-hero #tri-drift-bottom .st36,
+.site-hero #tri-drift-bottom .st33 {
+  animation: tri-drift-down 9s ease-in-out infinite alternate;
+  animation-delay: -3s;
+}
+
+.site-hero #tri-drift-bottom .st51 {
+  animation: tri-drift-down-right 8s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-near .st40,
+.site-hero #tri-drift-near .st43,
+.site-hero #tri-drift-near .st33 {
+  animation: tri-drift-right 8s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-near .st41,
+.site-hero #tri-drift-near .st44 {
+  animation: tri-drift-right-up 7s ease-in-out infinite alternate;
+  animation-delay: -2.5s;
+}
+
+.site-hero #tri-drift-near .st42,
+.site-hero #tri-drift-near .st45,
+.site-hero #tri-drift-near .st46,
+.site-hero #tri-drift-near .st55,
+.site-hero #tri-drift-near .st47 {
+  animation: tri-drift-right 10s ease-in-out infinite alternate;
+  animation-delay: -5s;
+}
+
+.site-hero #tri-drift-far .st54,
+.site-hero #tri-drift-far .st58,
+.site-hero #tri-drift-far .st59 {
+  animation: tri-drift-right 6s ease-in-out infinite alternate;
+}
+
+.site-hero #tri-drift-far .st57,
+.site-hero #tri-drift-far .st51 {
+  animation: tri-drift-right-up 5s ease-in-out infinite alternate;
+  animation-delay: -1s;
+}
+
+@keyframes tri-mesh-breathe {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(-4%, 2%, 0) scale(1.06) rotate(0.6deg);
+  }
+}
+
+@keyframes tri-base-float-a {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(36px, -28px) rotate(1.2deg);
+  }
+}
+
+@keyframes tri-base-float-b {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(-42px, 22px) rotate(-1deg);
+  }
+}
+
+@keyframes tri-base-float-c {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(28px, 34px) rotate(0.8deg);
+  }
+}
+
+@keyframes tri-layer-drift-a {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(70px, -48px);
+  }
+}
+
+@keyframes tri-layer-drift-b {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-80px, 56px);
+  }
+}
+
+@keyframes tri-layer-drift-c {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(90px, -30px);
+  }
+}
+
+@keyframes tri-layer-drift-d {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-50px, 70px);
+  }
+}
+
+@keyframes tri-drift-right {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(220px, -18px);
+  }
+}
+
+@keyframes tri-drift-right-up {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(200px, -120px);
+  }
+}
+
+@keyframes tri-drift-down {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(170px, 140px);
+  }
+}
+
+@keyframes tri-drift-down-right {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(150px, 90px);
+  }
+}

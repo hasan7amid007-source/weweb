@@ -4,6 +4,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/shop", "destination": "/shop.html" },
     { "source": "/services/(.*)", "destination": "/services/$1" }
   ],
   "headers": [

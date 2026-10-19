@@ -1,6 +1,7 @@
 import type { Messages } from './types'
 import { bookingShopEn } from './booking-shop'
 import { servicePagesEn } from './service-pages-en'
+import { shopPageEn } from './shop-page'
 
 export const en: Messages = {
   meta: {
@@ -9,7 +10,14 @@ export const en: Messages = {
       'BDITEC delivers tailored technology solutions, web development and digital marketing to help your business succeed online.',
   },
   brandHome: 'BDITEC home',
-  nav: { about: 'About', services: 'Services', faq: 'FAQ', contact: 'Order', process: 'Process' },
+  nav: {
+    about: 'About',
+    services: 'Services',
+    shop: 'Shop',
+    faq: 'FAQ',
+    contact: 'Order',
+    process: 'Process',
+  },
   navAria: 'Main navigation',
   langAria: 'Language',
   menuOpen: 'Open menu',
@@ -163,6 +171,7 @@ export const en: Messages = {
     demoPayNote: 'Demo mode: no real charge. Add Stripe Payment Links in .env for live payments.',
   },
   bookingShop: bookingShopEn,
+  shopPage: shopPageEn,
   serviceUi: {
     back: 'All services',
     highlights: 'What you get',

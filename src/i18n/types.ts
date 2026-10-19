@@ -1,4 +1,5 @@
 import type { BookingShopCopy } from './booking-shop'
+import type { ShopPageCopy } from './shop-page'
 
 export type Locale = 'de' | 'en' | 'ar'
 
@@ -37,7 +38,14 @@ export type ServicePageCopy = {
 export type Messages = {
   meta: { title: string; description: string }
   brandHome: string
-  nav: { about: string; services: string; faq: string; contact: string; process: string }
+  nav: {
+    about: string
+    services: string
+    shop: string
+    faq: string
+    contact: string
+    process: string
+  }
   navAria: string
   langAria: string
   menuOpen: string
@@ -174,6 +182,7 @@ export type Messages = {
     demoPayNote: string
   }
   bookingShop: BookingShopCopy
+  shopPage: ShopPageCopy
   serviceUi: {
     back: string
     highlights: string

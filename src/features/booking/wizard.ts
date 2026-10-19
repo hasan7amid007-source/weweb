@@ -352,6 +352,7 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
   }
 
   const wanted = params.get('service')
+  const wantedPackage = params.get('package') || ''
   if (wanted && isBookingServiceKey(wanted)) {
     const radio = form.querySelector<HTMLInputElement>(`input[name="service"][value="${wanted}"]`)
     if (radio) radio.checked = true
@@ -388,6 +389,30 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
   }
 
   if (!paid) trackEvent('booking_step_view', { step: 1, locale })
+
+  // Deep-link from /shop: ?service=&package=#booking → jump to options with package preselected
+  if (!paid && wanted && isBookingServiceKey(wanted)) {
+    const serviceRadio = form.querySelector<HTMLInputElement>(
+      `input[name="service"][value="${wanted}"]`,
+    )
+    if (serviceRadio?.checked) {
+      go(2)
+      if (wantedPackage && isPackageId(wanted, wantedPackage)) {
+        const pkgRadio = form.querySelector<HTMLInputElement>(
+          `input[name="package"][value="${wantedPackage}"]`,
+        )
+        if (pkgRadio) {
+          pkgRadio.checked = true
+          pkgRadio.dispatchEvent(new Event('change', { bubbles: true }))
+        }
+      }
+      trackEvent('booking_shop_deeplink', {
+        service: wanted,
+        package: wantedPackage || 'none',
+        locale,
+      })
+    }
+  }
 
   wizard.querySelector('[data-booking-again]')?.addEventListener('click', () => {
     clearDraft()

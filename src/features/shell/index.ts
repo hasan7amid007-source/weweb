@@ -13,14 +13,17 @@ export function langSwitcher(locale: Locale) {
     </div>`
 }
 
-/** Links from home (hash) vs nested service pages */
-export function siteLinks(from: 'home' | 'service') {
+export type ShellFrom = 'home' | 'service' | 'shop'
+
+/** Links from home (hash) vs nested service / shop pages */
+export function siteLinks(from: ShellFrom) {
   const root = from === 'home' ? '' : '/'
   const hash = (id: string) => (from === 'home' ? `#${id}` : `${root}#${id}`)
   return {
     home: from === 'home' ? '#main' : '/',
     about: hash('about'),
     services: hash('services'),
+    shop: from === 'shop' ? '#main' : '/shop.html',
     faq: hash('faq'),
     /** Self-service checkout (service → options → details → pay). Legacy #contact aliases to #booking. */
     contact: hash('booking'),
@@ -29,7 +32,7 @@ export function siteLinks(from: 'home' | 'service') {
   }
 }
 
-export function renderHeader(locale: Locale, from: 'home' | 'service') {
+export function renderHeader(locale: Locale, from: ShellFrom) {
   const m = t(locale)
   const links = siteLinks(from)
   return `
@@ -42,12 +45,13 @@ export function renderHeader(locale: Locale, from: 'home' | 'service') {
     <nav id="site-nav" class="header-nav" aria-label="${m.navAria}">
       <a href="${links.about}">${m.nav.about}</a>
       <a href="${links.services}">${m.nav.services}</a>
+      <a href="${links.shop}">${m.nav.shop}</a>
       <a href="${links.faq}">${m.nav.faq}</a>
       <a href="${links.contact}">${m.nav.contact}</a>
     </nav>
     <div class="header-actions">
       ${langSwitcher(locale)}
-      <a class="header-cta" href="${links.contact}">${m.nav.contact}</a>
+      <a class="header-cta" href="${links.shop}">${m.nav.shop}</a>
       <button type="button" class="nav-toggle" data-nav-toggle
         aria-controls="site-nav" aria-expanded="false" aria-label="${m.menuOpen}">
         <span class="nav-toggle-bars" aria-hidden="true"></span>
@@ -56,7 +60,7 @@ export function renderHeader(locale: Locale, from: 'home' | 'service') {
   </header>`
 }
 
-export function renderFooter(locale: Locale, from: 'home' | 'service') {
+export function renderFooter(locale: Locale, from: ShellFrom) {
   const m = t(locale)
   const links = siteLinks(from)
   return `
@@ -69,6 +73,7 @@ export function renderFooter(locale: Locale, from: 'home' | 'service') {
           <ul>
             <li><a href="${links.about}">${m.nav.about}</a></li>
             <li><a href="${links.services}">${m.nav.services}</a></li>
+            <li><a href="${links.shop}">${m.nav.shop}</a></li>
             <li><a href="${links.process}">${m.nav.process}</a></li>
             <li><a href="${links.contact}">${m.nav.contact}</a></li>
           </ul>

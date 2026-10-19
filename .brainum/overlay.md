@@ -30,6 +30,7 @@ Origin (temporary until `bditec.com` is owned + attached): `https://weweb-weld.v
 - `/services/offline-marketing.html`
 - `/impressum.html`
 - `/datenschutz.html`
+- `/shop.html` (also `/shop` via rewrite)
 - Note: `/#booking` is an in-page checkout hash (not a separate crawl URL)
 
 ## Notes
@@ -56,3 +57,6 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch perf polish (2026-10-19) — trim Google Font weights; home OG/preload; `site.webmanifest` + theme-color
 - [x] Soft-launch hardening (2026-10-19) — security headers in `vercel.json`; branded `404.html`
 - [x] Shop-style order options (2026-10-19) — per-service packages + add-ons; 4-step checkout (service → options → details → pay)
+- [x] Public agency shop Phase 1 (2026-10-19) — `/shop.html` categories/filters/search, package detail, quote mailto, booking deep-links; Stripe live still deferred
+- [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
+- [ ] Phase 2+: Checkout Sessions + webhooks + post-order briefing (needs Stripe account + backend)

@@ -1,9 +1,25 @@
 import type { BookingServiceKey } from './catalog'
 
+/** Public shop taxonomy (agency categories). Maps onto booking services. */
+export const SHOP_CATEGORY_IDS = [
+  'web-design',
+  'digital-marketing',
+  'seo-analytics',
+  'hosting-support',
+  'mobile-app',
+  'offline-marketing',
+] as const
+
+export type ShopCategoryId = (typeof SHOP_CATEGORY_IDS)[number]
+
+export type PurchaseMode = 'checkout' | 'subscription' | 'quote'
+
 export type ShopPackageDef = {
   id: string
   priceEur: number
   recommended?: boolean
+  purchaseMode: PurchaseMode
+  shopCategory: ShopCategoryId
 }
 
 export type ShopAddonDef = {
@@ -16,16 +32,38 @@ export type ServiceShop = {
   addons: ShopAddonDef[]
 }
 
+export type ShopListingItem = {
+  service: BookingServiceKey
+  package: ShopPackageDef
+}
+
 /**
  * Shop configurator per service — packages (required) + add-ons (optional).
  * Prices are online start amounts (EUR), credited toward the project.
+ * purchaseMode / shopCategory drive the public /shop surface.
  */
 export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   general: {
     packages: [
-      { id: 'kickoff', priceEur: 49 },
-      { id: 'briefing', priceEur: 89, recommended: true },
-      { id: 'roadmap', priceEur: 149 },
+      {
+        id: 'kickoff',
+        priceEur: 49,
+        purchaseMode: 'checkout',
+        shopCategory: 'web-design',
+      },
+      {
+        id: 'briefing',
+        priceEur: 89,
+        recommended: true,
+        purchaseMode: 'checkout',
+        shopCategory: 'web-design',
+      },
+      {
+        id: 'roadmap',
+        priceEur: 149,
+        purchaseMode: 'quote',
+        shopCategory: 'web-design',
+      },
     ],
     addons: [
       { id: 'priority', priceEur: 39 },
@@ -34,9 +72,25 @@ export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   },
   'web-hosting': {
     packages: [
-      { id: 'shared', priceEur: 79 },
-      { id: 'vps', priceEur: 129, recommended: true },
-      { id: 'dedicated', priceEur: 249 },
+      {
+        id: 'shared',
+        priceEur: 79,
+        purchaseMode: 'checkout',
+        shopCategory: 'hosting-support',
+      },
+      {
+        id: 'vps',
+        priceEur: 129,
+        recommended: true,
+        purchaseMode: 'subscription',
+        shopCategory: 'hosting-support',
+      },
+      {
+        id: 'dedicated',
+        priceEur: 249,
+        purchaseMode: 'quote',
+        shopCategory: 'hosting-support',
+      },
     ],
     addons: [
       { id: 'migration', priceEur: 49 },
@@ -46,9 +100,25 @@ export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   },
   'mobile-app': {
     packages: [
-      { id: 'mvp', priceEur: 149 },
-      { id: 'launch', priceEur: 299, recommended: true },
-      { id: 'scale', priceEur: 499 },
+      {
+        id: 'mvp',
+        priceEur: 149,
+        purchaseMode: 'checkout',
+        shopCategory: 'mobile-app',
+      },
+      {
+        id: 'launch',
+        priceEur: 299,
+        recommended: true,
+        purchaseMode: 'quote',
+        shopCategory: 'mobile-app',
+      },
+      {
+        id: 'scale',
+        priceEur: 499,
+        purchaseMode: 'quote',
+        shopCategory: 'mobile-app',
+      },
     ],
     addons: [
       { id: 'ui-kit', priceEur: 79 },
@@ -58,9 +128,25 @@ export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   },
   'web-development': {
     packages: [
-      { id: 'landing', priceEur: 99 },
-      { id: 'business', priceEur: 199, recommended: true },
-      { id: 'custom', priceEur: 399 },
+      {
+        id: 'landing',
+        priceEur: 99,
+        purchaseMode: 'checkout',
+        shopCategory: 'web-design',
+      },
+      {
+        id: 'business',
+        priceEur: 199,
+        recommended: true,
+        purchaseMode: 'checkout',
+        shopCategory: 'web-design',
+      },
+      {
+        id: 'custom',
+        priceEur: 399,
+        purchaseMode: 'quote',
+        shopCategory: 'web-design',
+      },
     ],
     addons: [
       { id: 'cms', priceEur: 69 },
@@ -70,9 +156,25 @@ export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   },
   'e-commerce': {
     packages: [
-      { id: 'starter', priceEur: 129 },
-      { id: 'growth', priceEur: 249, recommended: true },
-      { id: 'scale', priceEur: 449 },
+      {
+        id: 'starter',
+        priceEur: 129,
+        purchaseMode: 'checkout',
+        shopCategory: 'web-design',
+      },
+      {
+        id: 'growth',
+        priceEur: 249,
+        recommended: true,
+        purchaseMode: 'checkout',
+        shopCategory: 'web-design',
+      },
+      {
+        id: 'scale',
+        priceEur: 449,
+        purchaseMode: 'quote',
+        shopCategory: 'web-design',
+      },
     ],
     addons: [
       { id: 'payments', priceEur: 59 },
@@ -82,9 +184,25 @@ export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   },
   'digital-marketing': {
     packages: [
-      { id: 'audit', priceEur: 99 },
-      { id: 'campaign', priceEur: 199, recommended: true },
-      { id: 'retainer', priceEur: 349 },
+      {
+        id: 'audit',
+        priceEur: 99,
+        purchaseMode: 'checkout',
+        shopCategory: 'seo-analytics',
+      },
+      {
+        id: 'campaign',
+        priceEur: 199,
+        recommended: true,
+        purchaseMode: 'checkout',
+        shopCategory: 'digital-marketing',
+      },
+      {
+        id: 'retainer',
+        priceEur: 349,
+        purchaseMode: 'subscription',
+        shopCategory: 'digital-marketing',
+      },
     ],
     addons: [
       { id: 'ads-setup', priceEur: 69 },
@@ -94,9 +212,25 @@ export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   },
   'offline-marketing': {
     packages: [
-      { id: 'print', priceEur: 89 },
-      { id: 'campaign', priceEur: 179, recommended: true },
-      { id: 'event', priceEur: 299 },
+      {
+        id: 'print',
+        priceEur: 89,
+        purchaseMode: 'checkout',
+        shopCategory: 'offline-marketing',
+      },
+      {
+        id: 'campaign',
+        priceEur: 179,
+        recommended: true,
+        purchaseMode: 'quote',
+        shopCategory: 'offline-marketing',
+      },
+      {
+        id: 'event',
+        priceEur: 299,
+        purchaseMode: 'quote',
+        shopCategory: 'offline-marketing',
+      },
     ],
     addons: [
       { id: 'design', priceEur: 59 },
@@ -105,6 +239,16 @@ export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
     ],
   },
 }
+
+/** Services listed on the public shop (excludes general consult-only). */
+const SHOP_LISTING_SERVICES: BookingServiceKey[] = [
+  'web-development',
+  'e-commerce',
+  'digital-marketing',
+  'web-hosting',
+  'mobile-app',
+  'offline-marketing',
+]
 
 export function shopFor(service: BookingServiceKey): ServiceShop {
   return SERVICE_SHOP[service]
@@ -136,4 +280,30 @@ export function calcOrderTotalEur(
   const pkg = shop.packages.find((p) => p.id === packageId) ?? shop.packages[0]!
   const addons = shop.addons.filter((a) => addonIds.includes(a.id))
   return pkg.priceEur + addons.reduce((sum, a) => sum + a.priceEur, 0)
+}
+
+export function listShopPackages(): ShopListingItem[] {
+  const items: ShopListingItem[] = []
+  for (const service of SHOP_LISTING_SERVICES) {
+    for (const pkg of SERVICE_SHOP[service].packages) {
+      items.push({ service, package: pkg })
+    }
+  }
+  return items
+}
+
+export function findShopPackage(
+  service: string,
+  packageId: string,
+): ShopListingItem | undefined {
+  return listShopPackages().find((item) => item.service === service && item.package.id === packageId)
+}
+
+export function isShopCategoryId(v: string): v is ShopCategoryId {
+  return (SHOP_CATEGORY_IDS as readonly string[]).includes(v)
+}
+
+export function bookingHref(service: BookingServiceKey, packageId: string): string {
+  const q = new URLSearchParams({ service, package: packageId })
+  return `/?${q.toString()}#booking`
 }

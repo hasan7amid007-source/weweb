@@ -1,6 +1,7 @@
 import type { Messages } from './types'
 import { bookingShopDe } from './booking-shop'
 import { servicePagesDe } from './service-pages-de'
+import { shopPageDe } from './shop-page'
 
 export const de: Messages = {
   meta: {
@@ -9,7 +10,14 @@ export const de: Messages = {
       'BDITEC bietet maßgeschneiderte Technologielösungen, Webentwicklung und digitales Marketing, um Ihr Unternehmen online erfolgreich zu machen.',
   },
   brandHome: 'BDITEC Startseite',
-  nav: { about: 'Über uns', services: 'Services', faq: 'FAQ', contact: 'Bestellen', process: 'Prozess' },
+  nav: {
+    about: 'Über uns',
+    services: 'Services',
+    shop: 'Shop',
+    faq: 'FAQ',
+    contact: 'Bestellen',
+    process: 'Prozess',
+  },
   navAria: 'Hauptnavigation',
   langAria: 'Sprache',
   menuOpen: 'Menü öffnen',
@@ -166,6 +174,7 @@ export const de: Messages = {
     demoPayNote: 'Demo-Modus: keine echte Belastung. Für Live-Zahlungen Stripe Payment Links in .env hinterlegen.',
   },
   bookingShop: bookingShopDe,
+  shopPage: shopPageDe,
   serviceUi: {
     back: 'Alle Services',
     highlights: 'Leistungen im Überblick',

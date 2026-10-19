@@ -1,6 +1,7 @@
 import type { Messages } from './types'
 import { bookingShopAr } from './booking-shop'
 import { servicePagesAr } from './service-pages-ar'
+import { shopPageAr } from './shop-page'
 
 export const ar: Messages = {
   meta: {
@@ -9,7 +10,14 @@ export const ar: Messages = {
       'تقدم BDITEC حلولاً تقنية مخصّصة وتطوير ويب وتسويقاً رقمياً لمساعدة عملك على النجاح عبر الإنترنت.',
   },
   brandHome: 'الصفحة الرئيسية لـ BDITEC',
-  nav: { about: 'من نحن', services: 'الخدمات', faq: 'الأسئلة', contact: 'اطلب', process: 'العملية' },
+  nav: {
+    about: 'من نحن',
+    services: 'الخدمات',
+    shop: 'المتجر',
+    faq: 'الأسئلة',
+    contact: 'اطلب',
+    process: 'العملية',
+  },
   navAria: 'التنقل الرئيسي',
   langAria: 'اللغة',
   menuOpen: 'فتح القائمة',
@@ -161,6 +169,7 @@ export const ar: Messages = {
     demoPayNote: 'وضع تجريبي: بلا خصم حقيقي. للدفع الحي أضيفوا روابط Stripe في .env.',
   },
   bookingShop: bookingShopAr,
+  shopPage: shopPageAr,
   serviceUi: {
     back: 'كل الخدمات',
     highlights: 'ما نقدّمه',

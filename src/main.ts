@@ -193,7 +193,10 @@ function render(locale: Locale) {
             <h3>${m.services.processTitle}</h3>
             <p>${m.services.processBody}</p>
           </div>
-          <span class="glowborder"><a class="ts-btn pink solid" href="#booking">${m.services.cta}</a></span>
+          <div class="dark-footer-ctas">
+            <span class="glowborder"><a class="ts-btn pink solid" href="/shop.html">${m.nav.shop}</a></span>
+            <span class="glowborder"><a class="ts-btn pink solid" href="#booking">${m.services.cta}</a></span>
+          </div>
         </div>
       </div>
     </section>

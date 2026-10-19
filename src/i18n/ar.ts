@@ -147,11 +147,14 @@ export const ar: Messages = {
     summaryTitle: 'طلبكم',
     payCta: 'ادفع الآن',
     paySecure: 'دفع أونلاين آمن (بطاقة / Stripe)',
+    paySecureDemo: 'دفع تجريبي — بلا خصم حقيقي على البطاقة',
     payProcessing: 'جارٍ تجهيز الدفع…',
     payUnavailable: 'الدفع الأونلاين غير مُعدّ بعد. أضيفوا روابط Stripe في .env.',
     successTitle: 'اكتمل الطلب',
     successBody:
       'تم استلام الدفع. التأكيد بالبريد — والمتابعة رقمية بلا موعد شخصي.',
+    successBodyDemo:
+      'تم تسجيل طلب تجريبي (بلا خصم حقيقي). سنتواصل بالبريد — والمتابعة رقمية.',
     successAgain: 'طلب آخر',
     demoPayNote: 'وضع تجريبي: بلا خصم حقيقي. للدفع الحي أضيفوا روابط Stripe في .env.',
   },

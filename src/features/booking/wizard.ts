@@ -2,6 +2,7 @@ import {
   BOOKING_DEPOSITS_EUR,
   BOOKING_STORAGE_KEY,
   formatEur,
+  hasLiveStripeCheckout,
   isBookingServiceKey,
   resolveCheckout,
   type BookingServiceKey,
@@ -87,11 +88,17 @@ function renderSummary(root: HTMLElement, locale: Locale, draft: BookingDraft) {
   `
 }
 
-function showSuccess(root: HTMLElement, show: boolean) {
+function showSuccess(root: HTMLElement, show: boolean, bodyText?: string) {
   const form = root.querySelector<HTMLElement>('[data-booking-flow]')
   const success = root.querySelector<HTMLElement>('[data-booking-success]')
   if (form) form.hidden = show
-  if (success) success.hidden = !show
+  if (success) {
+    success.hidden = !show
+    if (show && bodyText) {
+      const p = success.querySelector('p')
+      if (p) p.textContent = bodyText
+    }
+  }
 }
 
 export function renderBookingFormMarkup(locale: Locale): string {
@@ -179,7 +186,7 @@ export function renderBookingFormMarkup(locale: Locale): string {
 
         <div data-booking-step="3" hidden>
           <div data-booking-summary class="booking-summary"></div>
-          <p class="booking-secure">${m.contact.paySecure}</p>
+          <p class="booking-secure" data-booking-secure>${m.contact.paySecure}</p>
           <p class="booking-hint" data-booking-demo-note hidden>${m.contact.demoPayNote}</p>
           <p class="booking-error" data-booking-error hidden></p>
           <div class="booking-nav">
@@ -204,7 +211,11 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
   const params = new URLSearchParams(location.search)
   const paid = params.get('booking') === 'success' || params.get('paid') === '1'
   if (paid) {
-    showSuccess(wizard, true)
+    showSuccess(
+      wizard,
+      true,
+      hasLiveStripeCheckout() ? undefined : m.contact.successBodyDemo,
+    )
     clearDraft()
   }
 
@@ -226,7 +237,12 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       renderSummary(wizard, locale, draft)
       const checkout = resolveCheckout(draft.service, draft.email)
       const demoNote = wizard.querySelector<HTMLElement>('[data-booking-demo-note]')
+      const secure = wizard.querySelector<HTMLElement>('[data-booking-secure]')
       if (demoNote) demoNote.hidden = checkout.mode !== 'demo'
+      if (secure) {
+        secure.textContent =
+          checkout.mode === 'demo' ? m.contact.paySecureDemo : m.contact.paySecure
+      }
     }
   }
 
@@ -301,7 +317,7 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       const url = new URL(location.href)
       url.searchParams.set('booking', 'success')
       history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}#booking`)
-      showSuccess(wizard, true)
+      showSuccess(wizard, true, m.contact.successBodyDemo)
       if (payBtn) {
         payBtn.disabled = false
         payBtn.textContent = m.contact.payCta

@@ -151,12 +151,15 @@ export const de: Messages = {
     summaryTitle: 'Ihre Bestellung',
     payCta: 'Jetzt bezahlen',
     paySecure: 'Sichere Online-Zahlung (Karte / Stripe)',
+    paySecureDemo: 'Demo-Checkout — keine echte Kartenzahlung',
     payProcessing: 'Zahlung wird vorbereitet…',
     payUnavailable:
       'Online-Zahlung ist noch nicht konfiguriert. Bitte Stripe Payment Links in der .env setzen.',
     successTitle: 'Bestellung abgeschlossen',
     successBody:
       'Zahlung erhalten. Sie bekommen die Bestätigung per E-Mail — der Rest läuft digital, ohne persönlichen Termin.',
+    successBodyDemo:
+      'Demo-Bestellung erfasst (keine echte Belastung). Wir melden uns per E-Mail — der Rest läuft digital.',
     successAgain: 'Weitere Bestellung',
     demoPayNote: 'Demo-Modus: keine echte Belastung. Für Live-Zahlungen Stripe Payment Links in .env hinterlegen.',
   },

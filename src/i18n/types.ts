@@ -161,10 +161,12 @@ export type Messages = {
     summaryTitle: string
     payCta: string
     paySecure: string
+    paySecureDemo: string
     payProcessing: string
     payUnavailable: string
     successTitle: string
     successBody: string
+    successBodyDemo: string
     successAgain: string
     demoPayNote: string
   }

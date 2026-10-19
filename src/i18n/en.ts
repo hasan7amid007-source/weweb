@@ -148,12 +148,15 @@ export const en: Messages = {
     summaryTitle: 'Your order',
     payCta: 'Pay now',
     paySecure: 'Secure online payment (card / Stripe)',
+    paySecureDemo: 'Demo checkout — no real card charge',
     payProcessing: 'Preparing payment…',
     payUnavailable:
       'Online payment is not configured yet. Add Stripe Payment Links in .env.',
     successTitle: 'Order complete',
     successBody:
       'Payment received. Confirmation comes by email — everything continues digitally, with no personal appointment.',
+    successBodyDemo:
+      'Demo order recorded (no real charge). We will follow up by email — everything continues digitally.',
     successAgain: 'Place another order',
     demoPayNote: 'Demo mode: no real charge. Add Stripe Payment Links in .env for live payments.',
   },

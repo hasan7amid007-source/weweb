@@ -40,6 +40,12 @@ export function formatEur(amount: number, locale: string): string {
  * Soft-launch default: demo checkout when links are missing (Stripe skipped).
  * Set VITE_BOOKING_DEMO_PAY=false to force “unavailable” instead of demo.
  */
+export function hasLiveStripeCheckout(): boolean {
+  return (Object.values(ENV_LINK) as (string | undefined)[]).some(
+    (raw) => (raw || '').trim().startsWith('https://'),
+  )
+}
+
 export function resolveCheckout(
   service: BookingServiceKey,
   email: string,

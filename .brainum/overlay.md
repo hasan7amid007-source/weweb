@@ -61,4 +61,4 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Shop Phase 2 scaffold (2026-10-19) — `/api/create-checkout` (server price validation), `/api/stripe-webhook` (signed + duplicate guard), `/order.html` briefing; demo without `STRIPE_SECRET_KEY`
 - [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
 - [ ] Ops: set Vercel `STRIPE_SECRET_KEY` (test) + `STRIPE_WEBHOOK_SECRET`; durable event store for webhooks
-- [ ] Keep `api/_lib/shop-catalog.ts` in sync with `src/features/booking/shop-catalog.ts` when prices change
+- [ ] Keep prices in `api/create-checkout.ts` in sync with `src/features/booking/shop-catalog.ts` when prices change

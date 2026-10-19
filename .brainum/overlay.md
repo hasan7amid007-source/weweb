@@ -48,6 +48,6 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Custom domain — **skipped for now** (2026-10-19, Hasan Hamid): keep Vercel host; owner will pick a new domain later, then attach + flip origin
 - [x] Mobile nav + skip link + `?lang=` (2026-10-19) — Brainum frontend-product / a11y pass
 - [x] Vercel Git auto-deployments enabled for `hh-7/weweb`
+- [x] Responsive QA (mobile 390 / tablet 768) — nav + no page overflow; demo checkout soft-launch default (2026-10-19)
 - [ ] Optional: Google Search Console sitemap submit (`https://weweb-hh-7.vercel.app/sitemap.xml`)
 - [ ] Optional: legal counsel sign-off on Impressum/Datenschutz
-- [ ] Optional: full responsive visual QA (tablet breakpoints) when owner reviews

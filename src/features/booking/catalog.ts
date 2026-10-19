@@ -35,7 +35,11 @@ export function formatEur(amount: number, locale: string): string {
   }).format(amount)
 }
 
-/** Stripe Payment Link when configured; otherwise demo checkout in DEV / VITE_BOOKING_DEMO_PAY. */
+/**
+ * Stripe Payment Link when configured.
+ * Soft-launch default: demo checkout when links are missing (Stripe skipped).
+ * Set VITE_BOOKING_DEMO_PAY=false to force “unavailable” instead of demo.
+ */
 export function resolveCheckout(
   service: BookingServiceKey,
   email: string,
@@ -50,11 +54,10 @@ export function resolveCheckout(
     )
     return { mode: 'stripe', url: url.toString() }
   }
-  const demo =
-    import.meta.env.VITE_BOOKING_DEMO_PAY === 'true' ||
-    import.meta.env.DEV === true ||
-    import.meta.env.MODE === 'development'
-  return demo ? { mode: 'demo' } : { mode: 'unavailable' }
+  if (import.meta.env.VITE_BOOKING_DEMO_PAY === 'false') {
+    return { mode: 'unavailable' }
+  }
+  return { mode: 'demo' }
 }
 
 export const BOOKING_STORAGE_KEY = 'bditec-booking-draft'

@@ -99,6 +99,21 @@ function render(locale: Locale) {
           <p>${o.nextBody}</p>
         </section>
 
+        <section class="shop-quote" id="portal">
+          <h2>${o.portalTitle}</h2>
+          <p class="lead">${o.portalLead}</p>
+          <form class="contact-form shop-quote-form" data-order-portal novalidate>
+            <label class="contact-field">
+              <span>${o.portalEmail} <em>*</em></span>
+              <input type="email" name="email" required autocomplete="email" value="${order.email.replace(/"/g, '&quot;')}" />
+            </label>
+            <p class="booking-error" data-portal-error hidden></p>
+            <span class="glowborder">
+              <button type="submit" class="ts-btn pink solid" data-portal-submit>${o.portalCta}</button>
+            </span>
+          </form>
+        </section>
+
         <section class="shop-quote" id="briefing">
           <h2>${o.briefingTitle}</h2>
           <p class="lead">${o.briefingLead}</p>
@@ -138,6 +153,63 @@ function render(locale: Locale) {
 
   bindLangSwitch(app, locale, (next) => render(next))
   bindNavToggle(app, locale)
+
+  const portalForm = app.querySelector<HTMLFormElement>('[data-order-portal]')
+  portalForm?.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    const data = new FormData(portalForm)
+    const email = String(data.get('email') || '').trim()
+    const err = app.querySelector<HTMLElement>('[data-portal-error]')
+    const submit = app.querySelector<HTMLButtonElement>('[data-portal-submit]')
+    if (!email.includes('@')) {
+      portalForm.reportValidity()
+      return
+    }
+    if (err) {
+      err.hidden = true
+      err.textContent = ''
+    }
+    if (submit) {
+      submit.disabled = true
+      submit.textContent = o.portalProcessing
+    }
+    try {
+      const res = await fetch('/api/create-portal-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          returnUrl: `${window.location.origin}/order.html`,
+        }),
+      })
+      const payload = (await res.json().catch(() => ({}))) as { url?: string; error?: string }
+      if (!res.ok || !payload.url) {
+        if (err) {
+          err.hidden = false
+          err.textContent =
+            res.status === 503
+              ? o.portalUnavailable
+              : payload.error || o.portalError
+        }
+        if (submit) {
+          submit.disabled = false
+          submit.textContent = o.portalCta
+        }
+        return
+      }
+      trackEvent('order_portal_open', { locale, demo: order.demo })
+      window.location.href = payload.url
+    } catch {
+      if (err) {
+        err.hidden = false
+        err.textContent = o.portalError
+      }
+      if (submit) {
+        submit.disabled = false
+        submit.textContent = o.portalCta
+      }
+    }
+  })
 
   const form = app.querySelector<HTMLFormElement>('[data-order-briefing]')
   form?.addEventListener('submit', (event) => {

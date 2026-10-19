@@ -23,6 +23,13 @@ export type OrderPageCopy = {
   shopCta: string
   homeCta: string
   missingStatus: string
+  portalTitle: string
+  portalLead: string
+  portalEmail: string
+  portalCta: string
+  portalProcessing: string
+  portalError: string
+  portalUnavailable: string
 }
 
 export const orderPageDe: OrderPageCopy = {
@@ -54,6 +61,14 @@ export const orderPageDe: OrderPageCopy = {
   shopCta: 'Zurück zum Shop',
   homeCta: 'Zur Startseite',
   missingStatus: 'Keine Bestelldaten in der URL — Sie können trotzdem ein Briefing senden.',
+  portalTitle: 'Abo & Zahlungsmethode',
+  portalLead:
+    'Mit dem Stripe-Kundenportal können Sie Abos kündigen oder die Zahlungsmethode aktualisieren (nach Live-/Test-Checkout).',
+  portalEmail: 'E-Mail der Bestellung',
+  portalCta: 'Kundenportal öffnen',
+  portalProcessing: 'Portal wird vorbereitet…',
+  portalError: 'Portal konnte nicht geöffnet werden.',
+  portalUnavailable: 'Portal erst verfügbar, wenn Stripe (Test) auf dem Server konfiguriert ist.',
 }
 
 export const orderPageEn: OrderPageCopy = {
@@ -83,6 +98,14 @@ export const orderPageEn: OrderPageCopy = {
   shopCta: 'Back to shop',
   homeCta: 'Home',
   missingStatus: 'No order data in the URL — you can still send a briefing.',
+  portalTitle: 'Subscription & payment method',
+  portalLead:
+    'Use the Stripe customer portal to cancel a subscription or update your card (after a live/test checkout).',
+  portalEmail: 'Order email',
+  portalCta: 'Open customer portal',
+  portalProcessing: 'Preparing portal…',
+  portalError: 'Could not open the portal.',
+  portalUnavailable: 'Portal is available once Stripe (test) is configured on the server.',
 }
 
 export const orderPageAr: OrderPageCopy = {
@@ -112,4 +135,12 @@ export const orderPageAr: OrderPageCopy = {
   shopCta: 'العودة للمتجر',
   homeCta: 'الرئيسية',
   missingStatus: 'لا بيانات طلب في الرابط — يمكنك مع ذلك إرسال إحاطة.',
+  portalTitle: 'الاشتراك وطريقة الدفع',
+  portalLead:
+    'استخدم بوابة عملاء Stripe لإلغاء الاشتراك أو تحديث البطاقة (بعد دفع تجريبي/حي).',
+  portalEmail: 'بريد الطلب',
+  portalCta: 'فتح بوابة العملاء',
+  portalProcessing: 'جاري تجهيز البوابة…',
+  portalError: 'تعذر فتح البوابة.',
+  portalUnavailable: 'البوابة متاحة بعد إعداد Stripe (اختبار) على الخادم.',
 }

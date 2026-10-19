@@ -1,8 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 /**
- * Stripe webhook — verifies signature, handles checkout.session.completed.
- * Duplicate events: in-memory set (soft-launch). Production should persist event.id.
+ * Stripe webhook — signature verify + Billing lifecycle events.
+ * Duplicate events: in-memory set (soft-launch). Prefer durable store (KV) for production.
+ *
+ * Subscribe in Dashboard (test then live):
+ * - checkout.session.completed
+ * - invoice.paid
+ * - invoice.payment_failed
+ * - customer.subscription.updated
+ * - customer.subscription.deleted
  */
 
 const processed = new Set<string>()
@@ -50,24 +57,92 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(200).json({ received: true, duplicate: true })
     }
 
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as {
-        id: string
-        amount_total: number | null
-        currency: string | null
-        metadata: Record<string, string> | null
-        customer_email: string | null
-        payment_status: string
+    switch (event.type) {
+      case 'checkout.session.completed': {
+        const session = event.data.object as {
+          id: string
+          mode: string | null
+          amount_total: number | null
+          currency: string | null
+          metadata: Record<string, string> | null
+          customer: string | null
+          customer_email: string | null
+          payment_status: string
+          subscription: string | null
+        }
+        console.info('[stripe-webhook] checkout.session.completed', {
+          id: event.id,
+          sessionId: session.id,
+          mode: session.mode,
+          amount_total: session.amount_total,
+          currency: session.currency,
+          metadata: session.metadata,
+          customer: session.customer,
+          customer_email: session.customer_email,
+          payment_status: session.payment_status,
+          subscription: session.subscription,
+        })
+        break
       }
-      console.info('[stripe-webhook] checkout.session.completed', {
-        id: event.id,
-        sessionId: session.id,
-        amount_total: session.amount_total,
-        currency: session.currency,
-        metadata: session.metadata,
-        customer_email: session.customer_email,
-        payment_status: session.payment_status,
-      })
+      case 'invoice.paid': {
+        const invoice = event.data.object as {
+          id: string
+          customer: string | null
+          subscription: string | null
+          amount_paid: number
+          currency: string
+          status: string
+        }
+        console.info('[stripe-webhook] invoice.paid', {
+          id: event.id,
+          invoiceId: invoice.id,
+          customer: invoice.customer,
+          subscription: invoice.subscription,
+          amount_paid: invoice.amount_paid,
+          currency: invoice.currency,
+          status: invoice.status,
+        })
+        break
+      }
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object as {
+          id: string
+          customer: string | null
+          subscription: string | null
+          amount_due: number
+          currency: string
+          attempt_count: number | null
+        }
+        console.info('[stripe-webhook] invoice.payment_failed', {
+          id: event.id,
+          invoiceId: invoice.id,
+          customer: invoice.customer,
+          subscription: invoice.subscription,
+          amount_due: invoice.amount_due,
+          currency: invoice.currency,
+          attempt_count: invoice.attempt_count,
+        })
+        break
+      }
+      case 'customer.subscription.updated':
+      case 'customer.subscription.deleted': {
+        const sub = event.data.object as {
+          id: string
+          customer: string
+          status: string
+          cancel_at_period_end: boolean
+        }
+        console.info(`[stripe-webhook] ${event.type}`, {
+          id: event.id,
+          subscriptionId: sub.id,
+          customer: sub.customer,
+          status: sub.status,
+          cancel_at_period_end: sub.cancel_at_period_end,
+        })
+        break
+      }
+      default:
+        console.info('[stripe-webhook] unhandled', { id: event.id, type: event.type })
     }
 
     processed.add(event.id)

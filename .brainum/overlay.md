@@ -60,5 +60,7 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Public agency shop Phase 1 (2026-10-19) — `/shop.html` categories/filters/search, package detail, quote mailto, booking deep-links; Stripe live still deferred
 - [x] Shop Phase 2 scaffold (2026-10-19) — `/api/create-checkout` (server price validation), `/api/stripe-webhook` (signed + duplicate guard), `/order.html` briefing; demo without `STRIPE_SECRET_KEY`
 - [x] Shared catalog + session cart (2026-10-19) — `api/shop-catalog.json` single source; shop cart with multi-item checkout via `items[]`
+- [x] Stripe Payments/Billing code path (2026-10-19, Brainum) — Price ID env map, subscription Checkout when all lines recurring, Billing webhooks, Customer Portal API + order page; Connect deferred
 - [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
-- [ ] Ops: set Vercel `STRIPE_SECRET_KEY` (test) + `STRIPE_WEBHOOK_SECRET`; durable event store for webhooks
+- [ ] Ops: add Stripe **test** account to MCP/session; set Vercel `STRIPE_SECRET_KEY` (sk_test) + `STRIPE_WEBHOOK_SECRET`; create EUR Products/Prices; enable Customer Portal; durable event store for webhooks
+- [ ] Connect marketplace — deferred until Payments + Billing are live

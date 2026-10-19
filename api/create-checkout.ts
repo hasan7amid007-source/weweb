@@ -5,8 +5,31 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 /**
  * Checkout with server-side price validation from api/shop-catalog.json.
- * Supports single package (legacy) or items[] for session cart.
+ * Uses Stripe Price IDs when STRIPE_PRICE_* is set; otherwise price_data.
+ * Subscription-only carts (all lines subscription + Price IDs) use mode=subscription.
  */
+
+function packagePriceEnvKey(service: string, packageId: string): string {
+  const s = service.replace(/-/g, '_').toUpperCase()
+  const p = packageId.replace(/-/g, '_').toUpperCase()
+  return `STRIPE_PRICE_${s}_${p}`
+}
+
+function addonPriceEnvKey(service: string, addonId: string): string {
+  const s = service.replace(/-/g, '_').toUpperCase()
+  const a = addonId.replace(/-/g, '_').toUpperCase()
+  return `STRIPE_PRICE_${s}_ADDON_${a}`
+}
+
+function resolvePackagePriceId(service: string, packageId: string): string | undefined {
+  const id = (process.env[packagePriceEnvKey(service, packageId)] || '').trim()
+  return id.startsWith('price_') ? id : undefined
+}
+
+function resolveAddonPriceId(service: string, addonId: string): string | undefined {
+  const id = (process.env[addonPriceEnvKey(service, addonId)] || '').trim()
+  return id.startsWith('price_') ? id : undefined
+}
 
 type PurchaseMode = 'checkout' | 'subscription' | 'quote'
 type ServiceKey =
@@ -55,8 +78,9 @@ type ResolvedLine = {
   addonIds: string[]
   purchaseMode: PurchaseMode
   packagePrice: number
-  addonPrices: { id: string; priceEur: number }[]
+  addonPrices: { id: string; priceEur: number; priceId?: string }[]
   lineTotal: number
+  packagePriceId?: string
 }
 
 function loadCatalog(): Catalog {
@@ -134,7 +158,13 @@ function resolveLines(
     const addonIds = (Array.isArray(raw.addonIds) ? raw.addonIds : [])
       .map((id) => String(id))
       .filter((id) => catalog[serviceRaw].addons.some((a) => a.id === id))
-    const addonPrices = catalog[serviceRaw].addons.filter((a) => addonIds.includes(a.id))
+    const addonPrices = catalog[serviceRaw].addons
+      .filter((a) => addonIds.includes(a.id))
+      .map((a) => ({
+        id: a.id,
+        priceEur: a.priceEur,
+        priceId: resolveAddonPriceId(serviceRaw, a.id),
+      }))
     const lineTotal = pkg.priceEur + addonPrices.reduce((sum, a) => sum + a.priceEur, 0)
     lines.push({
       service: serviceRaw,
@@ -144,6 +174,7 @@ function resolveLines(
       packagePrice: pkg.priceEur,
       addonPrices,
       lineTotal,
+      packagePriceId: resolvePackagePriceId(serviceRaw, packageId),
     })
   }
 
@@ -151,6 +182,17 @@ function resolveLines(
     return { ok: false, error: 'Cart is empty', status: 400 }
   }
   return { ok: true, lines }
+}
+
+/** Billing subscription Checkout only when every line is subscription + has Price ID and no one-time addons. */
+function useSubscriptionMode(lines: ResolvedLine[]): boolean {
+  if (!lines.length) return false
+  return lines.every(
+    (line) =>
+      line.purchaseMode === 'subscription' &&
+      !!line.packagePriceId &&
+      line.addonPrices.length === 0,
+  )
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -183,7 +225,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const primary = lines[0]!
     const successUrl = safeUrl(
       body.successUrl,
-      `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(primary.service)}&package=${encodeURIComponent(primary.packageId)}&total=${totalEur}`,
+      `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(primary.service)}&package=${encodeURIComponent(primary.packageId)}&total=${totalEur}&email=${encodeURIComponent(email)}`,
     )
     const cancelUrl = safeUrl(body.cancelUrl, `${origin}/shop.html#cart`)
 
@@ -214,36 +256,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const { default: Stripe } = await import('stripe')
     const stripe = new Stripe(secret)
-    const line_items = lines.flatMap((line) => [
-      {
-        quantity: 1,
-        price_data: {
-          currency: 'eur',
-          unit_amount: line.packagePrice * 100,
-          product_data: {
-            name: `BDITEC ${line.service} / ${line.packageId}`,
-            description:
-              line.purchaseMode === 'subscription'
-                ? 'Start amount (recurring billing terms pending business setup)'
-                : 'Online start / deposit amount',
-          },
-        },
-      },
-      ...line.addonPrices.map((addon) => ({
-        quantity: 1,
-        price_data: {
-          currency: 'eur',
-          unit_amount: addon.priceEur * 100,
-          product_data: {
-            name: `Extra: ${addon.id}`,
-            description: `Add-on for ${line.service}`,
-          },
-        },
-      })),
-    ])
+    const subscriptionMode = useSubscriptionMode(lines)
+    const checkoutMode = subscriptionMode ? 'subscription' : 'payment'
+
+    const line_items = lines.flatMap((line) => {
+      const packageItem = line.packagePriceId
+        ? { quantity: 1, price: line.packagePriceId }
+        : {
+            quantity: 1,
+            price_data: {
+              currency: 'eur' as const,
+              unit_amount: line.packagePrice * 100,
+              ...(subscriptionMode
+                ? { recurring: { interval: 'month' as const } }
+                : {}),
+              product_data: {
+                name: `BDITEC ${line.service} / ${line.packageId}`,
+                description: subscriptionMode
+                  ? 'Monthly subscription (catalog start amount)'
+                  : 'Online start / deposit amount',
+              },
+            },
+          }
+
+      const addonItems = line.addonPrices.map((addon) =>
+        addon.priceId
+          ? { quantity: 1, price: addon.priceId }
+          : {
+              quantity: 1,
+              price_data: {
+                currency: 'eur' as const,
+                unit_amount: addon.priceEur * 100,
+                product_data: {
+                  name: `Extra: ${addon.id}`,
+                  description: `Add-on for ${line.service}`,
+                },
+              },
+            },
+      )
+
+      return [packageItem, ...addonItems]
+    })
 
     const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
+      mode: checkoutMode,
       customer_email: email,
       client_reference_id: `bditec-cart-${Date.now().toString(36)}`,
       success_url: successUrl.includes('{CHECKOUT_SESSION_ID}')
@@ -251,12 +307,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         : `${successUrl}${successUrl.includes('?') ? '&' : '?'}session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl,
       line_items,
+      ...(checkoutMode === 'payment' ? { customer_creation: 'always' as const } : {}),
       metadata: {
         itemCount: String(lines.length),
         items: lines.map((l) => `${l.service}:${l.packageId}`).join('|').slice(0, 450),
         customerName: name.slice(0, 200),
         locale,
         totalEur: String(totalEur),
+        checkoutMode,
       },
     })
 
@@ -270,6 +328,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       sessionId: session.id,
       totalEur,
       itemCount: lines.length,
+      checkoutMode,
     })
   } catch (err) {
     console.error('[create-checkout]', err)

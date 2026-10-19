@@ -276,7 +276,7 @@ function render(locale: Locale) {
               const sp = m.servicePages[id]
               return `
               <a class="service-item service-item-link" href="${servicePath(id)}">
-                <span class="service-icon"><img src="${SERVICE_ICONS[id]}" width="24" height="24" alt="" /></span>
+                <span class="service-icon"><img src="${SERVICE_ICONS[id]}" width="24" height="24" alt="" loading="lazy" decoding="async" /></span>
                 <div>
                   <h3>${sp.title}</h3>
                   <p>${sp.lead}</p>

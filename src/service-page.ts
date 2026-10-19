@@ -4,7 +4,7 @@ import { SERVICE_ICONS, SERVICE_IDS, SERVICE_IMAGES, SITE_ORIGIN, isServiceId, s
 import { initTelemetry } from './lib/telemetry'
 import { initAccordions } from './features/accordion'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader, siteLinks } from './features/shell'
-import { detectLocale, setLocale, t, type Locale } from './i18n'
+import { applyHreflang, detectLocale, setLocale, t, type Locale } from './i18n'
 
 const root = document.querySelector<HTMLDivElement>('#app')
 if (!root) throw new Error('#app not found')
@@ -47,7 +47,8 @@ function applyServiceMeta(locale: Locale) {
   upsertMeta('property', 'og:title', page.metaTitle)
   upsertMeta('property', 'og:description', page.metaDescription)
   upsertMeta('property', 'og:url', url)
-  upsertMeta('property', 'og:image', `${SITE_ORIGIN}${SERVICE_IMAGES[serviceId]}`)
+  const image = `${SITE_ORIGIN}${SERVICE_IMAGES[serviceId]}`
+  upsertMeta('property', 'og:image', image)
   upsertMeta(
     'property',
     'og:locale',
@@ -56,6 +57,8 @@ function applyServiceMeta(locale: Locale) {
   upsertMeta('name', 'twitter:card', 'summary_large_image')
   upsertMeta('name', 'twitter:title', page.metaTitle)
   upsertMeta('name', 'twitter:description', page.metaDescription)
+  upsertMeta('name', 'twitter:image', image)
+  applyHreflang(servicePath(serviceId))
 }
 
 function injectJsonLd(locale: Locale) {

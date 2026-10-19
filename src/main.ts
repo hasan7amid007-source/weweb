@@ -146,6 +146,8 @@ function render(locale: Locale) {
                 width="960"
                 height="720"
                 alt="${m.services.thumbAlt}"
+                decoding="async"
+                fetchpriority="high"
               />
             </div>
             <div class="devices-copy">
@@ -264,6 +266,7 @@ function render(locale: Locale) {
                 width="1400"
                 height="900"
                 alt="${m.join.imgAlt}"
+                loading="lazy"
                 decoding="async"
               />
             </div>

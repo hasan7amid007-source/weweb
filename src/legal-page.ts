@@ -3,7 +3,7 @@ import './styles/effects.css'
 import { SITE_ORIGIN } from './data/services'
 import { initTelemetry } from './lib/telemetry'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader } from './features/shell'
-import { detectLocale, setLocale, t, type Locale } from './i18n'
+import { applyHreflang, detectLocale, setLocale, t, type Locale } from './i18n'
 
 const rootEl = document.querySelector<HTMLDivElement>('#app')
 if (!rootEl) throw new Error('#app not found')
@@ -92,11 +92,20 @@ function render(locale: Locale) {
     pageId === 'impressum' ? m.legal.impressumDescription : m.legal.privacyDescription
   const url = `${SITE_ORIGIN}${path}`
   document.title = `${title} — BDITEC`
+  const image = `${SITE_ORIGIN}/page/devices-showcase.jpg`
   upsertMeta('name', 'description', description)
   upsertLink('canonical', url)
+  applyHreflang(path)
+  upsertMeta('property', 'og:type', 'website')
+  upsertMeta('property', 'og:site_name', 'BDITEC')
   upsertMeta('property', 'og:title', `${title} — BDITEC`)
   upsertMeta('property', 'og:description', description)
   upsertMeta('property', 'og:url', url)
+  upsertMeta('property', 'og:image', image)
+  upsertMeta('name', 'twitter:card', 'summary_large_image')
+  upsertMeta('name', 'twitter:title', `${title} — BDITEC`)
+  upsertMeta('name', 'twitter:description', description)
+  upsertMeta('name', 'twitter:image', image)
 
   const body = pageId === 'impressum' ? impressumHtml(locale) : datenschutzHtml(locale)
   root.innerHTML = `

@@ -9,6 +9,7 @@ import {
 } from './catalog'
 import { type Locale, t } from '../../i18n'
 import { SERVICE_IDS, SERVICE_ICONS } from '../../data/services'
+import { trackEvent } from '../../lib/telemetry'
 
 export type BookingDraft = {
   service: BookingServiceKey
@@ -216,6 +217,10 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       true,
       hasLiveStripeCheckout() ? undefined : m.contact.successBodyDemo,
     )
+    trackEvent('booking_success_view', {
+      locale,
+      mode: hasLiveStripeCheckout() ? 'stripe' : 'demo',
+    })
     clearDraft()
   }
 
@@ -231,8 +236,13 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
   const go = (next: Step) => {
     step = next
     setStep(wizard, step)
+    const draft = readForm(form)
+    trackEvent('booking_step_view', {
+      step,
+      locale,
+      service: draft.service || undefined,
+    })
     if (step === 3) {
-      const draft = readForm(form)
       saveDraft(draft)
       renderSummary(wizard, locale, draft)
       const checkout = resolveCheckout(draft.service, draft.email)
@@ -245,6 +255,8 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       }
     }
   }
+
+  if (!paid) trackEvent('booking_step_view', { step: 1, locale })
 
   wizard.querySelector('[data-booking-again]')?.addEventListener('click', () => {
     clearDraft()
@@ -265,6 +277,7 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
           form.reportValidity()
           return
         }
+        trackEvent('booking_service_selected', { service: service.value, locale })
         go(2)
         return
       }
@@ -307,17 +320,20 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     const checkout = resolveCheckout(draft.service, draft.email)
 
     if (checkout.mode === 'stripe') {
+      trackEvent('booking_checkout_stripe', { service: draft.service, locale })
       window.location.href = checkout.url
       return
     }
 
     if (checkout.mode === 'demo') {
+      trackEvent('booking_checkout_demo', { service: draft.service, locale })
       await new Promise((r) => setTimeout(r, 900))
       clearDraft()
       const url = new URL(location.href)
       url.searchParams.set('booking', 'success')
       history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}#booking`)
       showSuccess(wizard, true, m.contact.successBodyDemo)
+      trackEvent('booking_success_view', { locale, mode: 'demo', service: draft.service })
       if (payBtn) {
         payBtn.disabled = false
         payBtn.textContent = m.contact.payCta

@@ -107,5 +107,7 @@ export function initShowcase(root: HTMLElement) {
   })
   slides[0]?.classList.add('is-active')
   playEnter(slides[0]!)
-  schedule()
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (!reduceMotion) schedule()
 }

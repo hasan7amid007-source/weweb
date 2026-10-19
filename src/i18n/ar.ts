@@ -41,12 +41,12 @@ export const ar: Messages = {
     title: 'شريككم للنمو <strong>الرقمي</strong>',
     p1: 'نساعدكم على تعزيز حضوركم الرقمي وترسيخ أعمالكم بنجاح عبر الإنترنت — من الفكرة الأولى حتى التنفيذ النهائي.',
     p2: 'نؤمن بقوة الابتكار ونعمل عن قرب مع عملائنا لتحويل رؤاهم إلى واقع.',
-    statsLabel: 'أرقام تتحدث',
+    statsLabel: 'ما نركز عليه',
     stats: [
-      { value: '114', label: 'عملاء' },
-      { value: '131', label: 'مشاريع' },
-      { value: '854', label: 'ساعات دعم' },
-      { value: '6', label: 'خبراء' },
+      { value: 'HH', label: 'مقر هامبورغ' },
+      { value: '6', label: 'مجالات خدمة' },
+      { value: '3', label: 'لغات (DE/EN/AR)' },
+      { value: '24/7', label: 'طلب أونلاين' },
     ],
     mediaAlt: 'تحرير BDITEC',
   },
@@ -103,7 +103,7 @@ export const ar: Messages = {
   join: {
     eyebrow: 'بتصميم قوي لا تظهر علامتكم فقط — بل تصبح أيقونة لا تُنسى',
     title: 'هل أنتم مستعدون لتصميم وجه علامتكم؟',
-    cta: 'Start Your Campaign',
+    cta: 'ابدأ حملتك',
     imgAlt: 'حملة علامة BDITEC',
     panelTitle: 'تجارب رقمية<br>تجعل علامتكم لا تُنسى',
     panelBody:
@@ -170,6 +170,32 @@ export const ar: Messages = {
     colContact: 'اتصل بنا',
     help: 'دعم البريد',
     phone: 'الهاتف',
+    impressum: 'البيانات القانونية',
+    datenschutz: 'الخصوصية',
     credit: '© BDITEC — تصميم ويب مبتكر وتسويق رقمي · هامبورغ',
+  },
+  legal: {
+    impressumTitle: 'البيانات القانونية (Impressum)',
+    impressumDescription: 'بيانات مزوّد الخدمة — BDITEC، هامبورغ.',
+    privacyTitle: 'سياسة الخصوصية',
+    privacyDescription: 'كيف تعالج BDITEC البيانات الشخصية.',
+    counselNote:
+      'مسودة للشفافية فقط — ليست استشارة قانونية. يُرجى مراجعتها وإكمالها مع محامٍ قبل الإطلاق العام.',
+    providerHeading: 'مزوّد الخدمة',
+    contactHeading: 'التواصل',
+    responsibleHeading: 'المسؤول عن المحتوى',
+    privacyController: 'المسؤول',
+    privacyData: 'البيانات التي نعالجها',
+    privacyDataBody:
+      'قد يجمع الدفع أونلاين الاسم والبريد واختيارياً الهاتف وملاحظة المشروع. وقد تُعالَج بيانات وصول تقنية عبر الاستضافة وخدمات الأمان.',
+    privacyPurpose: 'الغرض',
+    privacyPurposeBody:
+      'نستخدم البيانات لتنفيذ طلبكم والتواصل معكم — وعند التفعيل — لمعالجة الدفع عبر Stripe. لا يعمل الدفع الذاتي دون الحقول المطلوبة.',
+    privacyRights: 'حقوقكم',
+    privacyRightsBody:
+      'يمكنكم طلب الاطلاع والتصحيح والمحو وتقييد المعالجة ونقل البيانات والاعتراض حيث يسمح القانون، وتقديم شكوى للجهة الرقابية المختصة.',
+    privacyHosting: 'الاستضافة والمدفوعات',
+    privacyHostingBody:
+      'يُستضاف الموقع على Vercel. عند تفعيل روابط Stripe تنطبق أيضاً سياسة Stripe. وضع العرض التجريبي لا يخزّن بيانات البطاقة لدينا.',
   },
 }

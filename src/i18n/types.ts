@@ -183,6 +183,27 @@ export type Messages = {
     colContact: string
     help: string
     phone: string
+    impressum: string
+    datenschutz: string
     credit: string
+  }
+  legal: {
+    impressumTitle: string
+    impressumDescription: string
+    privacyTitle: string
+    privacyDescription: string
+    counselNote: string
+    providerHeading: string
+    contactHeading: string
+    responsibleHeading: string
+    privacyController: string
+    privacyData: string
+    privacyDataBody: string
+    privacyPurpose: string
+    privacyPurposeBody: string
+    privacyRights: string
+    privacyRightsBody: string
+    privacyHosting: string
+    privacyHostingBody: string
   }
 }

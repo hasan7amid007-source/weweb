@@ -44,12 +44,12 @@ export const de: Messages = {
     title: 'Ihr Partner für <strong>digitales</strong> Wachstum',
     p1: 'Dabei helfen wir Ihnen, Ihre digitale Präsenz zu stärken und Ihr Geschäft erfolgreich im digitalen Raum zu etablieren — von der ersten Idee bis zur fertigen Umsetzung.',
     p2: 'Wir glauben an die Kraft der Innovation und arbeiten eng mit unseren Kunden zusammen, um deren Visionen in die Realität umzusetzen.',
-    statsLabel: 'Zahlen die sprechen',
+    statsLabel: 'Worauf wir setzen',
     stats: [
-      { value: '114', label: 'Kunden' },
-      { value: '131', label: 'Projekte' },
-      { value: '854', label: 'Support-Stunden' },
-      { value: '6', label: 'Experten' },
+      { value: 'HH', label: 'Standort Hamburg' },
+      { value: '6', label: 'Service-Bereiche' },
+      { value: '3', label: 'Sprachen (DE/EN/AR)' },
+      { value: '24/7', label: 'Online-Bestellung' },
     ],
     mediaAlt: 'BDITEC Bearbeitung',
   },
@@ -107,7 +107,7 @@ export const de: Messages = {
   join: {
     eyebrow: 'Mit starkem Design wird Ihre Marke nicht nur sichtbar — sie wird unverwechselbar',
     title: 'Bereit, das Gesicht Ihrer Marke zu gestalten?',
-    cta: 'Start Your Campaign',
+    cta: 'Kampagne starten',
     imgAlt: 'BDITEC Marken-Campaign',
     panelTitle: 'Digitale Erlebnisse,<br>die Marken unvergesslich machen',
     panelBody:
@@ -175,6 +175,32 @@ export const de: Messages = {
     colContact: 'Kontakt',
     help: 'E-Mail Support',
     phone: 'Telefon',
+    impressum: 'Impressum',
+    datenschutz: 'Datenschutz',
     credit: '© BDITEC — Innovatives Webdesign und Digitales Marketing · Hamburg',
+  },
+  legal: {
+    impressumTitle: 'Impressum',
+    impressumDescription: 'Angaben gemäß § 5 TMG — BDITEC, Hamburg.',
+    privacyTitle: 'Datenschutzerklärung',
+    privacyDescription: 'Informationen zur Verarbeitung personenbezogener Daten bei BDITEC.',
+    counselNote:
+      'Entwurf zur Transparenz. Keine Rechtsberatung — bitte vor dem öffentlichen Launch durch Fachanwalt prüfen und vervollständigen lassen.',
+    providerHeading: 'Diensteanbieter',
+    contactHeading: 'Kontakt',
+    responsibleHeading: 'Verantwortlich für den Inhalt',
+    privacyController: 'Verantwortlicher',
+    privacyData: 'Welche Daten wir verarbeiten',
+    privacyDataBody:
+      'Über den Online-Checkout können Name, E-Mail-Adresse sowie optional Telefonnummer und Projektnotiz erhoben werden. Technische Zugriffsdaten können durch Hosting und Sicherheitsdienste anfallen.',
+    privacyPurpose: 'Zweck der Verarbeitung',
+    privacyPurposeBody:
+      'Die Daten dienen der Abwicklung Ihrer Bestellung, der Kommunikation und — sofern konfiguriert — der Zahlungsabwicklung über Stripe. Ohne diese Angaben ist der Self-Service-Checkout nicht nutzbar.',
+    privacyRights: 'Ihre Rechte',
+    privacyRightsBody:
+      'Sie können Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Datenübertragbarkeit verlangen sowie der Verarbeitung widersprechen, soweit gesetzlich vorgesehen. Beschwerden richten Sie an die zuständige Aufsichtsbehörde.',
+    privacyHosting: 'Hosting und Zahlungsdienstleister',
+    privacyHostingBody:
+      'Die Website wird über Vercel bereitgestellt. Bei aktivierten Stripe Payment Links gelten zusätzlich die Datenschutzhinweise von Stripe. Demo-Checkout speichert Zahlungsdaten nicht bei uns.',
   },
 }

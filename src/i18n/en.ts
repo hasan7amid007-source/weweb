@@ -41,12 +41,12 @@ export const en: Messages = {
     title: 'Your partner for <strong>digital</strong> growth',
     p1: 'We help you strengthen your digital presence and establish your business successfully online — from the first idea to finished delivery.',
     p2: 'We believe in the power of innovation and work closely with our clients to turn their visions into reality.',
-    statsLabel: 'Numbers that speak',
+    statsLabel: 'What we stand for',
     stats: [
-      { value: '114', label: 'Clients' },
-      { value: '131', label: 'Projects' },
-      { value: '854', label: 'Support hours' },
-      { value: '6', label: 'Experts' },
+      { value: 'HH', label: 'Based in Hamburg' },
+      { value: '6', label: 'Service areas' },
+      { value: '3', label: 'Languages (DE/EN/AR)' },
+      { value: '24/7', label: 'Online ordering' },
     ],
     mediaAlt: 'BDITEC editing',
   },
@@ -104,7 +104,7 @@ export const en: Messages = {
   join: {
     eyebrow: "With strong design, your brand doesn't just get seen — it becomes unmistakable",
     title: 'Ready to design the face of your brand?',
-    cta: 'Start Your Campaign',
+    cta: 'Start your campaign',
     imgAlt: 'BDITEC brand campaign',
     panelTitle: 'Digital experiences<br>that make brands unforgettable',
     panelBody:
@@ -172,6 +172,32 @@ export const en: Messages = {
     colContact: 'Contact',
     help: 'Email support',
     phone: 'Phone',
+    impressum: 'Legal notice',
+    datenschutz: 'Privacy',
     credit: '© BDITEC — Innovative web design and digital marketing · Hamburg',
+  },
+  legal: {
+    impressumTitle: 'Legal notice (Impressum)',
+    impressumDescription: 'Provider information for BDITEC, Hamburg.',
+    privacyTitle: 'Privacy policy',
+    privacyDescription: 'How BDITEC processes personal data.',
+    counselNote:
+      'Draft for transparency only — not legal advice. Have counsel review and complete before public launch.',
+    providerHeading: 'Service provider',
+    contactHeading: 'Contact',
+    responsibleHeading: 'Responsible for content',
+    privacyController: 'Controller',
+    privacyData: 'Data we process',
+    privacyDataBody:
+      'The online checkout may collect name, email, and optionally phone and a project note. Technical access data may be processed by hosting and security services.',
+    privacyPurpose: 'Purpose',
+    privacyPurposeBody:
+      'We use this data to fulfil your order, communicate with you, and — when configured — process payments via Stripe. Self-service checkout cannot run without the required fields.',
+    privacyRights: 'Your rights',
+    privacyRightsBody:
+      'You may request access, rectification, erasure, restriction, portability, and object where the law allows. You may also lodge a complaint with a supervisory authority.',
+    privacyHosting: 'Hosting and payments',
+    privacyHostingBody:
+      'This site is hosted on Vercel. When Stripe Payment Links are enabled, Stripe’s privacy terms also apply. Demo checkout does not store card data with us.',
   },
 }

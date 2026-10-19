@@ -97,6 +97,11 @@ export function renderFooter(locale: Locale, from: 'home' | 'service') {
       </div>
 
       <div class="footer-bottom">
+        <p class="footer-legal">
+          <a href="/impressum.html">${m.footer.impressum}</a>
+          <span aria-hidden="true">·</span>
+          <a href="/datenschutz.html">${m.footer.datenschutz}</a>
+        </p>
         <p class="credit">${m.footer.credit}</p>
       </div>
     </div>

@@ -27,6 +27,8 @@ Use programmer/developer/owner from `.brainum/project.json` in README metadata, 
 - `/services/e-commerce.html`
 - `/services/digital-marketing.html`
 - `/services/offline-marketing.html`
+- `/impressum.html`
+- `/datenschutz.html`
 - Note: `/#booking` is an in-page checkout hash (not a separate crawl URL)
 
 ## Notes
@@ -34,5 +36,8 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 
 ## Product backlog (non-gate)
 - [x] Stripe live pay — skipped for now (demo checkout OK)
-- [ ] Deploy production (`bditec-weweb` on Vercel team HH7) — needs owner `vercel login` / dashboard deploy
+- [x] Deploy production — Vercel `hh-7/weweb` ← GitHub `hasan7amid007-source/weweb` (alias `weweb-hh-7.vercel.app`); SSO protection disabled 2026-10-19
+- [x] Impressum + Datenschutz draft pages (counsel review still required)
 - [ ] Optional: Google Search Console sitemap submit
+- [ ] Optional: attach custom domain `bditec.com`
+- [ ] Optional: legal counsel sign-off on Impressum/Datenschutz

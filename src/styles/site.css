@@ -3235,6 +3235,59 @@ html[dir='rtl'] .brand {
   letter-spacing: 0;
 }
 
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+}
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-legal a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.legal-main {
+  padding: 4.5rem 0 5rem;
+  min-height: 50vh;
+}
+
+.legal-doc {
+  max-width: 42rem;
+}
+
+.legal-doc h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+}
+
+.legal-doc h2 {
+  margin: 2rem 0 0.65rem;
+  font-size: 1.15rem;
+}
+
+.legal-doc p {
+  margin: 0 0 0.85rem;
+  line-height: 1.65;
+}
+
+.legal-note {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid #f8e937;
+  background: rgba(248, 233, 55, 0.08);
+  font-size: 0.95rem;
+}
+
 @media (max-width: 900px) {
   .header-nav {
     display: none;

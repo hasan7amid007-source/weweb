@@ -208,6 +208,6 @@ export const de: Messages = {
       'Sie können Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Datenübertragbarkeit verlangen sowie der Verarbeitung widersprechen, soweit gesetzlich vorgesehen. Beschwerden richten Sie an die zuständige Aufsichtsbehörde.',
     privacyHosting: 'Hosting und Zahlungsdienstleister',
     privacyHostingBody:
-      'Die Website wird über Vercel bereitgestellt. Bei aktivierten Stripe Payment Links gelten zusätzlich die Datenschutzhinweise von Stripe. Demo-Checkout speichert Zahlungsdaten nicht bei uns.',
+      'Die Website wird über Vercel bereitgestellt. Zur Reichweitenmessung nutzen wir Vercel Web Analytics (ohne Cookie-Banner-pflichtige Tracking-Cookies nach unserem Verständnis; pseudonymisierte Nutzungsdaten). Bei aktivierten Stripe Payment Links gelten zusätzlich die Datenschutzhinweise von Stripe. Demo-Checkout speichert Zahlungsdaten nicht bei uns.',
   },
 }

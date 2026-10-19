@@ -2,6 +2,7 @@ import './styles/site.css'
 import './features/hero/hero.css'
 import './styles/effects.css'
 import { SERVICE_ICONS, SERVICE_IDS, servicePath } from './data/services'
+import { initTelemetry } from './lib/telemetry'
 import { initAccordions } from './features/accordion'
 import { initBookingWizard, renderBookingFormMarkup } from './features/booking'
 import { initShowcase, initTriangleMotion, triangleHeroSvg } from './features/hero'
@@ -350,4 +351,5 @@ function initSvcFramework(root: ParentNode) {
   io.observe(grid)
 }
 
+initTelemetry()
 render(detectLocale())

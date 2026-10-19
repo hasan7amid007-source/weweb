@@ -49,5 +49,6 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Mobile nav + skip link + `?lang=` (2026-10-19) — Brainum frontend-product / a11y pass
 - [x] Vercel Git auto-deployments enabled for `hh-7/weweb`
 - [x] Responsive QA (mobile 390 / tablet 768) — nav + no page overflow; demo checkout soft-launch default (2026-10-19)
-- [ ] Optional: Google Search Console sitemap submit (`https://weweb-weld.vercel.app/sitemap.xml`)
+- [ ] Deferred: Google Search Console — wait until custom domain is attached, then flip `SITE_ORIGIN` + submit sitemap
 - [ ] Optional: legal counsel sign-off on Impressum/Datenschutz
+- [x] Soft-launch: Vercel Web Analytics (2026-10-19) — `@vercel/analytics` + Datenschutz note; enabled on `hh-7/weweb` (Speed Insights skipped — paid, needs interactive confirm)

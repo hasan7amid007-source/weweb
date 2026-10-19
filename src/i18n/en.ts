@@ -205,6 +205,6 @@ export const en: Messages = {
       'You may request access, rectification, erasure, restriction, portability, and object where the law allows. You may also lodge a complaint with a supervisory authority.',
     privacyHosting: 'Hosting and payments',
     privacyHostingBody:
-      'This site is hosted on Vercel. When Stripe Payment Links are enabled, Stripe’s privacy terms also apply. Demo checkout does not store card data with us.',
+      'This site is hosted on Vercel. For traffic measurement we use Vercel Web Analytics (no cookie-banner tracking cookies as we understand them; pseudonymised usage data). When Stripe Payment Links are enabled, Stripe’s privacy terms also apply. Demo checkout does not store card data with us.',
   },
 }

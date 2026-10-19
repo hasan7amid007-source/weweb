@@ -1,6 +1,7 @@
 import './styles/site.css'
 import './styles/effects.css'
 import { SITE_ORIGIN } from './data/services'
+import { initTelemetry } from './lib/telemetry'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader } from './features/shell'
 import { detectLocale, setLocale, t, type Locale } from './i18n'
 
@@ -110,4 +111,5 @@ function render(locale: Locale) {
   bindNavToggle(root, locale)
 }
 
+initTelemetry()
 render(detectLocale())

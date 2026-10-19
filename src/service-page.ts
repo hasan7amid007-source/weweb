@@ -1,6 +1,7 @@
 import './styles/site.css'
 import './styles/effects.css'
 import { SERVICE_ICONS, SERVICE_IDS, SERVICE_IMAGES, SITE_ORIGIN, isServiceId, servicePath, type ServiceId } from './data/services'
+import { initTelemetry } from './lib/telemetry'
 import { initAccordions } from './features/accordion'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader, siteLinks } from './features/shell'
 import { detectLocale, setLocale, t, type Locale } from './i18n'
@@ -293,4 +294,5 @@ function render(locale: Locale) {
   initAccordions(app)
 }
 
+initTelemetry()
 render(detectLocale())

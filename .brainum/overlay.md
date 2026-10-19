@@ -39,7 +39,7 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Stripe live pay — skipped for now (demo checkout OK)
 - [x] Deploy production — Vercel `hh-7/weweb` ← GitHub `hasan7amid007-source/weweb` (alias `weweb-hh-7.vercel.app`); SSO protection disabled 2026-10-19
 - [x] Impressum + Datenschutz draft pages (counsel review still required)
-- [x] SEO origin aligned to live public host (2026-10-19) — `SITE_ORIGIN` / robots / sitemap → `weweb-hh-7.vercel.app` because `bditec.com` DNS NXDOMAIN
-- [ ] HUMAN: buy or transfer `bditec.com`, attach on Vercel `hh-7/weweb`, then flip `SITE_ORIGIN` + robots/sitemap back to `https://bditec.com`
+- [x] SEO origin aligned to live public host (2026-10-19) — `SITE_ORIGIN` / robots / sitemap → `weweb-hh-7.vercel.app`
+- [x] Custom domain — **skipped for now** (2026-10-19, Hasan Hamid): keep Vercel host; owner will pick a new domain later, then attach + flip origin
 - [ ] Optional: Google Search Console sitemap submit (`https://weweb-hh-7.vercel.app/sitemap.xml`)
 - [ ] Optional: legal counsel sign-off on Impressum/Datenschutz

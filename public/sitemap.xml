@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://weweb-hh-7.vercel.app/</loc>
+    <loc>https://weweb-weld.vercel.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/services/web-hosting.html</loc>
+    <loc>https://weweb-weld.vercel.app/services/web-hosting.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/services/mobile-app.html</loc>
+    <loc>https://weweb-weld.vercel.app/services/mobile-app.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/services/web-development.html</loc>
+    <loc>https://weweb-weld.vercel.app/services/web-development.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/services/e-commerce.html</loc>
+    <loc>https://weweb-weld.vercel.app/services/e-commerce.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/services/digital-marketing.html</loc>
+    <loc>https://weweb-weld.vercel.app/services/digital-marketing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/services/offline-marketing.html</loc>
+    <loc>https://weweb-weld.vercel.app/services/offline-marketing.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/impressum.html</loc>
+    <loc>https://weweb-weld.vercel.app/impressum.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://weweb-hh-7.vercel.app/datenschutz.html</loc>
+    <loc>https://weweb-weld.vercel.app/datenschutz.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

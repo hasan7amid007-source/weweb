@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://weweb-hh-7.vercel.app/sitemap.xml
+Sitemap: https://weweb-weld.vercel.app/sitemap.xml

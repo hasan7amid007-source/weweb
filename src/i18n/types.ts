@@ -191,6 +191,7 @@ export type Messages = {
     related: string
     cta: string
     ctaSecondary: string
+    ctaShop: string
     overview: string
     details: string
     included: string

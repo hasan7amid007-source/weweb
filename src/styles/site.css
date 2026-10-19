@@ -3031,6 +3031,22 @@ html[dir='rtl'] .service-faq summary::after {
   min-width: 0;
 }
 
+.service-aside-shop {
+  margin: 0.85rem 0 0;
+  text-align: center;
+}
+
+.service-aside-shop a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  font-size: 0.92rem;
+}
+
+.service-aside-shop a:hover {
+  color: #fff;
+}
+
 html[dir='rtl'] .service-aside li {
   padding: 0.55rem 1.15rem 0.55rem 0;
 }

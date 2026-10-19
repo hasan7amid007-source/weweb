@@ -180,6 +180,7 @@ export const en: Messages = {
     related: 'More services',
     cta: 'Order online',
     ctaSecondary: 'Go to checkout',
+    ctaShop: 'Packages in the shop',
     overview: 'Overview',
     details: 'Learn more',
     included: 'What’s included',
@@ -219,6 +220,6 @@ export const en: Messages = {
       'You may request access, rectification, erasure, restriction, portability, and object where the law allows. You may also lodge a complaint with a supervisory authority.',
     privacyHosting: 'Hosting and payments',
     privacyHostingBody:
-      'This site is hosted on Vercel. For traffic measurement we use Vercel Web Analytics (no cookie-banner tracking cookies as we understand them; pseudonymised usage data). When Stripe Payment Links are enabled, Stripe’s privacy terms also apply. Demo checkout does not store card data with us.',
+      'This site is hosted on Vercel. For traffic measurement we use Vercel Web Analytics (no cookie-banner tracking cookies as we understand them; pseudonymised usage data). When Stripe Checkout, subscriptions (Billing), or the customer portal are enabled, Stripe’s privacy terms also apply; payment data is processed by Stripe. Demo checkout does not store card data with us.',
   },
 }

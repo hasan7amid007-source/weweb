@@ -91,6 +91,7 @@ function writeFiltersToUrl(state: ShopFilterState, replace = true) {
 function filterItems(locale: Locale, state: ShopFilterState): ShopListingItem[] {
   const q = state.query.toLowerCase()
   return listShopPackages().filter((item) => {
+    if (state.service && !state.packageId && item.service !== state.service) return false
     if (state.category !== 'all' && item.package.shopCategory !== state.category) return false
     if (state.mode !== 'all' && item.package.purchaseMode !== state.mode) return false
     if (!q) return true
@@ -200,7 +201,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
       ${addCartCta ? `<span class="glowborder">${addCartCta}</span>` : ''}
       ${secondaryCta}
       <a class="shop-secondary-cta" href="${serviceHref}">${shop.ctaService}</a>
-      <p class="shop-cart-feedback" data-shop-cart-feedback hidden></p>
+      <p class="shop-cart-feedback" data-shop-cart-feedback role="status" aria-live="polite" hidden></p>
     </div>`
 }
 
@@ -360,17 +361,17 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
           <input type="search" name="q" value="${state.query.replace(/"/g, '&quot;')}" placeholder="${shop.searchPlaceholder}" data-shop-search />
         </label>
         <div class="shop-cat-filters" role="group" aria-label="${shop.filterAll}">
-          <button type="button" class="shop-chip${state.category === 'all' ? ' is-active' : ''}" data-shop-cat="all">${shop.filterAll}</button>
+          <button type="button" class="shop-chip${state.category === 'all' ? ' is-active' : ''}" data-shop-cat="all" aria-pressed="${state.category === 'all'}">${shop.filterAll}</button>
           ${SHOP_CATEGORY_IDS.map(
             (id) => `
-            <button type="button" class="shop-chip${state.category === id ? ' is-active' : ''}" data-shop-cat="${id}">${shop.categories[id].title}</button>`,
+            <button type="button" class="shop-chip${state.category === id ? ' is-active' : ''}" data-shop-cat="${id}" aria-pressed="${state.category === id}">${shop.categories[id].title}</button>`,
           ).join('')}
         </div>
         <div class="shop-mode-filters" role="group" aria-label="${shop.filterModeLabel}">
           ${modeFilters
             .map(
               (f) => `
-            <button type="button" class="shop-chip shop-chip--mode${state.mode === f.id ? ' is-active' : ''}" data-shop-mode="${f.id}">${f.label}</button>`,
+            <button type="button" class="shop-chip shop-chip--mode${state.mode === f.id ? ' is-active' : ''}" data-shop-mode="${f.id}" aria-pressed="${state.mode === f.id}">${f.label}</button>`,
             )
             .join('')}
         </div>

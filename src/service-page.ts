@@ -133,6 +133,7 @@ function render(locale: Locale) {
   const page = m.servicePages[serviceId]
   const links = siteLinks('service')
   const bookingHref = `/?service=${serviceId}#booking`
+  const shopHref = `/shop.html?service=${encodeURIComponent(serviceId)}`
   const related = SERVICE_IDS.filter((id) => id !== serviceId)
 
   app.innerHTML = `
@@ -158,7 +159,7 @@ function render(locale: Locale) {
                 <span class="mi" aria-hidden="true">▶</span> ${m.serviceUi.cta}
               </a>
             </span>
-            <a class="service-hero-secondary" href="${bookingHref}">${m.serviceUi.ctaSecondary}</a>
+            <a class="service-hero-secondary" href="${shopHref}">${m.serviceUi.ctaShop}</a>
           </div>
         </div>
       </div>
@@ -248,6 +249,7 @@ function render(locale: Locale) {
                 <span class="mi" aria-hidden="true">▶</span> ${m.serviceUi.cta}
               </a>
             </span>
+            <p class="service-aside-shop"><a href="${shopHref}">${m.serviceUi.ctaShop}</a></p>
           </div>
         </aside>
       </div>

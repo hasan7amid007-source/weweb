@@ -2,8 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 /**
  * Stripe webhook — verifies signature, handles checkout.session.completed.
- * Duplicate events: in-memory set (soft-launch). Production should persist event.id
- * in durable storage (KV/DB) before claiming fulfillment DONE.
+ * Duplicate events: in-memory set (soft-launch). Production should persist event.id.
  */
 
 const processed = new Set<string>()

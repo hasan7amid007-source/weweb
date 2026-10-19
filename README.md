@@ -51,7 +51,7 @@ Live card payments (optional later): copy `.env.example` → `.env` and set Stri
 ## Git remote
 
 ```text
-https://github.com/hasan7amid/weweb
+https://github.com/hasan7amid007-source/weweb
 ```
 
 ## Deploy (Vercel)

@@ -1,0 +1,97 @@
+import {
+  calcOrderTotalEur,
+  canAddToCart,
+  findShopPackage,
+} from '../booking/shop-catalog'
+import { isBookingServiceKey, type BookingServiceKey } from '../booking/catalog'
+
+export const SHOP_CART_KEY = 'bditec-shop-cart'
+export const CART_MAX_ITEMS = 8
+
+export type CartLine = {
+  service: BookingServiceKey
+  packageId: string
+  addonIds: string[]
+}
+
+function lineKey(line: CartLine): string {
+  return `${line.service}:${line.packageId}`
+}
+
+export function readCart(): CartLine[] {
+  try {
+    const raw = sessionStorage.getItem(SHOP_CART_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw) as CartLine[]
+    if (!Array.isArray(parsed)) return []
+    return parsed
+      .filter(
+        (line) =>
+          line &&
+          isBookingServiceKey(line.service) &&
+          typeof line.packageId === 'string' &&
+          Array.isArray(line.addonIds),
+      )
+      .slice(0, CART_MAX_ITEMS)
+  } catch {
+    return []
+  }
+}
+
+export function writeCart(lines: CartLine[]) {
+  try {
+    sessionStorage.setItem(SHOP_CART_KEY, JSON.stringify(lines.slice(0, CART_MAX_ITEMS)))
+  } catch {
+    /* ignore */
+  }
+}
+
+export function clearCart() {
+  try {
+    sessionStorage.removeItem(SHOP_CART_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
+export function addToCart(service: string, packageId: string, addonIds: string[] = []): {
+  ok: boolean
+  reason?: 'not-found' | 'quote-only' | 'full' | 'duplicate'
+  cart: CartLine[]
+} {
+  const item = findShopPackage(service, packageId)
+  if (!item || !isBookingServiceKey(service)) {
+    return { ok: false, reason: 'not-found', cart: readCart() }
+  }
+  if (!canAddToCart(item.package.purchaseMode)) {
+    return { ok: false, reason: 'quote-only', cart: readCart() }
+  }
+  const cart = readCart()
+  const nextLine: CartLine = {
+    service,
+    packageId,
+    addonIds: addonIds.filter(Boolean),
+  }
+  if (cart.some((line) => lineKey(line) === lineKey(nextLine))) {
+    return { ok: false, reason: 'duplicate', cart }
+  }
+  if (cart.length >= CART_MAX_ITEMS) {
+    return { ok: false, reason: 'full', cart }
+  }
+  const next = [...cart, nextLine]
+  writeCart(next)
+  return { ok: true, cart: next }
+}
+
+export function removeFromCart(service: string, packageId: string): CartLine[] {
+  const next = readCart().filter((line) => !(line.service === service && line.packageId === packageId))
+  writeCart(next)
+  return next
+}
+
+export function cartTotalEur(lines: CartLine[] = readCart()): number {
+  return lines.reduce(
+    (sum, line) => sum + calcOrderTotalEur(line.service, line.packageId, line.addonIds),
+    0,
+  )
+}

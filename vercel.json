@@ -3,6 +3,11 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "functions": {
+    "api/create-checkout.ts": {
+      "includeFiles": "api/shop-catalog.json"
+    }
+  },
   "rewrites": [
     { "source": "/shop", "destination": "/shop.html" },
     { "source": "/order", "destination": "/order.html" },

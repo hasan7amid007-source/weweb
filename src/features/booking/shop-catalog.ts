@@ -1,4 +1,5 @@
 import type { BookingServiceKey } from './catalog'
+import catalogJson from '../../../api/shop-catalog.json'
 
 /** Public shop taxonomy (agency categories). Maps onto booking services. */
 export const SHOP_CATEGORY_IDS = [
@@ -38,208 +39,10 @@ export type ShopListingItem = {
 }
 
 /**
- * Shop configurator per service — packages (required) + add-ons (optional).
+ * Single source of truth: `api/shop-catalog.json` (also loaded by /api/create-checkout).
  * Prices are online start amounts (EUR), credited toward the project.
- * purchaseMode / shopCategory drive the public /shop surface.
- * SERVER MIRROR: keep `api/_lib/shop-catalog.ts` in sync (checkout validates there).
  */
-export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
-  general: {
-    packages: [
-      {
-        id: 'kickoff',
-        priceEur: 49,
-        purchaseMode: 'checkout',
-        shopCategory: 'web-design',
-      },
-      {
-        id: 'briefing',
-        priceEur: 89,
-        recommended: true,
-        purchaseMode: 'checkout',
-        shopCategory: 'web-design',
-      },
-      {
-        id: 'roadmap',
-        priceEur: 149,
-        purchaseMode: 'quote',
-        shopCategory: 'web-design',
-      },
-    ],
-    addons: [
-      { id: 'priority', priceEur: 39 },
-      { id: 'competitor', priceEur: 59 },
-    ],
-  },
-  'web-hosting': {
-    packages: [
-      {
-        id: 'shared',
-        priceEur: 79,
-        purchaseMode: 'checkout',
-        shopCategory: 'hosting-support',
-      },
-      {
-        id: 'vps',
-        priceEur: 129,
-        recommended: true,
-        purchaseMode: 'subscription',
-        shopCategory: 'hosting-support',
-      },
-      {
-        id: 'dedicated',
-        priceEur: 249,
-        purchaseMode: 'quote',
-        shopCategory: 'hosting-support',
-      },
-    ],
-    addons: [
-      { id: 'migration', priceEur: 49 },
-      { id: 'ssl-backup', priceEur: 29 },
-      { id: 'monitoring', priceEur: 39 },
-    ],
-  },
-  'mobile-app': {
-    packages: [
-      {
-        id: 'mvp',
-        priceEur: 149,
-        purchaseMode: 'checkout',
-        shopCategory: 'mobile-app',
-      },
-      {
-        id: 'launch',
-        priceEur: 299,
-        recommended: true,
-        purchaseMode: 'quote',
-        shopCategory: 'mobile-app',
-      },
-      {
-        id: 'scale',
-        priceEur: 499,
-        purchaseMode: 'quote',
-        shopCategory: 'mobile-app',
-      },
-    ],
-    addons: [
-      { id: 'ui-kit', priceEur: 79 },
-      { id: 'store-assets', priceEur: 59 },
-      { id: 'api-extra', priceEur: 99 },
-    ],
-  },
-  'web-development': {
-    packages: [
-      {
-        id: 'landing',
-        priceEur: 99,
-        purchaseMode: 'checkout',
-        shopCategory: 'web-design',
-      },
-      {
-        id: 'business',
-        priceEur: 199,
-        recommended: true,
-        purchaseMode: 'checkout',
-        shopCategory: 'web-design',
-      },
-      {
-        id: 'custom',
-        priceEur: 399,
-        purchaseMode: 'quote',
-        shopCategory: 'web-design',
-      },
-    ],
-    addons: [
-      { id: 'cms', priceEur: 69 },
-      { id: 'seo-tech', priceEur: 49 },
-      { id: 'forms', priceEur: 39 },
-    ],
-  },
-  'e-commerce': {
-    packages: [
-      {
-        id: 'starter',
-        priceEur: 129,
-        purchaseMode: 'checkout',
-        shopCategory: 'web-design',
-      },
-      {
-        id: 'growth',
-        priceEur: 249,
-        recommended: true,
-        purchaseMode: 'checkout',
-        shopCategory: 'web-design',
-      },
-      {
-        id: 'scale',
-        priceEur: 449,
-        purchaseMode: 'quote',
-        shopCategory: 'web-design',
-      },
-    ],
-    addons: [
-      { id: 'payments', priceEur: 59 },
-      { id: 'catalog', priceEur: 79 },
-      { id: 'shipping', priceEur: 49 },
-    ],
-  },
-  'digital-marketing': {
-    packages: [
-      {
-        id: 'audit',
-        priceEur: 99,
-        purchaseMode: 'checkout',
-        shopCategory: 'seo-analytics',
-      },
-      {
-        id: 'campaign',
-        priceEur: 199,
-        recommended: true,
-        purchaseMode: 'checkout',
-        shopCategory: 'digital-marketing',
-      },
-      {
-        id: 'retainer',
-        priceEur: 349,
-        purchaseMode: 'subscription',
-        shopCategory: 'digital-marketing',
-      },
-    ],
-    addons: [
-      { id: 'ads-setup', priceEur: 69 },
-      { id: 'content-pack', priceEur: 89 },
-      { id: 'reporting', priceEur: 39 },
-    ],
-  },
-  'offline-marketing': {
-    packages: [
-      {
-        id: 'print',
-        priceEur: 89,
-        purchaseMode: 'checkout',
-        shopCategory: 'offline-marketing',
-      },
-      {
-        id: 'campaign',
-        priceEur: 179,
-        recommended: true,
-        purchaseMode: 'quote',
-        shopCategory: 'offline-marketing',
-      },
-      {
-        id: 'event',
-        priceEur: 299,
-        purchaseMode: 'quote',
-        shopCategory: 'offline-marketing',
-      },
-    ],
-    addons: [
-      { id: 'design', priceEur: 59 },
-      { id: 'print-prod', priceEur: 79 },
-      { id: 'install', priceEur: 69 },
-    ],
-  },
-}
+export const SERVICE_SHOP = catalogJson as Record<BookingServiceKey, ServiceShop>
 
 /** Services listed on the public shop (excludes general consult-only). */
 const SHOP_LISTING_SERVICES: BookingServiceKey[] = [
@@ -307,4 +110,8 @@ export function isShopCategoryId(v: string): v is ShopCategoryId {
 export function bookingHref(service: BookingServiceKey, packageId: string): string {
   const q = new URLSearchParams({ service, package: packageId })
   return `/?${q.toString()}#booking`
+}
+
+export function canAddToCart(purchaseMode: PurchaseMode): boolean {
+  return purchaseMode === 'checkout' || purchaseMode === 'subscription'
 }

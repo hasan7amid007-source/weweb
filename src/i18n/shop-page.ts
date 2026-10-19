@@ -44,6 +44,22 @@ export type ShopPageCopy = {
   quoteHint: string
   quoteSuccess: string
   modeBadge: Record<PurchaseMode, string>
+  cartTitle: string
+  cartEmpty: string
+  cartCount: (n: number) => string
+  cartAdd: string
+  cartAdded: string
+  cartDuplicate: string
+  cartFull: string
+  cartRemove: string
+  cartClear: string
+  cartCheckout: string
+  cartOpen: string
+  cartName: string
+  cartEmail: string
+  cartPayHint: string
+  cartProcessing: string
+  cartError: string
 }
 
 export const shopPageDe: ShopPageCopy = {
@@ -124,6 +140,23 @@ export const shopPageDe: ShopPageCopy = {
     subscription: 'Abo',
     quote: 'Angebot',
   },
+  cartTitle: 'Warenkorb',
+  cartEmpty: 'Noch keine Pakete im Warenkorb.',
+  cartCount: (n) => (n === 1 ? '1 Artikel' : `${n} Artikel`),
+  cartAdd: 'In den Warenkorb',
+  cartAdded: 'Hinzugefügt',
+  cartDuplicate: 'Bereits im Warenkorb',
+  cartFull: 'Warenkorb voll (max. 8)',
+  cartRemove: 'Entfernen',
+  cartClear: 'Leeren',
+  cartCheckout: 'Warenkorb bezahlen',
+  cartOpen: 'Warenkorb öffnen',
+  cartName: 'Name',
+  cartEmail: 'E-Mail',
+  cartPayHint:
+    'Beträge werden serverseitig geprüft. Ohne Stripe-Schlüssel läuft der Soft-Launch als Demo.',
+  cartProcessing: 'Checkout wird vorbereitet…',
+  cartError: 'Checkout fehlgeschlagen. Bitte erneut versuchen oder Angebot anfragen.',
 }
 
 export const shopPageEn: ShopPageCopy = {
@@ -204,6 +237,23 @@ export const shopPageEn: ShopPageCopy = {
     subscription: 'Subscription',
     quote: 'Quote',
   },
+  cartTitle: 'Cart',
+  cartEmpty: 'No packages in the cart yet.',
+  cartCount: (n) => (n === 1 ? '1 item' : `${n} items`),
+  cartAdd: 'Add to cart',
+  cartAdded: 'Added',
+  cartDuplicate: 'Already in cart',
+  cartFull: 'Cart full (max 8)',
+  cartRemove: 'Remove',
+  cartClear: 'Clear',
+  cartCheckout: 'Pay cart',
+  cartOpen: 'Open cart',
+  cartName: 'Name',
+  cartEmail: 'Email',
+  cartPayHint:
+    'Amounts are validated server-side. Without a Stripe secret key, soft-launch stays in demo mode.',
+  cartProcessing: 'Preparing checkout…',
+  cartError: 'Checkout failed. Try again or request a quote.',
 }
 
 export const shopPageAr: ShopPageCopy = {
@@ -284,4 +334,21 @@ export const shopPageAr: ShopPageCopy = {
     subscription: 'اشتراك',
     quote: 'عرض',
   },
+  cartTitle: 'السلة',
+  cartEmpty: 'لا باقات في السلة بعد.',
+  cartCount: (n) => (n === 1 ? 'عنصر واحد' : `${n} عناصر`),
+  cartAdd: 'أضف إلى السلة',
+  cartAdded: 'تمت الإضافة',
+  cartDuplicate: 'موجود مسبقاً في السلة',
+  cartFull: 'السلة ممتلئة (حد أقصى 8)',
+  cartRemove: 'إزالة',
+  cartClear: 'تفريغ',
+  cartCheckout: 'ادفع السلة',
+  cartOpen: 'فتح السلة',
+  cartName: 'الاسم',
+  cartEmail: 'البريد',
+  cartPayHint:
+    'تُتحقق المبالغ على الخادم. بدون مفتاح Stripe يبقى الإطلاق التجريبي في وضع العرض.',
+  cartProcessing: 'جاري تجهيز الدفع…',
+  cartError: 'فشل الدفع. حاول مجدداً أو اطلب عرض سعر.',
 }

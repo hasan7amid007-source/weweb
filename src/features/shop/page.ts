@@ -1,6 +1,7 @@
 import {
   SHOP_CATEGORY_IDS,
   bookingHref,
+  canAddToCart,
   findShopPackage,
   isShopCategoryId,
   listShopPackages,
@@ -9,7 +10,16 @@ import {
   type ShopCategoryId,
   type ShopListingItem,
 } from '../booking/shop-catalog'
+import { startCartCheckout } from '../booking/checkout-client'
 import { formatEur, isBookingServiceKey, type BookingServiceKey } from '../booking/catalog'
+import {
+  addToCart,
+  cartTotalEur,
+  clearCart,
+  readCart,
+  removeFromCart,
+  type CartLine,
+} from './cart'
 import { SERVICE_ICONS, servicePath, type ServiceId } from '../../data/services'
 import { trackEvent } from '../../lib/telemetry'
 import { type Locale, t } from '../../i18n'
@@ -129,12 +139,16 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
   const serviceHref =
     item.service === 'general' ? '/#services' : servicePath(item.service as ServiceId)
   const checkoutHref = bookingHref(item.service, item.package.id)
+  const cartable = canAddToCart(item.package.purchaseMode)
   const primaryCta =
     item.package.purchaseMode === 'quote'
       ? `<a class="ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
       : item.package.purchaseMode === 'subscription'
         ? `<a class="ts-btn pink solid" href="${checkoutHref}">${shop.ctaSubscription}</a>`
         : `<a class="ts-btn pink solid" href="${checkoutHref}">${shop.ctaCheckout}</a>`
+  const addCartCta = cartable
+    ? `<button type="button" class="ts-btn pink" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
+    : ''
   const secondaryCta =
     item.package.purchaseMode === 'quote'
       ? ''
@@ -183,9 +197,65 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
     </div>
     <div class="shop-detail-actions">
       <span class="glowborder">${primaryCta}</span>
+      ${addCartCta ? `<span class="glowborder">${addCartCta}</span>` : ''}
       ${secondaryCta}
       <a class="shop-secondary-cta" href="${serviceHref}">${shop.ctaService}</a>
+      <p class="shop-cart-feedback" data-shop-cart-feedback hidden></p>
     </div>`
+}
+
+function renderCartPanel(locale: Locale, lines: CartLine[]): string {
+  const shop = t(locale).shopPage
+  const total = cartTotalEur(lines)
+  return `
+    <section class="shop-cart" id="cart" data-shop-cart>
+      <div class="shop-cart-head">
+        <h2>${shop.cartTitle}</h2>
+        <p class="shop-results">${shop.cartCount(lines.length)} · ${formatEur(total, locale)}</p>
+      </div>
+      ${
+        lines.length === 0
+          ? `<p class="shop-empty">${shop.cartEmpty}</p>`
+          : `
+        <ul class="shop-cart-list">
+          ${lines
+            .map((line) => {
+              const copy = packageCopy(locale, line.service, line.packageId)
+              const lineTotal = cartTotalEur([line])
+              return `
+              <li class="shop-cart-line">
+                <div>
+                  <strong>${copy?.title ?? line.packageId}</strong>
+                  <span>${serviceTitle(locale, line.service)}</span>
+                </div>
+                <div class="shop-cart-line-actions">
+                  <span>${formatEur(lineTotal, locale)}</span>
+                  <button type="button" class="shop-cart-remove" data-shop-remove="${line.service}:${line.packageId}">${shop.cartRemove}</button>
+                </div>
+              </li>`
+            })
+            .join('')}
+        </ul>
+        <div class="shop-cart-toolbar">
+          <button type="button" class="booking-back" data-shop-clear-cart>${shop.cartClear}</button>
+        </div>
+        <form class="contact-form shop-quote-form" data-shop-cart-pay novalidate>
+          <label class="contact-field">
+            <span>${shop.cartName} <em>*</em></span>
+            <input type="text" name="name" required autocomplete="name" />
+          </label>
+          <label class="contact-field">
+            <span>${shop.cartEmail} <em>*</em></span>
+            <input type="email" name="email" required autocomplete="email" />
+          </label>
+          <p class="booking-hint">${shop.cartPayHint}</p>
+          <p class="booking-error" data-shop-cart-error hidden></p>
+          <span class="glowborder">
+            <button type="submit" class="ts-btn pink solid" data-shop-cart-submit>${shop.cartCheckout}</button>
+          </span>
+        </form>`
+      }
+    </section>`
 }
 
 function renderQuoteForm(locale: Locale, prefillService = '', prefillPackage = ''): string {
@@ -254,13 +324,21 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
     { id: 'quote', label: shop.modeQuote },
   ]
 
+  const cartLines = readCart()
+  const cartBar = `
+    <div class="wrap shop-cart-bar">
+      <a class="shop-cart-bar-link" href="#cart">${shop.cartOpen} · ${shop.cartCount(cartLines.length)}</a>
+    </div>`
+
   if (detail) {
     return `
       <div class="shop-page" data-shop-root>
+        ${cartBar}
         <div class="shop-detail wrap" data-shop-detail>
           ${renderDetail(locale, detail)}
         </div>
         <div class="wrap">
+          ${renderCartPanel(locale, cartLines)}
           ${renderQuoteForm(locale, detail.package.shopCategory, `${detail.service}:${detail.package.id}`)}
         </div>
       </div>`
@@ -274,6 +352,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
         <p class="lead">${shop.lead}</p>
         <p class="shop-note shop-note--warn">${shop.missingTerms}</p>
       </div>
+      ${cartBar}
 
       <div class="wrap shop-toolbar">
         <label class="shop-search">
@@ -307,6 +386,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
       </div>
 
       <div class="wrap">
+        ${renderCartPanel(locale, cartLines)}
         ${renderQuoteForm(locale)}
       </div>
     </div>`
@@ -378,6 +458,94 @@ export function initShopPage(
         msg.value = `${serviceTitle(locale, service as BookingServiceKey)} / ${copy?.title ?? packageId}`
       }
     })
+  })
+
+  const feedback = (message: string) => {
+    const el = host.querySelector<HTMLElement>('[data-shop-cart-feedback]')
+    if (!el) return
+    el.hidden = false
+    el.textContent = message
+  }
+
+  host.querySelectorAll<HTMLButtonElement>('[data-shop-add-cart]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const service = btn.dataset.service || ''
+      const packageId = btn.dataset.package || ''
+      const result = addToCart(service, packageId)
+      const shop = t(locale).shopPage
+      if (result.ok) {
+        feedback(shop.cartAdded)
+        trackEvent('shop_cart_add', { service, package: packageId, locale })
+        onRerender(state)
+        return
+      }
+      if (result.reason === 'duplicate') feedback(shop.cartDuplicate)
+      else if (result.reason === 'full') feedback(shop.cartFull)
+      else feedback(shop.cartError)
+    })
+  })
+
+  host.querySelectorAll<HTMLButtonElement>('[data-shop-remove]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const raw = btn.dataset.shopRemove || ''
+      const [service, packageId] = raw.split(':')
+      if (service && packageId) {
+        removeFromCart(service, packageId)
+        trackEvent('shop_cart_remove', { service, package: packageId, locale })
+        onRerender(state)
+      }
+    })
+  })
+
+  host.querySelector<HTMLButtonElement>('[data-shop-clear-cart]')?.addEventListener('click', () => {
+    clearCart()
+    trackEvent('shop_cart_clear', { locale })
+    onRerender(state)
+  })
+
+  const cartPay = host.querySelector<HTMLFormElement>('[data-shop-cart-pay]')
+  cartPay?.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    const shop = t(locale).shopPage
+    const data = new FormData(cartPay)
+    const name = String(data.get('name') || '').trim()
+    const email = String(data.get('email') || '').trim()
+    const err = host.querySelector<HTMLElement>('[data-shop-cart-error]')
+    const submit = host.querySelector<HTMLButtonElement>('[data-shop-cart-submit]')
+    if (!name || !email) {
+      cartPay.reportValidity()
+      return
+    }
+    const items = readCart()
+    if (!items.length) return
+    if (err) {
+      err.hidden = true
+      err.textContent = ''
+    }
+    if (submit) {
+      submit.disabled = true
+      submit.textContent = shop.cartProcessing
+    }
+    const result = await startCartCheckout({ items, email, name, locale })
+    if (result.mode === 'stripe' || result.mode === 'demo') {
+      trackEvent('shop_cart_checkout', {
+        locale,
+        mode: result.mode,
+        items: items.length,
+        total: result.totalEur ?? cartTotalEur(items),
+      })
+      clearCart()
+      window.location.href = result.url
+      return
+    }
+    if (err) {
+      err.hidden = false
+      err.textContent = result.error || shop.cartError
+    }
+    if (submit) {
+      submit.disabled = false
+      submit.textContent = shop.cartCheckout
+    }
   })
 
   const form = host.querySelector<HTMLFormElement>('[data-shop-quote]')

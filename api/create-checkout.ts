@@ -1,9 +1,11 @@
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 /**
- * Single-file checkout handler (no relative imports — Vercel Node ESM
- * does not reliably package api/_lib for this Vite MPA).
- * Keep prices aligned with src/features/booking/shop-catalog.ts.
+ * Checkout with server-side price validation from api/shop-catalog.json.
+ * Supports single package (legacy) or items[] for session cart.
  */
 
 type PurchaseMode = 'checkout' | 'subscription' | 'quote'
@@ -17,109 +19,54 @@ type ServiceKey =
   | 'offline-marketing'
 
 type Shop = {
-  packages: { id: string; priceEur: number; purchaseMode: PurchaseMode }[]
+  packages: {
+    id: string
+    priceEur: number
+    purchaseMode: PurchaseMode
+    shopCategory?: string
+    recommended?: boolean
+  }[]
   addons: { id: string; priceEur: number }[]
 }
 
-const SERVICE_SHOP: Record<ServiceKey, Shop> = {
-  general: {
-    packages: [
-      { id: 'kickoff', priceEur: 49, purchaseMode: 'checkout' },
-      { id: 'briefing', priceEur: 89, purchaseMode: 'checkout' },
-      { id: 'roadmap', priceEur: 149, purchaseMode: 'quote' },
-    ],
-    addons: [
-      { id: 'priority', priceEur: 39 },
-      { id: 'competitor', priceEur: 59 },
-    ],
-  },
-  'web-hosting': {
-    packages: [
-      { id: 'shared', priceEur: 79, purchaseMode: 'checkout' },
-      { id: 'vps', priceEur: 129, purchaseMode: 'subscription' },
-      { id: 'dedicated', priceEur: 249, purchaseMode: 'quote' },
-    ],
-    addons: [
-      { id: 'migration', priceEur: 49 },
-      { id: 'ssl-backup', priceEur: 29 },
-      { id: 'monitoring', priceEur: 39 },
-    ],
-  },
-  'mobile-app': {
-    packages: [
-      { id: 'mvp', priceEur: 149, purchaseMode: 'checkout' },
-      { id: 'launch', priceEur: 299, purchaseMode: 'quote' },
-      { id: 'scale', priceEur: 499, purchaseMode: 'quote' },
-    ],
-    addons: [
-      { id: 'ui-kit', priceEur: 79 },
-      { id: 'store-assets', priceEur: 59 },
-      { id: 'api-extra', priceEur: 99 },
-    ],
-  },
-  'web-development': {
-    packages: [
-      { id: 'landing', priceEur: 99, purchaseMode: 'checkout' },
-      { id: 'business', priceEur: 199, purchaseMode: 'checkout' },
-      { id: 'custom', priceEur: 399, purchaseMode: 'quote' },
-    ],
-    addons: [
-      { id: 'cms', priceEur: 69 },
-      { id: 'seo-tech', priceEur: 49 },
-      { id: 'forms', priceEur: 39 },
-    ],
-  },
-  'e-commerce': {
-    packages: [
-      { id: 'starter', priceEur: 129, purchaseMode: 'checkout' },
-      { id: 'growth', priceEur: 249, purchaseMode: 'checkout' },
-      { id: 'scale', priceEur: 449, purchaseMode: 'quote' },
-    ],
-    addons: [
-      { id: 'payments', priceEur: 59 },
-      { id: 'catalog', priceEur: 79 },
-      { id: 'shipping', priceEur: 49 },
-    ],
-  },
-  'digital-marketing': {
-    packages: [
-      { id: 'audit', priceEur: 99, purchaseMode: 'checkout' },
-      { id: 'campaign', priceEur: 199, purchaseMode: 'checkout' },
-      { id: 'retainer', priceEur: 349, purchaseMode: 'subscription' },
-    ],
-    addons: [
-      { id: 'ads-setup', priceEur: 69 },
-      { id: 'content-pack', priceEur: 89 },
-      { id: 'reporting', priceEur: 39 },
-    ],
-  },
-  'offline-marketing': {
-    packages: [
-      { id: 'print', priceEur: 89, purchaseMode: 'checkout' },
-      { id: 'campaign', priceEur: 179, purchaseMode: 'quote' },
-      { id: 'event', priceEur: 299, purchaseMode: 'quote' },
-    ],
-    addons: [
-      { id: 'design', priceEur: 59 },
-      { id: 'print-prod', priceEur: 79 },
-      { id: 'install', priceEur: 69 },
-    ],
-  },
-}
+type Catalog = Record<ServiceKey, Shop>
 
-function isServiceKey(v: string): v is ServiceKey {
-  return Object.prototype.hasOwnProperty.call(SERVICE_SHOP, v)
+type CartItemIn = {
+  service?: string
+  packageId?: string
+  addonIds?: string[]
 }
 
 type Body = {
   service?: string
   packageId?: string
   addonIds?: string[]
+  items?: CartItemIn[]
   email?: string
   name?: string
   locale?: string
   successUrl?: string
   cancelUrl?: string
+}
+
+type ResolvedLine = {
+  service: ServiceKey
+  packageId: string
+  addonIds: string[]
+  purchaseMode: PurchaseMode
+  packagePrice: number
+  addonPrices: { id: string; priceEur: number }[]
+  lineTotal: number
+}
+
+function loadCatalog(): Catalog {
+  const here = dirname(fileURLToPath(import.meta.url))
+  const raw = readFileSync(join(here, 'shop-catalog.json'), 'utf8')
+  return JSON.parse(raw) as Catalog
+}
+
+function isServiceKey(v: string, catalog: Catalog): v is ServiceKey {
+  return Object.prototype.hasOwnProperty.call(catalog, v)
 }
 
 function parseBody(req: VercelRequest): Body {
@@ -152,6 +99,60 @@ function safeUrl(raw: string | undefined, fallback: string): string {
   }
 }
 
+function resolveLines(
+  catalog: Catalog,
+  body: Body,
+): { ok: true; lines: ResolvedLine[] } | { ok: false; error: string; status: number } {
+  const rawItems: CartItemIn[] =
+    Array.isArray(body.items) && body.items.length > 0
+      ? body.items
+      : [{ service: body.service, packageId: body.packageId, addonIds: body.addonIds }]
+
+  if (rawItems.length > 8) {
+    return { ok: false, error: 'Too many cart items (max 8)', status: 400 }
+  }
+
+  const lines: ResolvedLine[] = []
+  const seen = new Set<string>()
+
+  for (const raw of rawItems) {
+    const serviceRaw = String(raw.service || '').trim()
+    if (!isServiceKey(serviceRaw, catalog)) {
+      return { ok: false, error: 'Invalid service', status: 400 }
+    }
+    const packageId = String(raw.packageId || '').trim()
+    const pkg = catalog[serviceRaw].packages.find((p) => p.id === packageId)
+    if (!pkg) {
+      return { ok: false, error: 'Invalid package', status: 400 }
+    }
+    if (pkg.purchaseMode === 'quote') {
+      return { ok: false, error: 'Package requires a quote, not checkout', status: 400 }
+    }
+    const key = `${serviceRaw}:${packageId}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    const addonIds = (Array.isArray(raw.addonIds) ? raw.addonIds : [])
+      .map((id) => String(id))
+      .filter((id) => catalog[serviceRaw].addons.some((a) => a.id === id))
+    const addonPrices = catalog[serviceRaw].addons.filter((a) => addonIds.includes(a.id))
+    const lineTotal = pkg.priceEur + addonPrices.reduce((sum, a) => sum + a.priceEur, 0)
+    lines.push({
+      service: serviceRaw,
+      packageId,
+      addonIds,
+      purchaseMode: pkg.purchaseMode,
+      packagePrice: pkg.priceEur,
+      addonPrices,
+      lineTotal,
+    })
+  }
+
+  if (!lines.length) {
+    return { ok: false, error: 'Cart is empty', status: 400 }
+  }
+  return { ok: true, lines }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (req.method === 'OPTIONS') {
@@ -164,36 +165,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(405).json({ error: 'Method not allowed' })
     }
 
+    const catalog = loadCatalog()
     const body = parseBody(req)
-    const serviceRaw = String(body.service || '').trim()
-    if (!isServiceKey(serviceRaw)) {
-      return res.status(400).json({ error: 'Invalid service' })
+    const resolved = resolveLines(catalog, body)
+    if (!resolved.ok) {
+      return res.status(resolved.status).json({ error: resolved.error })
     }
-    const packageId = String(body.packageId || '').trim()
-    const pkg = SERVICE_SHOP[serviceRaw].packages.find((p) => p.id === packageId)
-    if (!pkg) {
-      return res.status(400).json({ error: 'Invalid package' })
-    }
-    if (pkg.purchaseMode === 'quote') {
-      return res.status(400).json({ error: 'Package requires a quote, not checkout' })
-    }
-    const addonIds = (Array.isArray(body.addonIds) ? body.addonIds : [])
-      .map((id) => String(id))
-      .filter((id) => SERVICE_SHOP[serviceRaw].addons.some((a) => a.id === id))
+    const { lines } = resolved
     const email = String(body.email || '').trim()
     const name = String(body.name || '').trim()
     if (!email.includes('@') || !name) {
       return res.status(400).json({ error: 'Name and valid email required' })
     }
-    const addons = SERVICE_SHOP[serviceRaw].addons.filter((a) => addonIds.includes(a.id))
-    const totalEur = pkg.priceEur + addons.reduce((sum, a) => sum + a.priceEur, 0)
+    const totalEur = lines.reduce((sum, line) => sum + line.lineTotal, 0)
     const locale = String(body.locale || 'de').slice(0, 5)
     const origin = originFromReq(req)
+    const primary = lines[0]!
     const successUrl = safeUrl(
       body.successUrl,
-      `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(serviceRaw)}&package=${encodeURIComponent(packageId)}`,
+      `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(primary.service)}&package=${encodeURIComponent(primary.packageId)}&total=${totalEur}`,
     )
-    const cancelUrl = safeUrl(body.cancelUrl, `${origin}/shop.html`)
+    const cancelUrl = safeUrl(body.cancelUrl, `${origin}/shop.html#cart`)
 
     const secret = (process.env.STRIPE_SECRET_KEY || '').trim()
     if (!secret) {
@@ -201,64 +193,67 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const demoUrl = new URL(`${origin}/order.html`)
       demoUrl.searchParams.set('demo', '1')
       demoUrl.searchParams.set('order', demoId)
-      demoUrl.searchParams.set('service', serviceRaw)
-      demoUrl.searchParams.set('package', packageId)
+      demoUrl.searchParams.set('service', primary.service)
+      demoUrl.searchParams.set('package', primary.packageId)
       demoUrl.searchParams.set('total', String(totalEur))
       demoUrl.searchParams.set('email', email)
       demoUrl.searchParams.set('name', name)
-      if (addonIds.length) demoUrl.searchParams.set('addons', addonIds.join(','))
+      demoUrl.searchParams.set(
+        'items',
+        lines.map((l) => `${l.service}:${l.packageId}`).join('|'),
+      )
+      if (primary.addonIds.length) demoUrl.searchParams.set('addons', primary.addonIds.join(','))
       return res.status(200).json({
         mode: 'demo',
         url: demoUrl.toString(),
         totalEur,
         orderId: demoId,
+        itemCount: lines.length,
       })
     }
 
     const { default: Stripe } = await import('stripe')
     const stripe = new Stripe(secret)
-    const line_items = [
+    const line_items = lines.flatMap((line) => [
       {
         quantity: 1,
         price_data: {
           currency: 'eur',
-          unit_amount: pkg.priceEur * 100,
+          unit_amount: line.packagePrice * 100,
           product_data: {
-            name: `BDITEC ${serviceRaw} / ${packageId}`,
+            name: `BDITEC ${line.service} / ${line.packageId}`,
             description:
-              pkg.purchaseMode === 'subscription'
+              line.purchaseMode === 'subscription'
                 ? 'Start amount (recurring billing terms pending business setup)'
                 : 'Online start / deposit amount',
           },
         },
       },
-      ...addons.map((addon) => ({
+      ...line.addonPrices.map((addon) => ({
         quantity: 1,
         price_data: {
           currency: 'eur',
           unit_amount: addon.priceEur * 100,
           product_data: {
             name: `Extra: ${addon.id}`,
-            description: `Add-on for ${serviceRaw}`,
+            description: `Add-on for ${line.service}`,
           },
         },
       })),
-    ]
+    ])
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       customer_email: email,
-      client_reference_id: `bditec-${serviceRaw}-${packageId}-${Date.now().toString(36)}`,
+      client_reference_id: `bditec-cart-${Date.now().toString(36)}`,
       success_url: successUrl.includes('{CHECKOUT_SESSION_ID}')
         ? successUrl
         : `${successUrl}${successUrl.includes('?') ? '&' : '?'}session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl,
       line_items,
       metadata: {
-        service: serviceRaw,
-        packageId,
-        addonIds: addonIds.join(',') || 'none',
-        purchaseMode: pkg.purchaseMode,
+        itemCount: String(lines.length),
+        items: lines.map((l) => `${l.service}:${l.packageId}`).join('|').slice(0, 450),
         customerName: name.slice(0, 200),
         locale,
         totalEur: String(totalEur),
@@ -274,6 +269,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       url: session.url,
       sessionId: session.id,
       totalEur,
+      itemCount: lines.length,
     })
   } catch (err) {
     console.error('[create-checkout]', err)

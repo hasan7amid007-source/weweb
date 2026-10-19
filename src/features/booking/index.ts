@@ -17,3 +17,4 @@ export {
   renderBookingFormMarkup,
   type BookingDraft,
 } from './wizard'
+export { startCheckout, type CheckoutRequest, type CheckoutResult } from './checkout-client'

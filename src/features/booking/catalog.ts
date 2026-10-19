@@ -13,7 +13,7 @@ export const BOOKING_DEPOSITS_EUR: Record<BookingServiceKey, number> = {
   'offline-marketing': 89,
 }
 
-const ENV_LINK: Record<BookingServiceKey, string | undefined> = {
+const ENV_LINK_SERVICE: Record<BookingServiceKey, string | undefined> = {
   general: import.meta.env.VITE_STRIPE_LINK_GENERAL,
   'web-hosting': import.meta.env.VITE_STRIPE_LINK_WEB_HOSTING,
   'mobile-app': import.meta.env.VITE_STRIPE_LINK_MOBILE_APP,
@@ -21,6 +21,18 @@ const ENV_LINK: Record<BookingServiceKey, string | undefined> = {
   'e-commerce': import.meta.env.VITE_STRIPE_LINK_E_COMMERCE,
   'digital-marketing': import.meta.env.VITE_STRIPE_LINK_DIGITAL_MARKETING,
   'offline-marketing': import.meta.env.VITE_STRIPE_LINK_OFFLINE_MARKETING,
+}
+
+/** Env key fragment: web-development + landing → WEB_DEVELOPMENT_LANDING */
+function packageEnvKey(service: BookingServiceKey, packageId: string): string {
+  const s = service.replace(/-/g, '_').toUpperCase()
+  const p = packageId.replace(/-/g, '_').toUpperCase()
+  return `VITE_STRIPE_LINK_${s}_${p}`
+}
+
+function envLink(key: string): string {
+  const bag = import.meta.env as Record<string, string | undefined>
+  return (bag[key] || '').trim()
 }
 
 export function isBookingServiceKey(v: string): v is BookingServiceKey {
@@ -36,27 +48,36 @@ export function formatEur(amount: number, locale: string): string {
 }
 
 /**
- * Stripe Payment Link when configured.
- * Soft-launch default: demo checkout when links are missing (Stripe skipped).
- * Set VITE_BOOKING_DEMO_PAY=false to force “unavailable” instead of demo.
+ * Stripe Payment Link when configured (package-level preferred, then service-level).
+ * Soft-launch default: demo checkout when links are missing.
  */
 export function hasLiveStripeCheckout(): boolean {
-  return (Object.values(ENV_LINK) as (string | undefined)[]).some(
-    (raw) => (raw || '').trim().startsWith('https://'),
+  const bag = import.meta.env as Record<string, string | undefined>
+  return Object.keys(bag).some(
+    (key) => key.startsWith('VITE_STRIPE_LINK_') && (bag[key] || '').trim().startsWith('https://'),
   )
 }
 
 export function resolveCheckout(
   service: BookingServiceKey,
   email: string,
+  packageId?: string,
 ): { mode: 'stripe'; url: string } | { mode: 'demo' } | { mode: 'unavailable' } {
-  const raw = (ENV_LINK[service] || '').trim()
+  const packageRaw =
+    packageId && packageId.length > 0 ? envLink(packageEnvKey(service, packageId)) : ''
+  const serviceRaw = (ENV_LINK_SERVICE[service] || '').trim()
+  const raw = packageRaw.startsWith('https://')
+    ? packageRaw
+    : serviceRaw.startsWith('https://')
+      ? serviceRaw
+      : ''
+
   if (raw.startsWith('https://')) {
     const url = new URL(raw)
     if (email) url.searchParams.set('prefilled_email', email)
     url.searchParams.set(
       'client_reference_id',
-      `bditec-${service}-${Date.now().toString(36)}`,
+      `bditec-${service}-${packageId || 'pkg'}-${Date.now().toString(36)}`,
     )
     return { mode: 'stripe', url: url.toString() }
   }
@@ -67,3 +88,4 @@ export function resolveCheckout(
 }
 
 export const BOOKING_STORAGE_KEY = 'bditec-booking-draft'
+export const ORDER_BRIEFING_KEY = 'bditec-order-briefing'

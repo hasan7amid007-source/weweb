@@ -1,6 +1,7 @@
 import type { Messages } from './types'
 import { bookingShopEn } from './booking-shop'
 import { servicePagesEn } from './service-pages-en'
+import { orderPageEn } from './order-page'
 import { shopPageEn } from './shop-page'
 
 export const en: Messages = {
@@ -172,6 +173,7 @@ export const en: Messages = {
   },
   bookingShop: bookingShopEn,
   shopPage: shopPageEn,
+  orderPage: orderPageEn,
   serviceUi: {
     back: 'All services',
     highlights: 'What you get',

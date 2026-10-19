@@ -1,4 +1,5 @@
 import type { BookingShopCopy } from './booking-shop'
+import type { OrderPageCopy } from './order-page'
 import type { ShopPageCopy } from './shop-page'
 
 export type Locale = 'de' | 'en' | 'ar'
@@ -183,6 +184,7 @@ export type Messages = {
   }
   bookingShop: BookingShopCopy
   shopPage: ShopPageCopy
+  orderPage: OrderPageCopy
   serviceUi: {
     back: string
     highlights: string

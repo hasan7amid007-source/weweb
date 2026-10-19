@@ -3838,3 +3838,57 @@ html[dir='rtl'] .brand {
   color: #1b7a3d;
   font-weight: 600;
 }
+
+/* —— Order / briefing —— */
+.order-page {
+  padding: 2.5rem 0 4rem;
+}
+
+.order-wrap h1 {
+  margin: 0 0 0.75rem;
+  font-family: 'Bodoni Moda', Georgia, serif;
+  font-size: clamp(1.85rem, 3.5vw, 2.6rem);
+}
+
+.order-meta {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1.5rem 0;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e4e2ea;
+  background: var(--paper, #f7f6f9);
+}
+
+.order-meta > div {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 0.75rem;
+}
+
+.order-meta dt {
+  margin: 0;
+  color: #6a6a75;
+  font-size: 0.85rem;
+}
+
+.order-meta dd {
+  margin: 0;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.order-next {
+  margin: 1.5rem 0;
+}
+
+.order-next h2 {
+  margin: 0 0 0.4rem;
+  font-size: 1.15rem;
+}
+
+.order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}

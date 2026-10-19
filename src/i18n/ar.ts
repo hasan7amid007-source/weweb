@@ -1,6 +1,7 @@
 import type { Messages } from './types'
 import { bookingShopAr } from './booking-shop'
 import { servicePagesAr } from './service-pages-ar'
+import { orderPageAr } from './order-page'
 import { shopPageAr } from './shop-page'
 
 export const ar: Messages = {
@@ -170,6 +171,7 @@ export const ar: Messages = {
   },
   bookingShop: bookingShopAr,
   shopPage: shopPageAr,
+  orderPage: orderPageAr,
   serviceUi: {
     back: 'كل الخدمات',
     highlights: 'ما نقدّمه',

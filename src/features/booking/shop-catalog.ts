@@ -41,6 +41,7 @@ export type ShopListingItem = {
  * Shop configurator per service — packages (required) + add-ons (optional).
  * Prices are online start amounts (EUR), credited toward the project.
  * purchaseMode / shopCategory drive the public /shop surface.
+ * SERVER MIRROR: keep `api/_lib/shop-catalog.ts` in sync (checkout validates there).
  */
 export const SERVICE_SHOP: Record<BookingServiceKey, ServiceShop> = {
   general: {

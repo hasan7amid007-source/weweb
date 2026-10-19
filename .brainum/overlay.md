@@ -58,5 +58,7 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch hardening (2026-10-19) — security headers in `vercel.json`; branded `404.html`
 - [x] Shop-style order options (2026-10-19) — per-service packages + add-ons; 4-step checkout (service → options → details → pay)
 - [x] Public agency shop Phase 1 (2026-10-19) — `/shop.html` categories/filters/search, package detail, quote mailto, booking deep-links; Stripe live still deferred
+- [x] Shop Phase 2 scaffold (2026-10-19) — `/api/create-checkout` (server price validation), `/api/stripe-webhook` (signed + duplicate guard), `/order.html` briefing; demo without `STRIPE_SECRET_KEY`
 - [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
-- [ ] Phase 2+: Checkout Sessions + webhooks + post-order briefing (needs Stripe account + backend)
+- [ ] Ops: set Vercel `STRIPE_SECRET_KEY` (test) + `STRIPE_WEBHOOK_SECRET`; durable event store for webhooks
+- [ ] Keep `api/_lib/shop-catalog.ts` in sync with `src/features/booking/shop-catalog.ts` when prices change

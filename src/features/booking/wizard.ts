@@ -6,6 +6,7 @@ import {
   resolveCheckout,
   type BookingServiceKey,
 } from './catalog'
+import { startCheckout } from './checkout-client'
 import {
   calcOrderTotalEur,
   defaultPackageId,
@@ -377,7 +378,7 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     if (step === 4) {
       saveDraft(draft)
       renderSummary(wizard, locale, draft)
-      const checkout = resolveCheckout(draft.service, draft.email)
+      const checkout = resolveCheckout(draft.service, draft.email, draft.packageId)
       const demoNote = wizard.querySelector<HTMLElement>('[data-booking-demo-note]')
       const secure = wizard.querySelector<HTMLElement>('[data-booking-secure]')
       if (demoNote) demoNote.hidden = checkout.mode !== 'demo'
@@ -491,15 +492,23 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     }
 
     const total = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds)
-    const checkout = resolveCheckout(draft.service, draft.email)
+    const checkout = await startCheckout({
+      service: draft.service,
+      packageId: draft.packageId,
+      addonIds: draft.addonIds,
+      email: draft.email,
+      name: draft.name,
+      locale,
+    })
 
     if (checkout.mode === 'stripe') {
       trackEvent('booking_checkout_stripe', {
         service: draft.service,
         package: draft.packageId,
-        total,
+        total: checkout.totalEur ?? total,
         locale,
       })
+      clearDraft()
       window.location.href = checkout.url
       return
     }
@@ -509,32 +518,18 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
         service: draft.service,
         package: draft.packageId,
         addons: draft.addonIds.join('|') || 'none',
-        total,
+        total: checkout.totalEur ?? total,
         locale,
       })
-      await new Promise((r) => setTimeout(r, 900))
+      await new Promise((r) => setTimeout(r, 600))
       clearDraft()
-      const url = new URL(location.href)
-      url.searchParams.set('booking', 'success')
-      history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}#booking`)
-      showSuccess(wizard, true, m.contact.successBodyDemo)
-      trackEvent('booking_success_view', {
-        locale,
-        mode: 'demo',
-        service: draft.service,
-        package: draft.packageId,
-        total,
-      })
-      if (payBtn) {
-        payBtn.disabled = false
-        payBtn.textContent = m.contact.payCta
-      }
+      window.location.href = checkout.url
       return
     }
 
     if (err) {
       err.hidden = false
-      err.textContent = m.contact.payUnavailable
+      err.textContent = checkout.error || m.contact.payUnavailable
     }
     if (payBtn) {
       payBtn.disabled = false

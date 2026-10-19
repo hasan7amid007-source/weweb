@@ -5,6 +5,7 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/shop", "destination": "/shop.html" },
+    { "source": "/order", "destination": "/order.html" },
     { "source": "/services/(.*)", "destination": "/services/$1" }
   ],
   "headers": [

@@ -2,12 +2,6 @@
 node_modules
 .npm-cache
 
-# Local script artifacts
-scripts/.qe-frames/
-scripts/__pycache__/
-scripts/*.log
-*.pyc
-
 # Build
 dist
 dist-ssr

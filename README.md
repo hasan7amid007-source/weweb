@@ -48,21 +48,16 @@ npm run preview
 
 Live card payments (optional later): copy `.env.example` → `.env` and set Stripe Payment Link URLs. Success redirect: `/?booking=success#booking`. Until then, local/demo checkout works without Stripe.
 
-## Git remote
-
-```text
-https://github.com/hasan7amid007-source/weweb
-```
-
 ## Deploy (Vercel)
 
-Import that GitHub repo in Vercel (Vite → `dist`), or:
+Project prepared: **bditec-weweb** (team HH7).
 
 ```bash
 npx vercel login
 npx vercel --prod --yes
 ```
 
+Or deploy from the Vercel dashboard: https://vercel.com/hh-7/bditec-weweb  
 Then attach custom domain `bditec.com` when ready.
 
 ## Scripts

@@ -1,6 +1,7 @@
 import './styles/site.css'
 import './styles/effects.css'
 import { SITE_ORIGIN } from './data/services'
+import { listShopPackages } from './features/booking/shop-catalog'
 import { initTelemetry } from './lib/telemetry'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader } from './features/shell'
 import {
@@ -36,12 +37,51 @@ function upsertLink(rel: string, href: string) {
   el.href = href
 }
 
+function injectShopJsonLd(locale: Locale) {
+  const shop = t(locale).shopPage
+  const booking = t(locale).bookingShop
+  const items = listShopPackages().map((item, index) => {
+    const copy = booking.packages[item.service]?.[item.package.id]
+    const name = copy?.title || item.package.id
+    const detailUrl = `${SITE_ORIGIN}/shop.html?service=${encodeURIComponent(item.service)}&package=${encodeURIComponent(item.package.id)}`
+    return {
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Offer',
+        name,
+        url: detailUrl,
+        price: item.package.priceEur,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        seller: { '@type': 'Organization', name: 'BDITEC', url: SITE_ORIGIN },
+      },
+    }
+  })
+  const payload = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: shop.metaTitle,
+    description: shop.metaDescription,
+    url: `${SITE_ORIGIN}/shop.html`,
+    numberOfItems: items.length,
+    itemListElement: items,
+  }
+  document.querySelectorAll('script[data-shop-jsonld]').forEach((n) => n.remove())
+  const script = document.createElement('script')
+  script.type = 'application/ld+json'
+  script.dataset.shopJsonld = '1'
+  script.textContent = JSON.stringify(payload)
+  document.head.appendChild(script)
+}
+
 function applyShopMeta(locale: Locale) {
   const shop = t(locale).shopPage
   const url = `${SITE_ORIGIN}/shop.html`
   document.title = shop.metaTitle
   upsertMeta('name', 'description', shop.metaDescription)
   upsertLink('canonical', url)
+  injectShopJsonLd(locale)
   upsertMeta('property', 'og:type', 'website')
   upsertMeta('property', 'og:title', shop.metaTitle)
   upsertMeta('property', 'og:description', shop.metaDescription)

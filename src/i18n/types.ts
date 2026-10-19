@@ -37,6 +37,10 @@ export type Messages = {
   brandHome: string
   nav: { about: string; services: string; faq: string; contact: string; process: string }
   navAria: string
+  langAria: string
+  menuOpen: string
+  menuClose: string
+  skipToContent: string
   slidesAria: string
   prevSlide: string
   nextSlide: string

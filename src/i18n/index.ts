@@ -22,6 +22,12 @@ export function isLocale(v: string | null | undefined): v is Locale {
 
 export function detectLocale(): Locale {
   try {
+    const param = new URLSearchParams(location.search).get('lang')
+    if (isLocale(param)) return param
+  } catch {
+    /* ignore */
+  }
+  try {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (isLocale(saved)) return saved
   } catch {

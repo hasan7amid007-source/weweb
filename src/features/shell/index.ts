@@ -2,8 +2,9 @@ import { LOCALES, type Locale, t } from '../../i18n'
 import { SERVICE_IDS, servicePath } from '../../data/services'
 
 export function langSwitcher(locale: Locale) {
+  const m = t(locale)
   return `
-    <div class="lang-switch" role="group" aria-label="Language">
+    <div class="lang-switch" role="group" aria-label="${m.langAria}">
       ${LOCALES.map(
         (l) => `
         <button type="button" class="lang-btn${l.id === locale ? ' is-active' : ''}"
@@ -17,7 +18,7 @@ export function siteLinks(from: 'home' | 'service') {
   const root = from === 'home' ? '' : '/'
   const hash = (id: string) => (from === 'home' ? `#${id}` : `${root}#${id}`)
   return {
-    home: from === 'home' ? '#top' : '/',
+    home: from === 'home' ? '#main' : '/',
     about: hash('about'),
     services: hash('services'),
     faq: hash('faq'),
@@ -32,12 +33,13 @@ export function renderHeader(locale: Locale, from: 'home' | 'service') {
   const m = t(locale)
   const links = siteLinks(from)
   return `
+  <a class="skip-link" href="#main">${m.skipToContent}</a>
   <header class="site-header">
     <a class="brand" href="${links.home}" aria-label="${m.brandHome}">
       <span class="brand-mark" aria-hidden="true"></span>
       <span class="brand-name">BDITEC</span>
     </a>
-    <nav class="header-nav" aria-label="${m.navAria}">
+    <nav id="site-nav" class="header-nav" aria-label="${m.navAria}">
       <a href="${links.about}">${m.nav.about}</a>
       <a href="${links.services}">${m.nav.services}</a>
       <a href="${links.faq}">${m.nav.faq}</a>
@@ -46,6 +48,10 @@ export function renderHeader(locale: Locale, from: 'home' | 'service') {
     <div class="header-actions">
       ${langSwitcher(locale)}
       <a class="header-cta" href="${links.contact}">${m.nav.contact}</a>
+      <button type="button" class="nav-toggle" data-nav-toggle
+        aria-controls="site-nav" aria-expanded="false" aria-label="${m.menuOpen}">
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
     </div>
   </header>`
 }
@@ -114,5 +120,40 @@ export function bindLangSwitch(root: HTMLElement, locale: Locale, onChange: (nex
       const next = btn.dataset.locale as Locale
       if (next && next !== locale) onChange(next)
     })
+  })
+}
+
+export function bindNavToggle(root: HTMLElement, locale: Locale) {
+  const m = t(locale)
+  const toggle = root.querySelector<HTMLButtonElement>('[data-nav-toggle]')
+  const nav = root.querySelector<HTMLElement>('#site-nav')
+  if (!toggle || !nav) return
+
+  let onKey: ((event: KeyboardEvent) => void) | null = null
+
+  const setOpen = (open: boolean) => {
+    document.body.classList.toggle('nav-open', open)
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false')
+    toggle.setAttribute('aria-label', open ? m.menuClose : m.menuOpen)
+    if (onKey) {
+      document.removeEventListener('keydown', onKey)
+      onKey = null
+    }
+    if (open) {
+      onKey = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') setOpen(false)
+      }
+      document.addEventListener('keydown', onKey)
+    }
+  }
+
+  setOpen(false)
+
+  toggle.addEventListener('click', () => {
+    setOpen(!document.body.classList.contains('nav-open'))
+  })
+
+  nav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false))
   })
 }

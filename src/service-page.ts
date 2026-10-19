@@ -2,7 +2,7 @@ import './styles/site.css'
 import './styles/effects.css'
 import { SERVICE_ICONS, SERVICE_IDS, SERVICE_IMAGES, SITE_ORIGIN, isServiceId, servicePath, type ServiceId } from './data/services'
 import { initAccordions } from './features/accordion'
-import { bindLangSwitch, renderFooter, renderHeader, siteLinks } from './features/shell'
+import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader, siteLinks } from './features/shell'
 import { detectLocale, setLocale, t, type Locale } from './i18n'
 
 const root = document.querySelector<HTMLDivElement>('#app')
@@ -134,7 +134,7 @@ function render(locale: Locale) {
   app.innerHTML = `
   ${renderHeader(locale, 'service')}
 
-  <main class="service-main">
+  <main id="main" class="service-main">
     <section
       class="service-hero-band"
       style="--service-hero-image: url('${SERVICE_IMAGES[serviceId]}')"
@@ -289,6 +289,7 @@ function render(locale: Locale) {
 `
 
   bindLangSwitch(app, locale, render)
+  bindNavToggle(app, locale)
   initAccordions(app)
 }
 

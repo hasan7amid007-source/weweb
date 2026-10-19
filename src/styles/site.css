@@ -140,6 +140,23 @@ code {
   transform: rotate(180deg);
 }
 
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 100;
+  padding: 0.55rem 0.9rem;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--header);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
 .header-nav {
   display: none;
   gap: 1.25rem;
@@ -155,6 +172,61 @@ code {
   font-weight: 600;
 }
 
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  display: block;
+  width: 1.05rem;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  position: relative;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle-bars::before {
+  top: -6px;
+}
+
+.nav-toggle-bars::after {
+  top: 6px;
+}
+
+body.nav-open .nav-toggle-bars {
+  background: transparent;
+}
+
+body.nav-open .nav-toggle-bars::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+body.nav-open .nav-toggle-bars::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
 .cta-band a[href^='mailto'],
 .cta-band a[href^='tel'] {
   color: inherit;
@@ -163,9 +235,43 @@ code {
   text-underline-offset: 3px;
 }
 
+@media (max-width: 799px) {
+  body.nav-open .header-nav {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.5rem 1.25rem 1rem;
+    background: var(--header);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  }
+
+  body.nav-open .header-nav a {
+    padding: 0.75rem 0.15rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  body.nav-open .header-nav a:last-child {
+    border-bottom: 0;
+  }
+
+  .site-header {
+    position: sticky;
+    flex-wrap: wrap;
+  }
+}
+
 @media (min-width: 800px) {
   .header-nav {
     display: flex;
+  }
+
+  .nav-toggle {
+    display: none;
   }
 }
 
@@ -3289,10 +3395,6 @@ html[dir='rtl'] .brand {
 }
 
 @media (max-width: 900px) {
-  .header-nav {
-    display: none;
-  }
-
   .lang-btn {
     padding: 0.3rem 0.4rem;
   }

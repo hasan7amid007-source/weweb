@@ -1,7 +1,7 @@
 import './styles/site.css'
 import './styles/effects.css'
 import { SITE_ORIGIN } from './data/services'
-import { bindLangSwitch, renderFooter, renderHeader } from './features/shell'
+import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader } from './features/shell'
 import { detectLocale, setLocale, t, type Locale } from './i18n'
 
 const rootEl = document.querySelector<HTMLDivElement>('#app')
@@ -100,13 +100,14 @@ function render(locale: Locale) {
   const body = pageId === 'impressum' ? impressumHtml(locale) : datenschutzHtml(locale)
   root.innerHTML = `
     ${renderHeader(locale, 'service')}
-    <main class="legal-main">${body}</main>
+    <main id="main" class="legal-main">${body}</main>
     ${renderFooter(locale, 'service')}
   `
   bindLangSwitch(root, locale, (next) => {
     setLocale(next)
     render(next)
   })
+  bindNavToggle(root, locale)
 }
 
 render(detectLocale())

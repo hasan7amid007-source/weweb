@@ -5,7 +5,7 @@ import { SERVICE_ICONS, SERVICE_IDS, servicePath } from './data/services'
 import { initAccordions } from './features/accordion'
 import { initBookingWizard, renderBookingFormMarkup } from './features/booking'
 import { initShowcase, initTriangleMotion, triangleHeroSvg } from './features/hero'
-import { bindLangSwitch, renderFooter, renderHeader } from './features/shell'
+import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader } from './features/shell'
 import {
   applyMeta,
   detectLocale,
@@ -27,7 +27,7 @@ function render(locale: Locale) {
   app.innerHTML = `
   ${renderHeader(locale, 'home')}
 
-  <main id="top">
+  <main id="main">
     <section class="site-hero" aria-roledescription="carousel" aria-label="BDITEC">
       <div class="site-hero-bg" aria-hidden="true">${triangleHeroSvg}</div>
       <div class="site-hero-veil" aria-hidden="true"></div>
@@ -308,6 +308,7 @@ function render(locale: Locale) {
 `
 
   bindLangSwitch(app, locale, render)
+  bindNavToggle(app, locale)
   initTriangleMotion(app)
   initShowcase(app)
   initAccordions(app)

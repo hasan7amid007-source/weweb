@@ -1,5 +1,8 @@
-/** Public site origin for canonical / Open Graph (marketing pages only). */
-export const SITE_ORIGIN = 'https://bditec.com'
+/**
+ * Public site origin for canonical / Open Graph (marketing pages only).
+ * Temporary: live until custom domain `bditec.com` is registered + attached on Vercel.
+ */
+export const SITE_ORIGIN = 'https://weweb-hh-7.vercel.app'
 
 export const SERVICE_IDS = [
   'web-hosting',

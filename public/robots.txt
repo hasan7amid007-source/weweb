@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bditec.com/sitemap.xml
+Sitemap: https://weweb-hh-7.vercel.app/sitemap.xml

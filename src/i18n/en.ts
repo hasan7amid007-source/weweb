@@ -1,4 +1,5 @@
 import type { Messages } from './types'
+import { bookingShopEn } from './booking-shop'
 import { servicePagesEn } from './service-pages-en'
 
 export const en: Messages = {
@@ -103,7 +104,7 @@ export const en: Messages = {
     q3: 'Which technologies do you use?',
     a3: 'Among others WordPress, Joomla, Shopify, React Native, Flutter, HTML/CSS, JavaScript, Node.js and Python — matched to your project.',
     q4: 'Do I need to contact you in person?',
-    a4: 'No. Everything runs online: choose service → details → payment. Email <a href="mailto:info@bditec.com">info@bditec.com</a> and phone <a href="tel:+4915735804396">+49 1573 5804396</a> stay optional.',
+    a4: 'No. Everything runs online: choose service → package & extras → details → payment. Email <a href="mailto:info@bditec.com">info@bditec.com</a> and phone <a href="tel:+4915735804396">+49 1573 5804396</a> stay optional.',
   },
   join: {
     eyebrow: "With strong design, your brand doesn't just get seen — it becomes unmistakable",
@@ -118,7 +119,7 @@ export const en: Messages = {
   contact: {
     eyebrow: 'Self-service online',
     title: 'Choose a service & pay online',
-    lead: 'Three steps — fully digital, no appointment and no in-person contact: service → your details → payment.',
+    lead: 'Order online: pick a service → package & extras → your details → pay. Fully digital, no appointment.',
     cta: 'Continue to payment',
     nameLabel: 'Name',
     emailLabel: 'Email address',
@@ -129,7 +130,7 @@ export const en: Messages = {
     messageLabel: 'Project note (optional)',
     successHint: 'After payment we start digitally. Receipt and next steps arrive by email.',
     aboutTitle: 'How online checkout works',
-    aboutLead: 'Pick a service → enter details → pay securely. Done — no call-back needed.',
+    aboutLead: 'Pick a service → choose package & extras → pay securely. Done — no call-back needed.',
     aboutBody:
       'This site is self-service: you order and pay online. We receive the order automatically and get to work.',
     aboutPoints: [
@@ -139,12 +140,13 @@ export const en: Messages = {
       'No appointment, no in-person meeting',
     ],
     stepService: '1 · Service',
-    stepDetails: '2 · Details',
-    stepPay: '3 · Pay',
+    stepOptions: '2 · Options',
+    stepDetails: '3 · Details',
+    stepPay: '4 · Pay',
     next: 'Continue',
     back: 'Back',
     depositLabel: 'Online start price',
-    depositHint: 'Pay now to start. Add-ons later as needed.',
+    depositHint: 'Start online with a package + optional extras. More scope later as needed.',
     summaryTitle: 'Your order',
     payCta: 'Pay now',
     paySecure: 'Secure online payment (card / Stripe)',
@@ -160,6 +162,7 @@ export const en: Messages = {
     successAgain: 'Place another order',
     demoPayNote: 'Demo mode: no real charge. Add Stripe Payment Links in .env for live payments.',
   },
+  bookingShop: bookingShopEn,
   serviceUi: {
     back: 'All services',
     highlights: 'What you get',

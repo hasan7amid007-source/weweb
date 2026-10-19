@@ -1,5 +1,4 @@
 import {
-  BOOKING_DEPOSITS_EUR,
   BOOKING_STORAGE_KEY,
   formatEur,
   hasLiveStripeCheckout,
@@ -7,23 +6,41 @@ import {
   resolveCheckout,
   type BookingServiceKey,
 } from './catalog'
+import {
+  calcOrderTotalEur,
+  defaultPackageId,
+  fromPriceEur,
+  isAddonId,
+  isPackageId,
+  shopFor,
+} from './shop-catalog'
 import { type Locale, t } from '../../i18n'
 import { SERVICE_IDS, SERVICE_ICONS } from '../../data/services'
 import { trackEvent } from '../../lib/telemetry'
 
 export type BookingDraft = {
   service: BookingServiceKey
+  packageId: string
+  addonIds: string[]
   name: string
   email: string
   phone: string
   message: string
 }
 
-type Step = 1 | 2 | 3
+type Step = 1 | 2 | 3 | 4
 
 function serviceLabel(locale: Locale, key: BookingServiceKey): string {
   const m = t(locale)
   return key === 'general' ? m.contact.serviceGeneral : m.servicePages[key].title
+}
+
+function packageLabel(locale: Locale, service: BookingServiceKey, packageId: string): string {
+  return t(locale).bookingShop.packages[service][packageId]?.title ?? packageId
+}
+
+function addonLabel(locale: Locale, service: BookingServiceKey, addonId: string): string {
+  return t(locale).bookingShop.addons[service][addonId]?.title ?? addonId
 }
 
 function saveDraft(draft: BookingDraft) {
@@ -44,9 +61,18 @@ function clearDraft() {
 
 function readForm(form: HTMLFormElement): BookingDraft {
   const data = new FormData(form)
-  const service = String(data.get('service') || '').trim()
+  const serviceRaw = String(data.get('service') || '').trim()
+  const service: BookingServiceKey = isBookingServiceKey(serviceRaw) ? serviceRaw : 'general'
+  const packageRaw = String(data.get('package') || '').trim()
+  const packageId = isPackageId(service, packageRaw) ? packageRaw : defaultPackageId(service)
+  const addonIds = data
+    .getAll('addon')
+    .map((v) => String(v))
+    .filter((id) => isAddonId(service, id))
   return {
-    service: isBookingServiceKey(service) ? service : 'general',
+    service,
+    packageId,
+    addonIds,
     name: String(data.get('name') || '').trim(),
     email: String(data.get('email') || '').trim(),
     phone: String(data.get('phone') || '').trim(),
@@ -67,16 +93,105 @@ function setStep(root: HTMLElement, step: Step) {
   })
 }
 
+function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingServiceKey) {
+  const host = root.querySelector('[data-booking-options]')
+  if (!host) return
+  const m = t(locale)
+  const shop = m.bookingShop
+  const catalog = shopFor(service)
+  const prevPkg = root.querySelector<HTMLInputElement>('input[name="package"]:checked')?.value
+  const prevAddons = new Set(
+    [...root.querySelectorAll<HTMLInputElement>('input[name="addon"]:checked')].map((el) => el.value),
+  )
+  const selectedPkg =
+    (prevPkg && isPackageId(service, prevPkg) ? prevPkg : null) || defaultPackageId(service)
+
+  host.innerHTML = `
+    <p class="booking-step-label">${shop.packageHeading} <em>*</em></p>
+    <div class="booking-option-grid" role="radiogroup" aria-label="${shop.packageHeading}">
+      ${catalog.packages
+        .map((pkg) => {
+          const copy = shop.packages[service][pkg.id]
+          const checked = pkg.id === selectedPkg
+          return `
+          <label class="booking-option-card">
+            <input type="radio" name="package" value="${pkg.id}" required ${checked ? 'checked' : ''} />
+            <span class="booking-option-card-inner">
+              <span class="booking-option-top">
+                <span class="booking-option-name">${copy?.title ?? pkg.id}</span>
+                ${pkg.recommended ? `<span class="booking-option-badge">${shop.recommended}</span>` : ''}
+                <span class="booking-option-price">${formatEur(pkg.priceEur, locale)}</span>
+              </span>
+              <span class="booking-option-blurb">${copy?.blurb ?? ''}</span>
+            </span>
+          </label>`
+        })
+        .join('')}
+    </div>
+    ${
+      catalog.addons.length
+        ? `
+    <p class="booking-step-label booking-step-label--spaced">${shop.addonsHeading}</p>
+    <p class="booking-hint">${shop.addonsHint}</p>
+    <div class="booking-addon-grid" role="group" aria-label="${shop.addonsHeading}">
+      ${catalog.addons
+        .map((addon) => {
+          const copy = shop.addons[service][addon.id]
+          const checked = prevAddons.has(addon.id)
+          return `
+          <label class="booking-addon-card">
+            <input type="checkbox" name="addon" value="${addon.id}" ${checked ? 'checked' : ''} />
+            <span class="booking-addon-card-inner">
+              <span class="booking-option-top">
+                <span class="booking-option-name">${copy?.title ?? addon.id}</span>
+                <span class="booking-option-price">+${formatEur(addon.priceEur, locale)}</span>
+              </span>
+              <span class="booking-option-blurb">${copy?.blurb ?? ''}</span>
+            </span>
+          </label>`
+        })
+        .join('')}
+    </div>`
+        : ''
+    }
+    <p class="booking-running-total" data-booking-total aria-live="polite"></p>
+  `
+
+  const syncTotal = () => {
+    const form = root.querySelector<HTMLFormElement>('#booking-form')
+    if (!form) return
+    const draft = readForm(form)
+    const total = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds)
+    const el = root.querySelector('[data-booking-total]')
+    if (el) {
+      el.textContent = `${shop.runningTotal}: ${formatEur(total, locale)}`
+    }
+  }
+
+  host.querySelectorAll('input[name="package"], input[name="addon"]').forEach((input) => {
+    input.addEventListener('change', syncTotal)
+  })
+  syncTotal()
+}
+
 function renderSummary(root: HTMLElement, locale: Locale, draft: BookingDraft) {
   const m = t(locale)
+  const shop = m.bookingShop
   const box = root.querySelector('[data-booking-summary]')
   if (!box) return
-  const amount = BOOKING_DEPOSITS_EUR[draft.service]
-  const price = formatEur(amount, locale)
+  const total = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds)
+  const price = formatEur(total, locale)
+  const addonNames = draft.addonIds.map((id) => addonLabel(locale, draft.service, id))
   box.innerHTML = `
     <h3 class="booking-summary-title">${m.contact.summaryTitle}</h3>
     <dl class="booking-summary-list">
       <div><dt>${m.contact.serviceLabel}</dt><dd>${serviceLabel(locale, draft.service)}</dd></div>
+      <div><dt>${shop.packageLabel}</dt><dd>${packageLabel(locale, draft.service, draft.packageId)}</dd></div>
+      ${
+        addonNames.length
+          ? `<div><dt>${shop.addonsSummary}</dt><dd>${addonNames.join(', ')}</dd></div>`
+          : ''
+      }
       <div><dt>${m.contact.nameLabel}</dt><dd>${draft.name}</dd></div>
       <div><dt>${m.contact.emailLabel}</dt><dd>${draft.email}</dd></div>
       ${draft.phone ? `<div><dt>${m.contact.phoneLabel}</dt><dd>${draft.phone}</dd></div>` : ''}
@@ -104,18 +219,19 @@ function showSuccess(root: HTMLElement, show: boolean, bodyText?: string) {
 
 export function renderBookingFormMarkup(locale: Locale): string {
   const m = t(locale)
+  const shop = m.bookingShop
   const serviceCards = [
     {
       id: 'general' as const,
       title: m.contact.serviceGeneral,
       icon: '/page/icon-web.svg',
-      price: BOOKING_DEPOSITS_EUR.general,
+      price: fromPriceEur('general'),
     },
     ...SERVICE_IDS.map((id) => ({
       id,
       title: m.servicePages[id].title,
       icon: SERVICE_ICONS[id],
-      price: BOOKING_DEPOSITS_EUR[id],
+      price: fromPriceEur(id),
     })),
   ]
 
@@ -123,8 +239,9 @@ export function renderBookingFormMarkup(locale: Locale): string {
     <div class="booking-wizard" data-booking-root>
       <ol class="booking-steps" aria-label="${m.contact.title}">
         <li class="booking-pill is-active" data-booking-pill="1">${m.contact.stepService}</li>
-        <li class="booking-pill" data-booking-pill="2">${m.contact.stepDetails}</li>
-        <li class="booking-pill" data-booking-pill="3">${m.contact.stepPay}</li>
+        <li class="booking-pill" data-booking-pill="2">${m.contact.stepOptions}</li>
+        <li class="booking-pill" data-booking-pill="3">${m.contact.stepDetails}</li>
+        <li class="booking-pill" data-booking-pill="4">${m.contact.stepPay}</li>
       </ol>
 
       <div data-booking-success hidden class="booking-success">
@@ -147,7 +264,7 @@ export function renderBookingFormMarkup(locale: Locale): string {
                 <span class="booking-service-card-inner">
                   <img src="${card.icon}" width="28" height="28" alt="" />
                   <span class="booking-service-name">${card.title}</span>
-                  <span class="booking-service-price">${formatEur(card.price, locale)}</span>
+                  <span class="booking-service-price">${shop.fromLabel} ${formatEur(card.price, locale)}</span>
                 </span>
               </label>`,
               )
@@ -161,6 +278,16 @@ export function renderBookingFormMarkup(locale: Locale): string {
         </div>
 
         <div data-booking-step="2" hidden>
+          <div data-booking-options></div>
+          <div class="booking-nav">
+            <button type="button" class="booking-back" data-booking-back>${m.contact.back}</button>
+            <span class="glowborder">
+              <button type="button" class="ts-btn pink solid" data-booking-next>${m.contact.next}</button>
+            </span>
+          </div>
+        </div>
+
+        <div data-booking-step="3" hidden>
           <label class="contact-field">
             <span>${m.contact.nameLabel} <em>*</em></span>
             <input type="text" name="name" required autocomplete="name" />
@@ -185,7 +312,7 @@ export function renderBookingFormMarkup(locale: Locale): string {
           </div>
         </div>
 
-        <div data-booking-step="3" hidden>
+        <div data-booking-step="4" hidden>
           <div data-booking-summary class="booking-summary"></div>
           <p class="booking-secure" data-booking-secure>${m.contact.paySecure}</p>
           <p class="booking-hint" data-booking-demo-note hidden>${m.contact.demoPayNote}</p>
@@ -241,8 +368,12 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       step,
       locale,
       service: draft.service || undefined,
+      package: draft.packageId || undefined,
     })
-    if (step === 3) {
+    if (step === 2) {
+      renderOptionsPanel(wizard, locale, draft.service)
+    }
+    if (step === 4) {
       saveDraft(draft)
       renderSummary(wizard, locale, draft)
       const checkout = resolveCheckout(draft.service, draft.email)
@@ -282,20 +413,37 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
         return
       }
       if (step === 2) {
+        const pkg = form.querySelector<HTMLInputElement>('input[name="package"]:checked')
+        if (!pkg) {
+          form.reportValidity()
+          return
+        }
+        const draft = readForm(form)
+        trackEvent('booking_options_selected', {
+          service: draft.service,
+          package: draft.packageId,
+          addons: draft.addonIds.join('|') || 'none',
+          locale,
+        })
+        go(3)
+        return
+      }
+      if (step === 3) {
         const name = form.querySelector<HTMLInputElement>('input[name="name"]')
         const email = form.querySelector<HTMLInputElement>('input[name="email"]')
         if (!name?.value.trim() || !email?.value.trim()) {
           form.reportValidity()
           return
         }
-        go(3)
+        go(4)
       }
     })
   })
 
   wizard.querySelectorAll('[data-booking-back]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      if (step === 3) go(2)
+      if (step === 4) go(3)
+      else if (step === 3) go(2)
       else if (step === 2) go(1)
     })
   })
@@ -303,7 +451,7 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
     const draft = readForm(form)
-    if (!draft.service || !draft.name || !draft.email) return
+    if (!draft.service || !draft.name || !draft.email || !draft.packageId) return
 
     saveDraft(draft)
     const payBtn = form.querySelector<HTMLButtonElement>('[data-booking-pay]')
@@ -317,23 +465,41 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       payBtn.textContent = m.contact.payProcessing
     }
 
+    const total = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds)
     const checkout = resolveCheckout(draft.service, draft.email)
 
     if (checkout.mode === 'stripe') {
-      trackEvent('booking_checkout_stripe', { service: draft.service, locale })
+      trackEvent('booking_checkout_stripe', {
+        service: draft.service,
+        package: draft.packageId,
+        total,
+        locale,
+      })
       window.location.href = checkout.url
       return
     }
 
     if (checkout.mode === 'demo') {
-      trackEvent('booking_checkout_demo', { service: draft.service, locale })
+      trackEvent('booking_checkout_demo', {
+        service: draft.service,
+        package: draft.packageId,
+        addons: draft.addonIds.join('|') || 'none',
+        total,
+        locale,
+      })
       await new Promise((r) => setTimeout(r, 900))
       clearDraft()
       const url = new URL(location.href)
       url.searchParams.set('booking', 'success')
       history.replaceState(null, '', `${url.pathname}?${url.searchParams.toString()}#booking`)
       showSuccess(wizard, true, m.contact.successBodyDemo)
-      trackEvent('booking_success_view', { locale, mode: 'demo', service: draft.service })
+      trackEvent('booking_success_view', {
+        locale,
+        mode: 'demo',
+        service: draft.service,
+        package: draft.packageId,
+        total,
+      })
       if (payBtn) {
         payBtn.disabled = false
         payBtn.textContent = m.contact.payCta

@@ -55,3 +55,4 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch SEO/UX batch (2026-10-19) — booking funnel `track()` events; home JSON-LD + hreflang; `?lang=` URL sync; service static meta shells; Twitter/OG image on legal+services; lazy join image; reduced-motion hero pause
 - [x] Soft-launch perf polish (2026-10-19) — trim Google Font weights; home OG/preload; `site.webmanifest` + theme-color
 - [x] Soft-launch hardening (2026-10-19) — security headers in `vercel.json`; branded `404.html`
+- [x] Shop-style order options (2026-10-19) — per-service packages + add-ons; 4-step checkout (service → options → details → pay)

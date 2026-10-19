@@ -1,4 +1,5 @@
 import type { Messages } from './types'
+import { bookingShopAr } from './booking-shop'
 import { servicePagesAr } from './service-pages-ar'
 
 export const ar: Messages = {
@@ -102,7 +103,7 @@ export const ar: Messages = {
     q3: 'ما التقنيات التي تستخدمونها؟',
     a3: 'من بينها WordPress وJoomla وShopify وReact Native وFlutter وHTML/CSS وJavaScript وNode.js وPython — بما يناسب مشروعكم.',
     q4: 'هل يجب التواصل شخصياً؟',
-    a4: 'لا. كل شيء أونلاين: اختر الخدمة → البيانات → الدفع. البريد <a href="mailto:info@bditec.com">info@bditec.com</a> والهاتف <a href="tel:+4915735804396">+49 1573 5804396</a> اختياريان.',
+    a4: 'لا. كل شيء أونلاين: اختر الخدمة → الباقة والإضافات → البيانات → الدفع. البريد <a href="mailto:info@bditec.com">info@bditec.com</a> والهاتف <a href="tel:+4915735804396">+49 1573 5804396</a> اختياريان.',
   },
   join: {
     eyebrow: 'بتصميم قوي لا تظهر علامتكم فقط — بل تصبح أيقونة لا تُنسى',
@@ -117,7 +118,7 @@ export const ar: Messages = {
   contact: {
     eyebrow: 'خدمة ذاتية أونلاين',
     title: 'اختر الخدمة وادفع أونلاين',
-    lead: 'ثلاث خطوات رقمية بالكامل بلا موعد وبلا تواصل شخصي: الخدمة → بياناتكم → الدفع.',
+    lead: 'اطلبوا أونلاين: اختاروا الخدمة → الباقة والإضافات → بياناتكم → الدفع. رقمياً بالكامل بلا موعد.',
     cta: 'متابعة إلى الدفع',
     nameLabel: 'الاسم',
     emailLabel: 'البريد الإلكتروني',
@@ -128,7 +129,7 @@ export const ar: Messages = {
     messageLabel: 'ملاحظة المشروع (اختياري)',
     successHint: 'بعد الدفع نبدأ رقمياً. الإيصال والخطوات التالية بالبريد.',
     aboutTitle: 'كيف يعمل الدفع الأونلاين',
-    aboutLead: 'اختر الخدمة → أدخل البيانات → ادفع بأمان. انتهى — بلا اتصال راجع.',
+    aboutLead: 'اختر الخدمة → الباقة والإضافات → ادفع بأمان. انتهى — بلا اتصال راجع.',
     aboutBody:
       'الموقع يعمل بنظام الخدمة الذاتية: تطلبون وتدفعون أونلاين. نستلم الطلب تلقائياً ونبدأ العمل.',
     aboutPoints: [
@@ -138,12 +139,13 @@ export const ar: Messages = {
       'بلا موعد وبلا لقاء شخصي',
     ],
     stepService: '1 · الخدمة',
-    stepDetails: '2 · البيانات',
-    stepPay: '3 · الدفع',
+    stepOptions: '2 · الخيارات',
+    stepDetails: '3 · البيانات',
+    stepPay: '4 · الدفع',
     next: 'متابعة',
     back: 'رجوع',
     depositLabel: 'سعر البدء أونلاين',
-    depositHint: 'ادفعوا الآن للبدء. الإضافات لاحقاً حسب الحاجة.',
+    depositHint: 'ابدأوا أونلاين بباقة وإضافات اختيارية. المزيد لاحقاً حسب الحاجة.',
     summaryTitle: 'طلبكم',
     payCta: 'ادفع الآن',
     paySecure: 'دفع أونلاين آمن (بطاقة / Stripe)',
@@ -158,6 +160,7 @@ export const ar: Messages = {
     successAgain: 'طلب آخر',
     demoPayNote: 'وضع تجريبي: بلا خصم حقيقي. للدفع الحي أضيفوا روابط Stripe في .env.',
   },
+  bookingShop: bookingShopAr,
   serviceUi: {
     back: 'كل الخدمات',
     highlights: 'ما نقدّمه',

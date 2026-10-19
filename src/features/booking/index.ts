@@ -7,6 +7,12 @@ export {
   type BookingServiceKey,
 } from './catalog'
 export {
+  SERVICE_SHOP,
+  calcOrderTotalEur,
+  fromPriceEur,
+  shopFor,
+} from './shop-catalog'
+export {
   initBookingWizard,
   renderBookingFormMarkup,
   type BookingDraft,

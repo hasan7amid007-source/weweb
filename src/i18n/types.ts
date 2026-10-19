@@ -1,3 +1,5 @@
+import type { BookingShopCopy } from './booking-shop'
+
 export type Locale = 'de' | 'en' | 'ar'
 
 export type ServiceId =
@@ -152,6 +154,7 @@ export type Messages = {
     aboutBody: string
     aboutPoints: string[]
     stepService: string
+    stepOptions: string
     stepDetails: string
     stepPay: string
     next: string
@@ -170,6 +173,7 @@ export type Messages = {
     successAgain: string
     demoPayNote: string
   }
+  bookingShop: BookingShopCopy
   serviceUi: {
     back: string
     highlights: string

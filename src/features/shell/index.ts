@@ -22,7 +22,7 @@ export function siteLinks(from: 'home' | 'service') {
     about: hash('about'),
     services: hash('services'),
     faq: hash('faq'),
-    /** Self-service checkout (service → details → pay). Legacy #contact aliases to #booking. */
+    /** Self-service checkout (service → options → details → pay). Legacy #contact aliases to #booking. */
     contact: hash('booking'),
     booking: hash('booking'),
     process: hash('process'),

@@ -1,4 +1,5 @@
 import type { Messages } from './types'
+import { bookingShopDe } from './booking-shop'
 import { servicePagesDe } from './service-pages-de'
 
 export const de: Messages = {
@@ -106,7 +107,7 @@ export const de: Messages = {
     q3: 'Welche Technologien nutzen Sie?',
     a3: 'Unter anderem WordPress, Joomla, Shopify, React Native, Flutter, HTML/CSS, JavaScript, Node.js und Python — passend zu Ihrem Projekt.',
     q4: 'Muss ich Sie persönlich kontaktieren?',
-    a4: 'Nein. Der gesamte Ablauf läuft online: Service wählen → Daten → Zahlung. Optional bleiben E-Mail <a href="mailto:info@bditec.com">info@bditec.com</a> und Telefon <a href="tel:+4915735804396">+49 1573 5804396</a> verfügbar.',
+    a4: 'Nein. Der gesamte Ablauf läuft online: Service wählen → Paket & Extras → Daten → Zahlung. Optional bleiben E-Mail <a href="mailto:info@bditec.com">info@bditec.com</a> und Telefon <a href="tel:+4915735804396">+49 1573 5804396</a> verfügbar.',
   },
   join: {
     eyebrow: 'Mit starkem Design wird Ihre Marke nicht nur sichtbar — sie wird unverwechselbar',
@@ -121,7 +122,7 @@ export const de: Messages = {
   contact: {
     eyebrow: 'Self-Service online',
     title: 'Service wählen & online bezahlen',
-    lead: 'Drei Schritte — komplett digital, ohne Termin und ohne persönlichen Kontakt: Service → Ihre Daten → Zahlung.',
+    lead: 'Online bestellen: Service wählen → Paket & Extras → Angaben → zahlen. Komplett digital, ohne Termin.',
     cta: 'Weiter zur Zahlung',
     nameLabel: 'Name',
     emailLabel: 'E-Mail-Adresse',
@@ -132,7 +133,7 @@ export const de: Messages = {
     messageLabel: 'Projektnotiz (optional)',
     successHint: 'Nach der Zahlung starten wir digital. Beleg und nächste Schritte kommen per E-Mail.',
     aboutTitle: 'So funktioniert der Online-Checkout',
-    aboutLead: 'Service wählen → Daten eingeben → sicher zahlen. Fertig — kein Rückruf nötig.',
+    aboutLead: 'Service wählen → Paket & Extras → sicher zahlen. Fertig — kein Rückruf nötig.',
     aboutBody:
       'Die Website arbeitet im Self-Service: Sie bestellen und bezahlen online. Wir erhalten die Order automatisch und legen los.',
     aboutPoints: [
@@ -142,12 +143,13 @@ export const de: Messages = {
       'Kein Termin, kein Vor-Ort-Gespräch nötig',
     ],
     stepService: '1 · Service',
-    stepDetails: '2 · Daten',
-    stepPay: '3 · Zahlung',
+    stepOptions: '2 · Optionen',
+    stepDetails: '3 · Angaben',
+    stepPay: '4 · Zahlen',
     next: 'Weiter',
     back: 'Zurück',
     depositLabel: 'Online-Startpreis',
-    depositHint: 'Sofortzahlung für den Projektstart. Erweiterungen später nach Bedarf.',
+    depositHint: 'Paket + Extras jetzt online starten. Weitere Leistungen später nach Bedarf.',
     summaryTitle: 'Ihre Bestellung',
     payCta: 'Jetzt bezahlen',
     paySecure: 'Sichere Online-Zahlung (Karte / Stripe)',
@@ -163,6 +165,7 @@ export const de: Messages = {
     successAgain: 'Weitere Bestellung',
     demoPayNote: 'Demo-Modus: keine echte Belastung. Für Live-Zahlungen Stripe Payment Links in .env hinterlegen.',
   },
+  bookingShop: bookingShopDe,
   serviceUi: {
     back: 'Alle Services',
     highlights: 'Leistungen im Überblick',

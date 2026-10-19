@@ -1,0 +1,11 @@
+node_modules
+.npm-cache
+.tmp
+.git
+scripts/.qe-frames
+scripts/__pycache__
+**/*.pyc
+**/*.log
+.env
+.env.*
+!.env.example

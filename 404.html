@@ -70,6 +70,19 @@
       <h1>404</h1>
       <p>Diese Seite gibt es nicht. Zurück zur Startseite und online bestellen.</p>
       <a href="/">Zur Startseite</a>
+      <p style="margin-top: 1.25rem"><a href="/shop.html" style="background: transparent; border: 1px solid rgba(255,255,255,0.35)">Zum Shop</a></p>
     </main>
+    <script>
+      window.va =
+        window.va ||
+        function () {
+          ;(window.vaq = window.vaq || []).push(arguments)
+        }
+      window.va('event', {
+        name: 'page_404',
+        data: { path: location.pathname.slice(0, 120) },
+      })
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
   </body>
 </html>

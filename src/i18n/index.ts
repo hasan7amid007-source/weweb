@@ -103,7 +103,9 @@ function applyHreflang(path: string) {
   upsertLink('alternate', base, 'x-default')
 }
 
-function injectHomeJsonLd() {
+function injectHomeJsonLd(locale: Locale) {
+  const faq = t(locale).faq
+  const strip = (html: string) => html.replace(/<[^>]+>/g, '')
   const payload = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -130,6 +132,15 @@ function injectHomeJsonLd() {
         inLanguage: ['de', 'en', 'ar'],
         publisher: { '@type': 'Organization', name: 'BDITEC', url: SITE_ORIGIN },
       },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: faq.q1, acceptedAnswer: { '@type': 'Answer', text: strip(faq.a1) } },
+          { '@type': 'Question', name: faq.q2, acceptedAnswer: { '@type': 'Answer', text: strip(faq.a2) } },
+          { '@type': 'Question', name: faq.q3, acceptedAnswer: { '@type': 'Answer', text: strip(faq.a3) } },
+          { '@type': 'Question', name: faq.q4, acceptedAnswer: { '@type': 'Answer', text: strip(faq.a4) } },
+        ],
+      },
     ],
   }
   document.querySelectorAll('script[data-home-jsonld]').forEach((n) => n.remove())
@@ -148,7 +159,7 @@ export function applyMeta(locale: Locale) {
   upsertMeta('name', 'description', m.meta.description)
   upsertLink('canonical', url)
   applyHreflang('/')
-  injectHomeJsonLd()
+  injectHomeJsonLd(locale)
   upsertMeta('property', 'og:type', 'website')
   upsertMeta('property', 'og:site_name', 'BDITEC')
   upsertMeta('property', 'og:title', m.meta.title)

@@ -3833,6 +3833,18 @@ html[dir='rtl'] .brand {
   text-underline-offset: 3px;
 }
 
+.shop-faq {
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e4e2ea;
+}
+
+.shop-faq h2 {
+  margin: 0 0 1rem;
+  font-family: 'Bodoni Moda', Georgia, serif;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+}
+
 .shop-quote {
   margin-top: 2.5rem;
   padding: 1.75rem 0 1rem;

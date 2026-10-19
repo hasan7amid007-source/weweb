@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { applyApiCors, safeSameSiteUrl } from './_lib/cors.js'
 
 /**
  * Stripe Customer Portal session (Billing self-serve).
@@ -31,10 +32,10 @@ function originFromReq(req: VercelRequest): string {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (!applyApiCors(req, res)) {
+      return res.status(403).json({ error: 'Origin not allowed' })
+    }
     if (req.method === 'OPTIONS') {
-      res.setHeader('Access-Control-Allow-Origin', '*')
-      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
       return res.status(204).end()
     }
     if (req.method !== 'POST') {
@@ -52,7 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const email = String(body.email || '').trim()
     let customerId = String(body.customerId || '').trim()
     const origin = originFromReq(req)
-    const returnUrl = (body.returnUrl || `${origin}/order.html`).trim()
+    const returnUrl = safeSameSiteUrl(body.returnUrl, `${origin}/order.html`)
 
     const { default: Stripe } = await import('stripe')
     const stripe = new Stripe(secret)

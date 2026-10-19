@@ -112,11 +112,11 @@ export const de: Messages = {
     q1: 'Welche Dienstleistungen bietet BDITEC an?',
     a1: 'Webentwicklung, Mobile Apps, digitales Marketing (SEO, Social Media, PPC), E-Commerce, UI-Design, Hosting und Offline-Marketing.',
     q2: 'Wie erhalte ich ein Angebot?',
-    a2: 'Wählen Sie Ihren Service unter „Bestellen“, geben Sie Ihre Daten ein und zahlen Sie online — ohne Termin und ohne Rückruf.',
+    a2: 'Im <a href="/shop.html">Shop</a> wählen Sie ein Startpaket oder fordern ein individuelles Angebot an. Unter „Bestellen“ auf der Startseite geht der geführte Checkout (Service → Paket → Daten → Zahlung). Soft-Launch kann als Demo ohne echte Belastung laufen.',
     q3: 'Welche Technologien nutzen Sie?',
     a3: 'Unter anderem WordPress, Joomla, Shopify, React Native, Flutter, HTML/CSS, JavaScript, Node.js und Python — passend zu Ihrem Projekt.',
     q4: 'Muss ich Sie persönlich kontaktieren?',
-    a4: 'Nein. Der gesamte Ablauf läuft online: Service wählen → Paket & Extras → Daten → Zahlung. Optional bleiben E-Mail <a href="mailto:info@bditec.com">info@bditec.com</a> und Telefon <a href="tel:+4915735804396">+49 1573 5804396</a> verfügbar.',
+    a4: 'Nein. Der gesamte Ablauf läuft online: Shop oder Bestellen → Paket & Extras → Daten → Zahlung. Optional bleiben E-Mail <a href="mailto:info@bditec.com">info@bditec.com</a> und Telefon <a href="tel:+4915735804396">+49 1573 5804396</a> verfügbar.',
   },
   join: {
     eyebrow: 'Mit starkem Design wird Ihre Marke nicht nur sichtbar — sie wird unverwechselbar',

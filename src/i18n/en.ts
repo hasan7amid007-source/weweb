@@ -109,11 +109,11 @@ export const en: Messages = {
     q1: 'Which services does BDITEC offer?',
     a1: 'Web development, mobile apps, digital marketing (SEO, social media, PPC), e-commerce, UI design, hosting and offline marketing.',
     q2: 'How do I get a quote?',
-    a2: 'Choose your service under “Order”, enter your details, and pay online — no appointment and no call-back.',
+    a2: 'In the <a href="/shop.html">shop</a> pick a starter package or request a custom quote. On the home page, “Order” opens the guided checkout (service → package → details → pay). Soft-launch may run as a demo without a real charge.',
     q3: 'Which technologies do you use?',
     a3: 'Among others WordPress, Joomla, Shopify, React Native, Flutter, HTML/CSS, JavaScript, Node.js and Python — matched to your project.',
     q4: 'Do I need to contact you in person?',
-    a4: 'No. Everything runs online: choose service → package & extras → details → payment. Email <a href="mailto:info@bditec.com">info@bditec.com</a> and phone <a href="tel:+4915735804396">+49 1573 5804396</a> stay optional.',
+    a4: 'No. Everything runs online: shop or Order → package & extras → details → payment. Email <a href="mailto:info@bditec.com">info@bditec.com</a> and phone <a href="tel:+4915735804396">+49 1573 5804396</a> stay optional.',
   },
   join: {
     eyebrow: "With strong design, your brand doesn't just get seen — it becomes unmistakable",

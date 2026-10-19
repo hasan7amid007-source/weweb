@@ -59,6 +59,7 @@ function applyServiceMeta(locale: Locale) {
   upsertMeta('name', 'twitter:description', page.metaDescription)
   upsertMeta('name', 'twitter:image', image)
   applyHreflang(servicePath(serviceId))
+  upsertLink('prefetch', `/shop.html?service=${encodeURIComponent(serviceId)}`)
 }
 
 function injectJsonLd(locale: Locale) {

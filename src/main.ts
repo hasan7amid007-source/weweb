@@ -230,7 +230,7 @@ function render(locale: Locale) {
       <div class="wrap narrow">
         <h2 class="center animatetxtgradient">${m.faq.title}</h2>
         <p class="lead center">${m.faq.lead}</p>
-        <div class="accordion" data-accordion>
+        <div class="accordion" data-accordion data-track-open="home_faq_open">
           <details class="acc-item" open>
             <summary>${m.faq.q1}</summary>
             <div class="acc-body"><p>${m.faq.a1}</p></div>

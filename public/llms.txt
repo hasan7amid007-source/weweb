@@ -1,0 +1,29 @@
+# BDITEC
+
+> Hamburg agency for web design, development, digital marketing, hosting, mobile apps, and offline marketing.
+
+Primary public site: https://weweb-weld.vercel.app
+(Contact domain bditec.com is used for email; custom web domain may change later.)
+
+## Public pages
+- / — marketing home, multilingual (de/en/ar), self-service booking
+- /shop.html — agency package shop (catalog start amounts; soft-launch may use demo checkout)
+- /services/*.html — service detail pages
+- /impressum.html — legal notice (draft)
+- /datenschutz.html — privacy (draft)
+- /order.html — post-checkout briefing (noindex)
+
+## Checkout
+- Server-validated totals via POST /api/create-checkout
+- Demo mode when STRIPE_SECRET_KEY is unset
+- Stripe Customer Portal via POST /api/create-portal-session when configured
+
+## Contact
+- Email: info@bditec.com
+- Phone: +49 1573 5804396
+- Address: Alte Holsten Straße 72, 21029 Hamburg, Germany
+
+## Notes for agents
+- Do not invent live prices, contracts, or delivery SLAs beyond published catalog copy.
+- Prefer German default locale; respect ?lang=en|ar.
+- Authenticated app surfaces: none (public marketing site only).

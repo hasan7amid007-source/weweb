@@ -60,6 +60,8 @@ export type ShopPageCopy = {
   cartPayHint: string
   cartProcessing: string
   cartError: string
+  faqTitle: string
+  faq: { q: string; a: string }[]
 }
 
 export const shopPageDe: ShopPageCopy = {
@@ -157,6 +159,21 @@ export const shopPageDe: ShopPageCopy = {
     'Beträge werden serverseitig geprüft. Ohne Stripe-Schlüssel läuft der Soft-Launch als Demo.',
   cartProcessing: 'Checkout wird vorbereitet…',
   cartError: 'Checkout fehlgeschlagen. Bitte erneut versuchen oder Angebot anfragen.',
+  faqTitle: 'Shop FAQ',
+  faq: [
+    {
+      q: 'Was bedeuten die Startbeträge?',
+      a: 'Angezeigte EUR-Beträge sind Online-Startbeträge aus dem Katalog und werden serverseitig geprüft. Endpreise, Lieferzeiten und Vertragsbedingungen bedürfen noch der Freigabe durch BDITEC.',
+    },
+    {
+      q: 'Warum Demo-Checkout?',
+      a: 'Ohne konfigurierten Stripe-Testschlüssel bleibt der Soft-Launch im Demo-Modus — kein echter Karteneinzug. Live-/Test-Zahlung folgt nach Ops-Setup.',
+    },
+    {
+      q: 'Wie funktionieren Abos?',
+      a: 'Pakete mit Kaufart „Abo“ nutzen Stripe Billing, sobald Test-/Live-Keys und Price IDs gesetzt sind. Danach können Sie Abos im Kundenportal verwalten.',
+    },
+  ],
 }
 
 export const shopPageEn: ShopPageCopy = {
@@ -254,6 +271,21 @@ export const shopPageEn: ShopPageCopy = {
     'Amounts are validated server-side. Without a Stripe secret key, soft-launch stays in demo mode.',
   cartProcessing: 'Preparing checkout…',
   cartError: 'Checkout failed. Try again or request a quote.',
+  faqTitle: 'Shop FAQ',
+  faq: [
+    {
+      q: 'What do the start amounts mean?',
+      a: 'Listed EUR amounts are online catalog start amounts, validated on the server. Final prices, delivery times, and contract terms still need BDITEC business approval.',
+    },
+    {
+      q: 'Why demo checkout?',
+      a: 'Until a Stripe test secret is configured, soft-launch stays in demo mode — no real card charge. Live/test payment follows the ops setup.',
+    },
+    {
+      q: 'How do subscriptions work?',
+      a: 'Packages marked Subscription use Stripe Billing once test/live keys and Price IDs are set. You can then manage subscriptions in the customer portal.',
+    },
+  ],
 }
 
 export const shopPageAr: ShopPageCopy = {
@@ -351,4 +383,19 @@ export const shopPageAr: ShopPageCopy = {
     'تُتحقق المبالغ على الخادم. بدون مفتاح Stripe يبقى الإطلاق التجريبي في وضع العرض.',
   cartProcessing: 'جاري تجهيز الدفع…',
   cartError: 'فشل الدفع. حاول مجدداً أو اطلب عرض سعر.',
+  faqTitle: 'أسئلة المتجر',
+  faq: [
+    {
+      q: 'ماذا تعني مبالغ البداية؟',
+      a: 'المبالغ باليورو المعروضة هي مبالغ بداية من الكتالوج وتُتحقق على الخادم. الأسعار النهائية والمدد والشروط تحتاج موافقة أعمال BDITEC.',
+    },
+    {
+      q: 'لماذا وضع العرض (Demo)؟',
+      a: 'بدون مفتاح Stripe للاختبار يبقى الإطلاق التجريبي في وضع العرض — بلا خصم حقيقي. الدفع الحي/الاختباري يتبع إعداد العمليات.',
+    },
+    {
+      q: 'كيف تعمل الاشتراكات؟',
+      a: 'الباقات من نوع اشتراك تستخدم Stripe Billing بعد ضبط المفاتيح وPrice IDs. بعدها يمكن إدارة الاشتراك عبر بوابة العملاء.',
+    },
+  ],
 }

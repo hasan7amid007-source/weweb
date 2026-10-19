@@ -259,6 +259,25 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
     </section>`
 }
 
+function renderShopFaq(locale: Locale): string {
+  const shop = t(locale).shopPage
+  return `
+    <section class="shop-faq" id="shop-faq" aria-labelledby="shop-faq-title">
+      <h2 id="shop-faq-title">${shop.faqTitle}</h2>
+      <div class="service-faq" data-accordion data-track-open="shop_faq_open">
+        ${shop.faq
+          .map(
+            (item) => `
+          <details>
+            <summary>${item.q}</summary>
+            <p>${item.a}</p>
+          </details>`,
+          )
+          .join('')}
+      </div>
+    </section>`
+}
+
 function renderQuoteForm(locale: Locale, prefillService = '', prefillPackage = ''): string {
   const m = t(locale)
   const shop = m.shopPage
@@ -340,6 +359,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
         </div>
         <div class="wrap">
           ${renderCartPanel(locale, cartLines)}
+          ${renderShopFaq(locale)}
           ${renderQuoteForm(locale, detail.package.shopCategory, `${detail.service}:${detail.package.id}`)}
         </div>
       </div>`
@@ -388,6 +408,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
 
       <div class="wrap">
         ${renderCartPanel(locale, cartLines)}
+        ${renderShopFaq(locale)}
         ${renderQuoteForm(locale)}
       </div>
     </div>`

@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { applyApiCors, safeSameSiteUrl } from './_lib/cors.js'
 
 /**
  * Checkout with server-side price validation from api/shop-catalog.json.
@@ -111,18 +112,6 @@ function originFromReq(req: VercelRequest): string {
   return `${proto}://${host}`
 }
 
-function safeUrl(raw: string | undefined, fallback: string): string {
-  const value = (raw || '').trim()
-  if (!value) return fallback
-  try {
-    const url = new URL(value)
-    if (url.protocol !== 'https:' && url.protocol !== 'http:') return fallback
-    return url.toString()
-  } catch {
-    return fallback
-  }
-}
-
 function resolveLines(
   catalog: Catalog,
   body: Body,
@@ -197,10 +186,10 @@ function useSubscriptionMode(lines: ResolvedLine[]): boolean {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (!applyApiCors(req, res)) {
+      return res.status(403).json({ error: 'Origin not allowed' })
+    }
     if (req.method === 'OPTIONS') {
-      res.setHeader('Access-Control-Allow-Origin', '*')
-      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
       return res.status(204).end()
     }
     if (req.method !== 'POST') {
@@ -223,11 +212,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const locale = String(body.locale || 'de').slice(0, 5)
     const origin = originFromReq(req)
     const primary = lines[0]!
-    const successUrl = safeUrl(
+    const successUrl = safeSameSiteUrl(
       body.successUrl,
       `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(primary.service)}&package=${encodeURIComponent(primary.packageId)}&total=${totalEur}&email=${encodeURIComponent(email)}`,
     )
-    const cancelUrl = safeUrl(body.cancelUrl, `${origin}/shop.html#cart`)
+    const cancelUrl = safeSameSiteUrl(body.cancelUrl, `${origin}/shop.html#cart`)
 
     const secret = (process.env.STRIPE_SECRET_KEY || '').trim()
     if (!secret) {

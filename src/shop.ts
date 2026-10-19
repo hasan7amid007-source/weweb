@@ -1,6 +1,7 @@
 import './styles/site.css'
 import './styles/effects.css'
 import { SITE_ORIGIN } from './data/services'
+import { initAccordions } from './features/accordion'
 import { listShopPackages } from './features/booking/shop-catalog'
 import { initTelemetry } from './lib/telemetry'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader } from './features/shell'
@@ -60,12 +61,24 @@ function injectShopJsonLd(locale: Locale) {
   })
   const payload = {
     '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: shop.metaTitle,
-    description: shop.metaDescription,
-    url: `${SITE_ORIGIN}/shop.html`,
-    numberOfItems: items.length,
-    itemListElement: items,
+    '@graph': [
+      {
+        '@type': 'ItemList',
+        name: shop.metaTitle,
+        description: shop.metaDescription,
+        url: `${SITE_ORIGIN}/shop.html`,
+        numberOfItems: items.length,
+        itemListElement: items,
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: shop.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      },
+    ],
   }
   document.querySelectorAll('script[data-shop-jsonld]').forEach((n) => n.remove())
   const script = document.createElement('script')
@@ -121,6 +134,7 @@ function render(locale: Locale, state: ShopFilterState, restoreSearch = false) {
   bindLangSwitch(app, locale, (next) => render(next, readFiltersFromUrl()))
   bindNavToggle(app, locale)
   initShopPage(app, locale, (next) => render(locale, next, true))
+  initAccordions(app)
   initTelemetry()
 
   if (restoreSearch) {

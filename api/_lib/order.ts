@@ -5,7 +5,7 @@ import {
   isPackageId,
   type BookingServiceKey,
   type PurchaseMode,
-} from './shop-catalog'
+} from './shop-catalog.js'
 
 export type CreateCheckoutBody = {
   service?: string

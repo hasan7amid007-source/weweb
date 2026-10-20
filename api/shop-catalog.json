@@ -14,6 +14,7 @@
     "packages": [
       { "id": "shared", "priceEur": 79, "purchaseMode": "checkout", "shopCategory": "hosting-support" },
       { "id": "care", "priceEur": 59, "purchaseMode": "subscription", "shopCategory": "hosting-support" },
+      { "id": "care-pro", "priceEur": 99, "purchaseMode": "subscription", "shopCategory": "hosting-support" },
       { "id": "vps", "priceEur": 129, "recommended": true, "purchaseMode": "subscription", "shopCategory": "hosting-support" },
       { "id": "dedicated", "priceEur": 249, "purchaseMode": "quote", "shopCategory": "hosting-support" }
     ],
@@ -64,6 +65,8 @@
       { "id": "audit", "priceEur": 99, "purchaseMode": "checkout", "shopCategory": "seo-analytics" },
       { "id": "campaign", "priceEur": 199, "recommended": true, "purchaseMode": "checkout", "shopCategory": "digital-marketing" },
       { "id": "sea", "priceEur": 299, "purchaseMode": "subscription", "shopCategory": "digital-marketing" },
+      { "id": "seo-pflege", "priceEur": 490, "purchaseMode": "subscription", "shopCategory": "seo-analytics" },
+      { "id": "social", "priceEur": 499, "purchaseMode": "subscription", "shopCategory": "digital-marketing" },
       { "id": "retainer", "priceEur": 349, "purchaseMode": "subscription", "shopCategory": "digital-marketing" }
     ],
     "addons": [

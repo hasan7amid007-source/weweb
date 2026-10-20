@@ -55,8 +55,25 @@ export const bookingShopDe: BookingShopCopy = {
       },
       care: {
         title: 'Care',
-        blurb: 'Wartung, Updates & Support',
-        highlights: ['Updates & Backups', 'Sicherheits-Checks', 'Support-Kanal', 'Monatliche Betreuung'],
+        blurb: 'Wartung mit Stunden-Deckel (Hosting separat)',
+        highlights: [
+          'Updates & Backups',
+          'Sicherheits-Checks',
+          'Bis ca. 1 Std. Support / Monat',
+          'Hosting/Domain nicht inklusive',
+          'Orientierungspreis — Konditionen im Briefing',
+        ],
+      },
+      'care-pro': {
+        title: 'Care Pro',
+        blurb: 'Mehr Pflege & schnellere Antwort',
+        highlights: [
+          'Alles aus Care',
+          'Bis ca. 2 Std. Support / Monat',
+          'Kleine Inhaltsänderungen',
+          'Hosting/Domain nicht inklusive',
+          'Orientierungspreis — Konditionen im Briefing',
+        ],
       },
       dedicated: {
         title: 'Dedicated',
@@ -127,9 +144,37 @@ export const bookingShopDe: BookingShopCopy = {
         highlights: ['Kampagnen-Start', 'Konten & Tracking Start', 'Content-Grundlage', 'Digitales Briefing'],
       },
       sea: {
-        title: 'SEA',
-        blurb: 'Google Ads Betreuung',
-        highlights: ['Kampagnen-Steuerung', 'Budget-Optimierung', 'Conversion-Fokus', 'Monatliches Reporting', 'Werbebudget separat'],
+        title: 'SEA Start',
+        blurb: 'Leichte Google-Ads-Betreuung (Stunden-Deckel)',
+        highlights: [
+          'Begrenzte Optimierungsstunden / Monat',
+          'Kampagnen-Check & Reporting',
+          'Conversion-Fokus',
+          'Werbebudget separat (Kunde zahlt Google)',
+          'Kein Full-Service wie große SEA-Retainers',
+        ],
+      },
+      'seo-pflege': {
+        title: 'SEO Pflege',
+        blurb: 'Monatliche SEO-Betreuung',
+        highlights: [
+          '1 Inhalt neu/überarbeitet / Monat',
+          'Technische Basis-Checks',
+          'Google-Unternehmensprofil Pflege',
+          'Monatsbericht',
+          'Orientierungspreis — Scope im Briefing',
+        ],
+      },
+      social: {
+        title: 'Social',
+        blurb: 'Facebook & Instagram Betreuung',
+        highlights: [
+          'Posts & Community-Reaktion',
+          'Agenturhonorar monatlich',
+          'Optional: Ads-Budget separat',
+          'Mindestlaufzeit im Briefing klären',
+          'Orientierungspreis',
+        ],
       },
       retainer: {
         title: 'Retainer',
@@ -140,8 +185,8 @@ export const bookingShopDe: BookingShopCopy = {
     'offline-marketing': {
       print: {
         title: 'Print',
-        blurb: 'Druckmedien-Konzept',
-        highlights: ['Druckmedien-Konzept', 'Visuelle Richtung', 'Produktionsabstimmung', 'Digitales Briefing'],
+        blurb: 'Druckmedien-Konzept (Startbetrag)',
+        highlights: ['Druckmedien-Konzept', 'Visuelle Richtung', 'Produktion/Druck separat', 'Digitales Briefing'],
       },
       campaign: {
         title: 'Kampagne',
@@ -233,8 +278,25 @@ export const bookingShopEn: BookingShopCopy = {
       },
       care: {
         title: 'Care',
-        blurb: 'Maintenance, updates & support',
-        highlights: ['Updates & backups', 'Security checks', 'Support channel', 'Monthly care'],
+        blurb: 'Maintenance with hour cap (hosting separate)',
+        highlights: [
+          'Updates & backups',
+          'Security checks',
+          'Up to ~1 h support / month',
+          'Hosting/domain not included',
+          'Orientation price — terms in briefing',
+        ],
+      },
+      'care-pro': {
+        title: 'Care Pro',
+        blurb: 'More care & faster replies',
+        highlights: [
+          'Everything in Care',
+          'Up to ~2 h support / month',
+          'Small content edits',
+          'Hosting/domain not included',
+          'Orientation price — terms in briefing',
+        ],
       },
       dedicated: {
         title: 'Dedicated',
@@ -305,9 +367,37 @@ export const bookingShopEn: BookingShopCopy = {
         highlights: ['Campaign kickoff', 'Accounts & tracking start', 'Content foundation', 'Digital briefing'],
       },
       sea: {
-        title: 'SEA',
-        blurb: 'Google Ads management',
-        highlights: ['Campaign steering', 'Budget optimisation', 'Conversion focus', 'Monthly reporting', 'Ad spend separate'],
+        title: 'SEA Start',
+        blurb: 'Light Google Ads care (hour-capped)',
+        highlights: [
+          'Limited optimisation hours / month',
+          'Campaign check & reporting',
+          'Conversion focus',
+          'Ad spend separate (client pays Google)',
+          'Not full-service SEA retainers',
+        ],
+      },
+      'seo-pflege': {
+        title: 'SEO Care',
+        blurb: 'Monthly SEO retainership',
+        highlights: [
+          '1 new/updated piece of content / month',
+          'Technical baseline checks',
+          'Google Business Profile care',
+          'Monthly report',
+          'Orientation price — scope in briefing',
+        ],
+      },
+      social: {
+        title: 'Social',
+        blurb: 'Facebook & Instagram care',
+        highlights: [
+          'Posts & community replies',
+          'Monthly agency fee',
+          'Optional: ads budget separate',
+          'Minimum term clarified in briefing',
+          'Orientation price',
+        ],
       },
       retainer: {
         title: 'Retainer',
@@ -318,8 +408,8 @@ export const bookingShopEn: BookingShopCopy = {
     'offline-marketing': {
       print: {
         title: 'Print',
-        blurb: 'Print media concept',
-        highlights: ['Print media concept', 'Visual direction', 'Production alignment', 'Digital briefing'],
+        blurb: 'Print media concept (start amount)',
+        highlights: ['Print media concept', 'Visual direction', 'Print/production separate', 'Digital briefing'],
       },
       campaign: {
         title: 'Campaign',
@@ -411,8 +501,25 @@ export const bookingShopAr: BookingShopCopy = {
       },
       care: {
         title: 'رعاية',
-        blurb: 'صيانة وتحديثات ودعم',
-        highlights: ['تحديثات ونسخ احتياطي', 'فحوصات أمان', 'قناة دعم', 'رعاية شهرية'],
+        blurb: 'صيانة بحد ساعات (الاستضافة منفصلة)',
+        highlights: [
+          'تحديثات ونسخ احتياطي',
+          'فحوصات أمان',
+          'حتى ساعة دعم تقريباً / شهر',
+          'الاستضافة/النطاق غير مشمولة',
+          'سعر توجيهي — الشروط في الإحاطة',
+        ],
+      },
+      'care-pro': {
+        title: 'رعاية برو',
+        blurb: 'رعاية أكثر ورد أسرع',
+        highlights: [
+          'كل ما في Care',
+          'حتى ساعتين دعم تقريباً / شهر',
+          'تعديلات محتوى صغيرة',
+          'الاستضافة/النطاق غير مشمولة',
+          'سعر توجيهي — الشروط في الإحاطة',
+        ],
       },
       dedicated: {
         title: 'مخصص',
@@ -483,9 +590,37 @@ export const bookingShopAr: BookingShopCopy = {
         highlights: ['انطلاق الحملة', 'بداية حسابات وتتبع', 'أساس المحتوى', 'إحاطة رقمية'],
       },
       sea: {
-        title: 'SEA',
-        blurb: 'إدارة إعلانات Google',
-        highlights: ['توجيه الحملات', 'تحسين الميزانية', 'تركيز التحويل', 'تقارير شهرية', 'ميزانية الإعلان منفصلة'],
+        title: 'SEA Start',
+        blurb: 'رعاية Google Ads خفيفة (بحد ساعات)',
+        highlights: [
+          'ساعات تحسين محدودة / شهر',
+          'فحص حملات وتقارير',
+          'تركيز التحويل',
+          'ميزانية الإعلان منفصلة (يدفعها العميل لـ Google)',
+          'ليست رعاية SEA كاملة مثل الوكالات الكبيرة',
+        ],
+      },
+      'seo-pflege': {
+        title: 'رعاية SEO',
+        blurb: 'اشتراك SEO شهري',
+        highlights: [
+          'محتوى واحد جديد/محدّث / شهر',
+          'فحوصات تقنية أساسية',
+          'رعاية ملف Google للأعمال',
+          'تقرير شهري',
+          'سعر توجيهي — النطاق في الإحاطة',
+        ],
+      },
+      social: {
+        title: 'سوشيال',
+        blurb: 'رعاية Facebook و Instagram',
+        highlights: [
+          'منشورات وردود المجتمع',
+          'أتعاب وكالة شهرية',
+          'اختياري: ميزانية إعلانات منفصلة',
+          'الحد الأدنى للعقد يُوضح في الإحاطة',
+          'سعر توجيهي',
+        ],
       },
       retainer: {
         title: 'اشتراك',
@@ -496,8 +631,8 @@ export const bookingShopAr: BookingShopCopy = {
     'offline-marketing': {
       print: {
         title: 'طباعة',
-        blurb: 'مفهوم مواد مطبوعة',
-        highlights: ['مفهوم مواد مطبوعة', 'اتجاه بصري', 'تنسيق الإنتاج', 'إحاطة رقمية'],
+        blurb: 'مفهوم مواد مطبوعة (مبلغ بداية)',
+        highlights: ['مفهوم مواد مطبوعة', 'اتجاه بصري', 'الطباعة/الإنتاج منفصل', 'إحاطة رقمية'],
       },
       campaign: {
         title: 'حملة',

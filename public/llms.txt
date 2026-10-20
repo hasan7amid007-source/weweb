@@ -8,8 +8,11 @@ Primary public site: https://weweb-weld.vercel.app
 ## Public pages
 - / — marketing home, multilingual (de/en/ar), self-service booking
 - /shop.html — agency package shop (catalog start amounts; soft-launch may use demo checkout)
-- /shop.html?service=web-hosting&package=care — Care / Wartung orientation (€59/mo catalog start)
-- /shop.html?service=digital-marketing&package=sea — SEA monthly orientation (€299/mo catalog start)
+- /shop.html?service=web-hosting&package=care — Care (Wartung, hosting separate) €59/mo orientation
+- /shop.html?service=web-hosting&package=care-pro — Care Pro €99/mo orientation
+- /shop.html?service=digital-marketing&package=sea — SEA Start (hour-capped) €299/mo; ad spend separate
+- /shop.html?service=digital-marketing&package=seo-pflege — SEO Pflege €490/mo orientation
+- /shop.html?service=digital-marketing&package=social — Social retainer €499/mo orientation
 - /services/*.html — service detail pages
 - /impressum.html — legal notice (draft)
 - /datenschutz.html — privacy (draft)

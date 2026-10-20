@@ -31,7 +31,13 @@ export type ShopPageCopy = {
   viewDetails: string
   viewService: string
   planIncludes: string
+  planIncludesSubscription: string
   startAmountNote: string
+  subscriptionAmountNote: string
+  quoteAmountNote: string
+  priceKindCheckout: string
+  priceKindSubscription: string
+  priceKindQuote: string
   vatNote: string
   missingTerms: string
   detailBack: string
@@ -105,7 +111,7 @@ export const shopPageDe: ShopPageCopy = {
   sortPriceAsc: 'Preis: aufsteigend',
   sortPriceDesc: 'Preis: absteigend',
   sortName: 'Name A–Z',
-  modeCheckout: 'Einmalig',
+  modeCheckout: 'Startbetrag',
   modeSubscription: 'Monatlich',
   modeQuote: 'Angebot',
   categories: {
@@ -143,7 +149,14 @@ export const shopPageDe: ShopPageCopy = {
   viewDetails: 'Details ansehen',
   viewService: 'Zur Service-Seite',
   planIncludes: 'Enthalten im Start',
-  startAmountNote: 'Angezeigter Betrag ist ein Start-/Anzahlungswert in EUR und wird auf das Projekt angerechnet.',
+  planIncludesSubscription: 'Orientierung (monatlich)',
+  startAmountNote: 'Angezeigter Betrag ist ein Start-/Anzahlungswert in EUR und wird auf das Projekt angerechnet — kein Festpreis für das Gesamtprojekt.',
+  subscriptionAmountNote:
+    'Monatsbetrag (Orientierung, zzgl. MwSt.). Werbebudget, Hosting und Lizenzen nur wenn ausdrücklich genannt. Soft-Launch kann Demo-Checkout nutzen.',
+  quoteAmountNote: 'Richtwert für die Anfrage — verbindliches Angebot folgt nach Briefing.',
+  priceKindCheckout: 'Startbetrag',
+  priceKindSubscription: 'pro Monat',
+  priceKindQuote: 'Richtwert',
   vatNote: 'Alle Beträge in EUR zzgl. MwSt., sofern nicht anders angegeben.',
   missingTerms:
     'Preise und Konditionen sind Orientierungswerte (kein Festpreis wie bei manchen Agenturen) — finale Vereinbarung im Briefing. Soft-Launch kann Demo-Checkout nutzen.',
@@ -178,7 +191,7 @@ export const shopPageDe: ShopPageCopy = {
   quoteHint: 'Öffnet Ihr E-Mail-Programm an info@bditec.com. Es wird kein Konto angelegt und keine Zahlung ausgeführt.',
   quoteSuccess: 'E-Mail-Entwurf geöffnet. Senden Sie die Nachricht ab, um die Anfrage zu übermitteln.',
   modeBadge: {
-    checkout: 'Einmalig',
+    checkout: 'Startbetrag',
     subscription: 'Monatlich',
     quote: 'Angebot',
   },
@@ -207,7 +220,7 @@ export const shopPageDe: ShopPageCopy = {
   faq: [
     {
       q: 'Was bedeuten die Startbeträge?',
-      a: 'Angezeigte EUR-Beträge sind Online-Startbeträge aus dem Katalog und werden serverseitig geprüft. Endpreise, Lieferzeiten und Vertragsbedingungen bedürfen noch der Freigabe durch BDITEC.',
+      a: 'Einmalige Pakete zeigen einen Online-Start-/Anzahlungswert — kein Festpreis für das Gesamtprojekt. Monatliche Pakete (Care, SEA Start, SEO Pflege, Social) sind Orientierungshonorare pro Monat; Werbebudget und Hosting sind nur inklusive, wenn ausdrücklich genannt.',
     },
     {
       q: 'Warum Demo-Checkout?',
@@ -215,7 +228,7 @@ export const shopPageDe: ShopPageCopy = {
     },
     {
       q: 'Wie funktionieren Abos?',
-      a: 'Pakete mit Kaufart „Abo“ nutzen Stripe Billing, sobald Test-/Live-Keys und Price IDs gesetzt sind. Danach können Sie Abos im Kundenportal verwalten.',
+      a: 'Monatliche Pakete nutzen Stripe Billing, sobald Test-Keys und wiederkehrende Price IDs gesetzt sind. Bis dahin läuft der Soft-Launch als Demo. Konditionen (Stunden-Deckel, Kündigung) werden im Briefing bestätigt.',
     },
   ],
 }
@@ -239,7 +252,7 @@ export const shopPageEn: ShopPageCopy = {
   sortPriceAsc: 'Price: low to high',
   sortPriceDesc: 'Price: high to low',
   sortName: 'Name A–Z',
-  modeCheckout: 'One-time',
+  modeCheckout: 'Start amount',
   modeSubscription: 'Monthly',
   modeQuote: 'Quote',
   categories: {
@@ -277,7 +290,15 @@ export const shopPageEn: ShopPageCopy = {
   viewDetails: 'View details',
   viewService: 'Service page',
   planIncludes: 'Included to start',
-  startAmountNote: 'Shown amount is a start / deposit value in EUR and is credited toward the project.',
+  planIncludesSubscription: 'Orientation (monthly)',
+  startAmountNote:
+    'Shown amount is a start / deposit value in EUR credited toward the project — not a full-project Festpreis.',
+  subscriptionAmountNote:
+    'Monthly orientation fee (excl. VAT). Ad spend, hosting, and licenses only when explicitly listed. Soft-launch may use demo checkout.',
+  quoteAmountNote: 'Indicative amount for the request — binding quote follows after briefing.',
+  priceKindCheckout: 'Start amount',
+  priceKindSubscription: 'per month',
+  priceKindQuote: 'Indicative',
   vatNote: 'All amounts in EUR excl. VAT unless stated otherwise.',
   missingTerms:
     'Listed amounts are orientation start prices (not full agency Festpreise) — final scope is confirmed in the briefing. Soft-launch may use demo checkout.',
@@ -312,7 +333,7 @@ export const shopPageEn: ShopPageCopy = {
   quoteHint: 'Opens your email app to info@bditec.com. No account is created and no payment is taken.',
   quoteSuccess: 'Email draft opened. Send the message to submit your request.',
   modeBadge: {
-    checkout: 'One-time',
+    checkout: 'Start amount',
     subscription: 'Monthly',
     quote: 'Quote',
   },
@@ -341,7 +362,7 @@ export const shopPageEn: ShopPageCopy = {
   faq: [
     {
       q: 'What do the start amounts mean?',
-      a: 'Listed EUR amounts are online catalog start amounts, validated on the server. Final prices, delivery times, and contract terms still need BDITEC business approval.',
+      a: 'One-time packages show an online start/deposit — not a full-project Festpreis. Monthly packages (Care, SEA Start, SEO Care, Social) are orientation retainers; ad spend and hosting are included only when explicitly stated.',
     },
     {
       q: 'Why demo checkout?',
@@ -349,7 +370,7 @@ export const shopPageEn: ShopPageCopy = {
     },
     {
       q: 'How do subscriptions work?',
-      a: 'Packages marked Subscription use Stripe Billing once test/live keys and Price IDs are set. You can then manage subscriptions in the customer portal.',
+      a: 'Monthly packages use Stripe Billing once test keys and recurring Price IDs are set. Until then soft-launch stays demo. Hour caps and cancellation are confirmed in the briefing.',
     },
   ],
 }
@@ -373,7 +394,7 @@ export const shopPageAr: ShopPageCopy = {
   sortPriceAsc: 'السعر: من الأقل',
   sortPriceDesc: 'السعر: من الأعلى',
   sortName: 'الاسم أ–ي',
-  modeCheckout: 'مرة واحدة',
+  modeCheckout: 'مبلغ بداية',
   modeSubscription: 'شهري',
   modeQuote: 'عرض سعر',
   categories: {
@@ -411,7 +432,15 @@ export const shopPageAr: ShopPageCopy = {
   viewDetails: 'عرض التفاصيل',
   viewService: 'صفحة الخدمة',
   planIncludes: 'يشمل للبداية',
-  startAmountNote: 'المبلغ المعروض قيمة بداية / عربون باليورو ويُحتسب ضمن المشروع.',
+  planIncludesSubscription: 'توجيهي (شهري)',
+  startAmountNote:
+    'المبلغ المعروض قيمة بداية / عربون باليورو ويُحتسب ضمن المشروع — وليس سعر مشروع كامل.',
+  subscriptionAmountNote:
+    'أتعاب شهرية توجيهية (بدون ضريبة ما لم يُذكر). ميزانية الإعلان والاستضافة والتراخيص فقط إن ذُكرت صراحة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
+  quoteAmountNote: 'مبلغ توجيهي للطلب — العرض الملزم بعد الإحاطة.',
+  priceKindCheckout: 'مبلغ بداية',
+  priceKindSubscription: 'شهرياً',
+  priceKindQuote: 'توجيهي',
   vatNote: 'جميع المبالغ باليورو بدون ضريبة القيمة المضافة ما لم يُذكر خلاف ذلك.',
   missingTerms:
     'المبالغ توجيهية لمبالغ البداية (وليست أسعار مشاريع كاملة) — النطاق النهائي يُؤكد في الإحاطة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
@@ -446,7 +475,7 @@ export const shopPageAr: ShopPageCopy = {
   quoteHint: 'يفتح تطبيق البريد إلى info@bditec.com. لا يُنشأ حساب ولا يُؤخذ دفع.',
   quoteSuccess: 'فُتح مسودة البريد. أرسل الرسالة لإتمام الطلب.',
   modeBadge: {
-    checkout: 'مرة واحدة',
+    checkout: 'مبلغ بداية',
     subscription: 'شهري',
     quote: 'عرض',
   },
@@ -475,7 +504,7 @@ export const shopPageAr: ShopPageCopy = {
   faq: [
     {
       q: 'ماذا تعني مبالغ البداية؟',
-      a: 'المبالغ باليورو المعروضة هي مبالغ بداية من الكتالوج وتُتحقق على الخادم. الأسعار النهائية والمدد والشروط تحتاج موافقة أعمال BDITEC.',
+      a: 'الباقات لمرة واحدة تعرض مبلغ بداية/عربون — وليس سعر مشروع كامل. الباقات الشهرية (Care وSEA Start ورعاية SEO وسوشيال) أتعاب توجيهية؛ ميزانية الإعلان والاستضافة فقط إن ذُكرت صراحة.',
     },
     {
       q: 'لماذا وضع العرض (Demo)؟',
@@ -483,7 +512,7 @@ export const shopPageAr: ShopPageCopy = {
     },
     {
       q: 'كيف تعمل الاشتراكات؟',
-      a: 'الباقات من نوع اشتراك تستخدم Stripe Billing بعد ضبط المفاتيح وPrice IDs. بعدها يمكن إدارة الاشتراك عبر بوابة العملاء.',
+      a: 'الباقات الشهرية تستخدم Stripe Billing بعد ضبط مفاتيح الاختبار وأسعار متكررة. حتى ذلك يبقى الإطلاق التجريبي في وضع العرض. حدود الساعات والإلغاء تُؤكد في الإحاطة.',
     },
   ],
 }

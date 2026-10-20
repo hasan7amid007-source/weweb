@@ -183,12 +183,33 @@ function pricePeriod(locale: Locale, mode: PurchaseMode): string {
   return ''
 }
 
+function priceKindLabel(locale: Locale, mode: PurchaseMode): string {
+  const shop = t(locale).shopPage
+  if (mode === 'subscription') return shop.priceKindSubscription
+  if (mode === 'quote') return shop.priceKindQuote
+  return shop.priceKindCheckout
+}
+
+function priceAmountNote(locale: Locale, mode: PurchaseMode): string {
+  const shop = t(locale).shopPage
+  if (mode === 'subscription') return shop.subscriptionAmountNote
+  if (mode === 'quote') return shop.quoteAmountNote
+  return shop.startAmountNote
+}
+
+function planIncludesLabel(locale: Locale, mode: PurchaseMode): string {
+  const shop = t(locale).shopPage
+  return mode === 'subscription' ? shop.planIncludesSubscription : shop.planIncludes
+}
+
 function renderPlanCard(locale: Locale, item: ShopListingItem): string {
   const shop = t(locale).shopPage
   const copy = packageCopy(locale, item.service, item.package.id)
   const href = `/shop.html?service=${encodeURIComponent(item.service)}&package=${encodeURIComponent(item.package.id)}`
   const featured = item.package.recommended ? ' is-featured' : ''
   const period = pricePeriod(locale, item.package.purchaseMode)
+  const kind = priceKindLabel(locale, item.package.purchaseMode)
+  const includesLabel = planIncludesLabel(locale, item.package.purchaseMode)
   const highlights = copy?.highlights?.length
     ? copy.highlights
     : [copy?.blurb ?? shop.modeBadge[item.package.purchaseMode]].filter(Boolean)
@@ -205,8 +226,9 @@ function renderPlanCard(locale: Locale, item: ShopListingItem): string {
         <span class="shop-plan-amount">${formatEur(item.package.priceEur, locale)}</span>
         ${period ? `<span class="shop-plan-period">${period}</span>` : ''}
       </p>
+      <p class="shop-plan-price-kind">${kind}</p>
       <p class="shop-plan-blurb">${copy?.blurb ?? ''}</p>
-      <ul class="shop-plan-features" aria-label="${shop.planIncludes}">
+      <ul class="shop-plan-features" aria-label="${includesLabel}">
         ${highlights.map((line) => `<li>${line}</li>`).join('')}
       </ul>
       <div class="shop-plan-actions">
@@ -350,7 +372,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
           <p class="shop-detail-blurb">${copy?.blurb ?? ''}</p>
           ${
             highlights.length
-              ? `<ul class="shop-plan-features shop-detail-features" aria-label="${shop.planIncludes}">${highlights.map((line) => `<li>${line}</li>`).join('')}</ul>`
+              ? `<ul class="shop-plan-features shop-detail-features" aria-label="${planIncludesLabel(locale, item.package.purchaseMode)}">${highlights.map((line) => `<li>${line}</li>`).join('')}</ul>`
               : ''
           }
           <div class="shop-detail-grid">
@@ -378,7 +400,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
             <span>${shop.buyboxTotal}</span>
             <strong data-shop-buybox-total>${formatEur(item.package.priceEur, locale)}</strong>
           </p>
-          <p class="shop-note">${shop.startAmountNote}</p>
+          <p class="shop-note">${priceAmountNote(locale, item.package.purchaseMode)}</p>
           <div class="shop-detail-actions">
             <span class="glowborder">${buyPrimary}</span>
             ${buySecondary ? `<span class="glowborder">${buySecondary}</span>` : ''}

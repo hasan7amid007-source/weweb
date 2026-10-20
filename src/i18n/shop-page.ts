@@ -35,6 +35,7 @@ export type ShopPageCopy = {
   vatNote: string
   missingTerms: string
   detailBack: string
+  breadcrumbNav: string
   breadcrumbShop: string
   relatedTitle: string
   scopeTitle: string
@@ -72,6 +73,7 @@ export type ShopPageCopy = {
   buyboxTotal: string
   extrasSelectHint: string
   cartRemove: string
+  cartEdit: string
   cartClear: string
   cartCheckout: string
   cartOpen: string
@@ -146,6 +148,7 @@ export const shopPageDe: ShopPageCopy = {
   missingTerms:
     'Preise und Konditionen sind Orientierungswerte (kein Festpreis wie bei manchen Agenturen) — finale Vereinbarung im Briefing. Soft-Launch kann Demo-Checkout nutzen.',
   detailBack: 'Alle Pläne',
+  breadcrumbNav: 'Brotkrumen',
   breadcrumbShop: 'Shop',
   relatedTitle: 'Weitere Pläne in diesem Service',
   scopeTitle: 'Leistungsumfang (Orientierung)',
@@ -190,6 +193,7 @@ export const shopPageDe: ShopPageCopy = {
   buyboxTotal: 'Zwischensumme',
   extrasSelectHint: 'Optionale Extras — Betrag aktualisiert sich sofort.',
   cartRemove: 'Entfernen',
+  cartEdit: 'Extras bearbeiten',
   cartClear: 'Leeren',
   cartCheckout: 'Zur Kasse',
   cartOpen: 'Warenkorb öffnen',
@@ -278,6 +282,7 @@ export const shopPageEn: ShopPageCopy = {
   missingTerms:
     'Listed amounts are orientation start prices (not full agency Festpreise) — final scope is confirmed in the briefing. Soft-launch may use demo checkout.',
   detailBack: 'All plans',
+  breadcrumbNav: 'Breadcrumb',
   breadcrumbShop: 'Shop',
   relatedTitle: 'More plans in this service',
   scopeTitle: 'Scope (orientation)',
@@ -322,6 +327,7 @@ export const shopPageEn: ShopPageCopy = {
   buyboxTotal: 'Subtotal',
   extrasSelectHint: 'Optional extras — total updates instantly.',
   cartRemove: 'Remove',
+  cartEdit: 'Edit extras',
   cartClear: 'Clear',
   cartCheckout: 'Proceed to checkout',
   cartOpen: 'Open cart',
@@ -410,6 +416,7 @@ export const shopPageAr: ShopPageCopy = {
   missingTerms:
     'المبالغ توجيهية لمبالغ البداية (وليست أسعار مشاريع كاملة) — النطاق النهائي يُؤكد في الإحاطة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
   detailBack: 'كل الخطط',
+  breadcrumbNav: 'مسار التنقل',
   breadcrumbShop: 'المتجر',
   relatedTitle: 'خطط أخرى في هذه الخدمة',
   scopeTitle: 'نطاق الخدمة (توجيهي)',
@@ -454,6 +461,7 @@ export const shopPageAr: ShopPageCopy = {
   buyboxTotal: 'المجموع الفرعي',
   extrasSelectHint: 'إضافات اختيارية — يتحدث المجموع فوراً.',
   cartRemove: 'إزالة',
+  cartEdit: 'تعديل الإضافات',
   cartClear: 'تفريغ',
   cartCheckout: 'المتابعة للدفع',
   cartOpen: 'فتح السلة',

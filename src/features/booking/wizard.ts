@@ -291,11 +291,11 @@ export function renderBookingFormMarkup(locale: Locale): string {
         <div data-booking-step="3" hidden>
           <label class="contact-field">
             <span>${m.contact.nameLabel} <em>*</em></span>
-            <input type="text" name="name" required autocomplete="name" />
+            <input type="text" name="name" required autocomplete="name" maxlength="120" />
           </label>
           <label class="contact-field">
             <span>${m.contact.emailLabel} <em>*</em></span>
-            <input type="email" name="email" required autocomplete="email" />
+            <input type="email" name="email" required autocomplete="email" maxlength="254" />
           </label>
           <label class="contact-field">
             <span>${m.contact.phoneLabel}</span>

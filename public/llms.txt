@@ -8,6 +8,8 @@ Primary public site: https://weweb-weld.vercel.app
 ## Public pages
 - / — marketing home, multilingual (de/en/ar), self-service booking
 - /shop.html — agency package shop (catalog start amounts; soft-launch may use demo checkout)
+- /shop.html?service=web-hosting&package=care — Care / Wartung orientation (€59/mo catalog start)
+- /shop.html?service=digital-marketing&package=sea — SEA monthly orientation (€299/mo catalog start)
 - /services/*.html — service detail pages
 - /impressum.html — legal notice (draft)
 - /datenschutz.html — privacy (draft)
@@ -15,8 +17,8 @@ Primary public site: https://weweb-weld.vercel.app
 
 ## Checkout
 - Server-validated totals via POST /api/create-checkout
-- Demo mode when STRIPE_SECRET_KEY is unset
-- Stripe Customer Portal via POST /api/create-portal-session when configured
+- Demo mode when STRIPE_SECRET_KEY is unset or not a usable secret (sk_test_ / sk_live_)
+- Stripe Customer Portal via POST /api/create-portal-session when a usable secret is configured
 
 ## Contact
 - Email: info@bditec.com

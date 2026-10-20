@@ -282,11 +282,19 @@ function render(locale: Locale) {
     const assets = String(data.get('assets') || '').trim()
     const access = String(data.get('access') || '').trim()
     const notes = String(data.get('notes') || '').trim()
+    const itemsSummary =
+      order.items.length > 0
+        ? order.items.map((line) => {
+            const extras = line.addonIds.length ? ` (+${line.addonIds.join('+')})` : ''
+            return `${line.service}:${line.packageId}${extras}`
+          })
+        : []
     const payload = {
       orderId: order.orderId || order.sessionId,
       service: order.service,
       packageId: order.packageId,
       addons: order.addons,
+      items: order.items,
       email: order.email,
       name: order.name,
       demo: order.demo,
@@ -307,9 +315,13 @@ function render(locale: Locale) {
       `Demo: ${payload.demo ? 'yes' : 'no'}`,
       `Name: ${payload.name || '—'}`,
       `Email: ${payload.email || '—'}`,
-      `Service: ${payload.service || '—'}`,
-      `Package: ${payload.packageId || '—'}`,
-      `Addons: ${payload.addons.join(', ') || 'none'}`,
+      itemsSummary.length
+        ? `Items:\n${itemsSummary.map((line) => `- ${line}`).join('\n')}`
+        : [
+            `Service: ${payload.service || '—'}`,
+            `Package: ${payload.packageId || '—'}`,
+            `Addons: ${payload.addons.join(', ') || 'none'}`,
+          ].join('\n'),
       '',
       `Goals:`,
       goals,

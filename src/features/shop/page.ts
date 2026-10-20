@@ -321,7 +321,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
         : ''
 
   return `
-    <nav class="shop-breadcrumb" aria-label="Breadcrumb">
+    <nav class="shop-breadcrumb" aria-label="${shop.breadcrumbNav}">
       <a href="/shop.html">${shop.breadcrumbShop}</a>
       <span aria-hidden="true">/</span>
       <a href="/shop.html?cat=${encodeURIComponent(item.package.shopCategory)}">${catTitle}</a>
@@ -404,12 +404,14 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
               const addonLabels = line.addonIds
                 .map((id) => addonCopy(locale, line.service, id)?.title ?? id)
                 .filter(Boolean)
+              const editHref = `/shop.html?service=${encodeURIComponent(line.service)}&package=${encodeURIComponent(line.packageId)}`
               return `
               <li class="shop-cart-line">
                 <div>
                   <strong>${copy?.title ?? line.packageId}</strong>
                   <span>${serviceTitle(locale, line.service)}</span>
                   ${addonLabels.length ? `<span class="shop-cart-addons">${addonLabels.join(' · ')}</span>` : ''}
+                  <a class="shop-cart-edit" href="${editHref}">${shop.cartEdit}</a>
                 </div>
                 <div class="shop-cart-line-actions">
                   <span>${formatEur(lineTotal, locale)}</span>
@@ -425,11 +427,11 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
         <form class="contact-form shop-quote-form" data-shop-cart-pay novalidate>
           <label class="contact-field">
             <span>${shop.cartName} <em>*</em></span>
-            <input type="text" name="name" required autocomplete="name" />
+            <input type="text" name="name" required autocomplete="name" maxlength="120" />
           </label>
           <label class="contact-field">
             <span>${shop.cartEmail} <em>*</em></span>
-            <input type="email" name="email" required autocomplete="email" />
+            <input type="email" name="email" required autocomplete="email" maxlength="254" />
           </label>
           <p class="booking-hint">${shop.cartPayHint}</p>
           <p class="booking-error" data-shop-cart-error hidden></p>
@@ -475,11 +477,11 @@ function renderQuoteForm(locale: Locale, prefillService = '', prefillPackage = '
         <input type="hidden" name="packageHint" value="${prefillPackage}" />
         <label class="contact-field">
           <span>${shop.quoteName} <em>*</em></span>
-          <input type="text" name="name" required autocomplete="name" />
+          <input type="text" name="name" required autocomplete="name" maxlength="120" />
         </label>
         <label class="contact-field">
           <span>${shop.quoteEmail} <em>*</em></span>
-          <input type="email" name="email" required autocomplete="email" />
+          <input type="email" name="email" required autocomplete="email" maxlength="254" />
         </label>
         <label class="contact-field">
           <span>${shop.quotePhone}</span>

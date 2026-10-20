@@ -1,5 +1,6 @@
 import type { BookingServiceKey } from './catalog'
 import { resolveCheckout } from './catalog'
+import { calcOrderTotalEur } from './shop-catalog'
 import type { CartLine } from '../shop/cart'
 
 export type CheckoutRequest = {
@@ -72,15 +73,23 @@ export async function startCheckout(req: CheckoutRequest): Promise<CheckoutResul
   if (link.mode === 'stripe') return { mode: 'stripe', url: link.url }
   if (link.mode === 'unavailable') return { mode: 'unavailable' }
 
+  const totalEur = calcOrderTotalEur(req.service, req.packageId, req.addonIds)
+  const demoId = `demo_${Date.now().toString(36)}`
   const demoUrl = new URL(`${origin}/order.html`)
   demoUrl.searchParams.set('demo', '1')
-  demoUrl.searchParams.set('order', `demo_${Date.now().toString(36)}`)
+  demoUrl.searchParams.set('order', demoId)
   demoUrl.searchParams.set('service', req.service)
   demoUrl.searchParams.set('package', req.packageId)
+  demoUrl.searchParams.set('total', String(totalEur))
   demoUrl.searchParams.set('email', req.email)
   demoUrl.searchParams.set('name', req.name)
+  const itemsBase = `${req.service}:${req.packageId}`
+  demoUrl.searchParams.set(
+    'items',
+    req.addonIds.length ? `${itemsBase}:${req.addonIds.join('+')}` : itemsBase,
+  )
   if (req.addonIds.length) demoUrl.searchParams.set('addons', req.addonIds.join(','))
-  return { mode: 'demo', url: demoUrl.toString() }
+  return { mode: 'demo', url: demoUrl.toString(), totalEur, orderId: demoId }
 }
 
 /** Multi-package cart checkout via server-validated items[]. */

@@ -4423,6 +4423,24 @@ html[dir='rtl'] .brand {
   font-weight: 700;
 }
 
+.shop-cart-edit {
+  display: inline-block;
+  margin-top: 0.25rem;
+  color: #4a5a78;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.shop-cart-edit:focus-visible,
+.shop-cart-remove:focus-visible,
+.shop-chip:focus-visible,
+.shop-secondary-cta:focus-visible,
+.booking-back:focus-visible {
+  outline: 2px solid #e85d8a;
+  outline-offset: 3px;
+}
+
 .shop-cart-remove {
   border: 0;
   background: transparent;

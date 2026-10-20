@@ -80,6 +80,7 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links (incl. new Care €59/mo + SEA €299/mo orientation starts)
 - [x] Brainum continuous mode confirmed (2026-10-20) — owner: continue using Brainum; code soft-launch gaps until human gates only remain
 - [x] Domain ownership check (2026-10-20) — `weweb-weld.vercel.app` is production alias of Vercel project `hh-7/weweb` (this repo); webhook URL = `https://weweb-weld.vercel.app/api/stripe-webhook` (not `weweb-hh-7`, which is same app but `X-Robots-Tag: noindex`)
-- [ ] Ops: Stripe TEST verify blocked — Production `STRIPE_SECRET_KEY` is currently a **publishable** `pk_live_…` key (must be `sk_test_…`); `STRIPE_WEBHOOK_SECRET` is `whsec_…` (endpoint returns 400 without signature). Replace secret key, keep live payments off, then re-verify Checkout + Dashboard webhook delivery
-- [ ] Ops: add Stripe **test** account to MCP/session; set Vercel `STRIPE_SECRET_KEY` (sk_test) + `STRIPE_WEBHOOK_SECRET`; create EUR Products/Prices; enable Customer Portal; attach KV/Upstash for webhook durability (checklist in `.env.example`)
+- [x] Ops: Stripe TEST verify — **left as-is** (2026-10-20, owner): Production key is not `sk_test_`; soft-launch uses **demo checkout** when secret is unset/`pk_`/`rk_` (only `sk_test_`/`sk_live_` enable Stripe Checkout). Webhook `whsec_…` remains; signed delivery deferred until usable secret
+- [ ] Ops (optional later): set `sk_test_…`, EUR Prices, Customer Portal, KV/Upstash; then re-verify Checkout + signed webhooks
 - [ ] Connect marketplace — deferred until Payments + Billing are live
+- [x] Soft-launch continuity (2026-10-20, Brainum) — unusable Stripe secret → demo checkout; cart line edit deep-links; order briefing multi-line items; client demo totals/items; name/email maxlength; sitemap lastmod + llms Care/SEA; breadcrumb/focus a11y

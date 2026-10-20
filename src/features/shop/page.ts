@@ -59,7 +59,7 @@ function iconFor(service: BookingServiceKey): string {
   return SERVICE_ICONS[service]
 }
 
-function readFiltersFromUrl(): ShopFilterState {
+export function readFiltersFromUrl(): ShopFilterState {
   const params = new URLSearchParams(location.search)
   const catRaw = params.get('cat') || 'all'
   const modeRaw = params.get('mode') || 'all'
@@ -73,13 +73,24 @@ function readFiltersFromUrl(): ShopFilterState {
     modeRaw === 'quote'
       ? (modeRaw as ShopFilterState['mode'])
       : 'all'
+  let service = (params.get('service') || '').trim()
+  let packageId = (params.get('package') || '').trim()
+  if (packageId) {
+    const hit = service ? findShopPackage(service, packageId) : undefined
+    if (!hit) {
+      packageId = ''
+      if (service && !isBookingServiceKey(service)) service = ''
+    }
+  } else if (service && !isBookingServiceKey(service)) {
+    service = ''
+  }
   return {
     category,
     mode,
     sort: isShopSort(sortRaw) ? sortRaw : 'popular',
     query: (params.get('q') || '').trim(),
-    service: (params.get('service') || '').trim(),
-    packageId: (params.get('package') || '').trim(),
+    service,
+    packageId,
   }
 }
 
@@ -262,7 +273,6 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
   const addons = shopFor(item.service).addons
   const serviceHref =
     item.service === 'general' ? '/#services' : servicePath(item.service as ServiceId)
-  const checkoutHref = bookingHref(item.service, item.package.id)
   const cartable = canAddToCart(item.package.purchaseMode)
   const catTitle = shop.categories[item.package.shopCategory].title
   const highlights = copy?.highlights?.length ? copy.highlights : []
@@ -270,11 +280,12 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
     (line) => line.service === item.service && line.packageId === item.package.id,
   )
   const selectedAddons = new Set(existingLine?.addonIds ?? [])
+  const checkoutHref = bookingHref(item.service, item.package.id, [...selectedAddons])
   const buyPrimary = cartable
     ? `<button type="button" class="ts-btn pink solid" data-shop-add-cart data-shop-detail-cart data-service="${item.service}" data-package="${item.package.id}" data-base-price="${item.package.priceEur}">${shop.cartAdd}</button>`
     : `<a class="ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
   const buySecondary = cartable
-    ? `<a class="ts-btn pink" href="${checkoutHref}">${item.package.purchaseMode === 'subscription' ? shop.ctaSubscription : shop.ctaCheckout}</a>`
+    ? `<a class="ts-btn pink" href="${checkoutHref}" data-shop-booking-cta data-service="${item.service}" data-package="${item.package.id}">${item.package.purchaseMode === 'subscription' ? shop.ctaSubscription : shop.ctaCheckout}</a>`
     : ''
   const quoteLink =
     item.package.purchaseMode === 'quote'
@@ -590,7 +601,10 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
   const groups = groupByService(items)
   const flattenCatalog = state.sort === 'price-asc' || state.sort === 'price-desc' || state.sort === 'name'
   const catalogBody = !items.length
-    ? `<p class="shop-empty">${shop.empty}</p>`
+    ? `<div class="shop-empty-block">
+        <p class="shop-empty">${shop.empty}</p>
+        <button type="button" class="shop-filter-clear" data-shop-clear-filters>${shop.filterClear}</button>
+      </div>`
     : flattenCatalog
       ? `<div class="shop-plan-row shop-plan-row--flat">${items.map((item) => renderPlanCard(locale, item)).join('')}</div>`
       : groups.map((g) => renderPlanGroup(locale, g.service, g.items)).join('')
@@ -662,9 +676,34 @@ export function initShopPage(
   locale: Locale,
   onRerender: (state: ShopFilterState) => void,
 ) {
+  const rawPackage = (new URLSearchParams(location.search).get('package') || '').trim()
   let state = readFiltersFromUrl()
   const host = root.querySelector<HTMLElement>('[data-shop-root]')
   if (!host) return
+
+  if (rawPackage && !state.packageId) {
+    trackEvent('shop_deeplink_invalid', {
+      locale,
+      service: state.service || 'none',
+      package: rawPackage,
+    })
+    writeFiltersToUrl(state)
+  }
+  if (state.packageId && state.service) {
+    trackEvent('shop_detail_view', {
+      locale,
+      service: state.service,
+      package: state.packageId,
+    })
+  } else {
+    trackEvent('shop_page_view', {
+      locale,
+      category: state.category,
+      mode: state.mode,
+      service: state.service || 'none',
+      q: state.query ? '1' : '0',
+    })
+  }
 
   let searchTimer = 0
   host.querySelector<HTMLInputElement>('[data-shop-search]')?.addEventListener('input', (event) => {
@@ -779,16 +818,26 @@ export function initShopPage(
   }
 
   const buybox = host.querySelector<HTMLElement>('[data-shop-buybox]')
+  const bookingCta = host.querySelector<HTMLAnchorElement>('[data-shop-booking-cta]')
   const updateBuyboxTotal = () => {
     if (!buybox) return
     const base = Number(buybox.dataset.basePrice || 0)
     const checked = buybox.querySelectorAll<HTMLInputElement>('input[name="addon"]:checked')
     let extra = 0
+    const addonIds: string[] = []
     checked.forEach((input) => {
       extra += Number(input.dataset.addonPrice || 0)
+      addonIds.push(input.value)
     })
     const totalEl = buybox.querySelector<HTMLElement>('[data-shop-buybox-total]')
     if (totalEl) totalEl.textContent = formatEur(base + extra, locale)
+    if (bookingCta) {
+      const service = bookingCta.dataset.service || ''
+      const packageId = bookingCta.dataset.package || ''
+      if (isBookingServiceKey(service) && packageId) {
+        bookingCta.href = bookingHref(service, packageId, addonIds)
+      }
+    }
   }
   buybox?.querySelectorAll<HTMLInputElement>('input[name="addon"]').forEach((input) => {
     input.addEventListener('change', updateBuyboxTotal)
@@ -933,5 +982,3 @@ export function initShopPage(
     })
   }
 }
-
-export { readFiltersFromUrl }

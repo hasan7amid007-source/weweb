@@ -99,6 +99,26 @@ function addonLabels(locale: Locale, service: string, addonIds: string[]): strin
     .join(', ')
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
+  const sel = attr === 'name' ? `meta[name="${key}"]` : `meta[property="${key}"]`
+  let el = document.querySelector<HTMLMetaElement>(sel)
+  if (!el) {
+    el = document.createElement('meta')
+    el.setAttribute(attr, key)
+    document.head.appendChild(el)
+  }
+  el.setAttribute('content', content)
+}
+
 function render(locale: Locale) {
   setLocale(locale)
   const m = t(locale)
@@ -107,18 +127,24 @@ function render(locale: Locale) {
   document.documentElement.lang = locale === 'ar' ? 'ar' : locale
   document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr'
   document.title = o.metaTitle
+  upsertMeta('name', 'description', o.metaDescription)
+  upsertMeta('property', 'og:title', o.metaTitle)
+  upsertMeta('property', 'og:description', o.metaDescription)
 
   const hasMeta = !!(order.service || order.packageId || order.orderId || order.sessionId)
+  const multi = order.items.length > 1
   const totalText =
     order.total && /^\d+$/.test(order.total)
       ? formatEur(Number(order.total), locale)
       : order.total || '—'
+  const refId = escapeHtml(order.orderId || order.sessionId)
+  const emailAttr = escapeHtml(order.email)
 
   app.innerHTML = `
     ${renderHeader(locale, 'shop')}
     <main id="main" class="order-page">
       <div class="wrap order-wrap">
-        <p class="shop-eyebrow">${order.demo ? 'Demo' : 'BDITEC'}</p>
+        <p class="shop-eyebrow">${order.demo ? o.eyebrowDemo : o.eyebrowPaid}</p>
         <h1>${order.demo ? o.titleDemo : o.titlePaid}</h1>
         <p class="lead">${order.demo ? o.leadDemo : o.leadPaid}</p>
         ${!hasMeta ? `<p class="shop-note shop-note--warn">${o.missingStatus}</p>` : ''}
@@ -126,29 +152,29 @@ function render(locale: Locale) {
         <dl class="order-meta">
           ${
             order.orderId || order.sessionId
-              ? `<div><dt>${o.orderLabel}</dt><dd>${order.orderId || order.sessionId}</dd></div>`
-              : ''
-          }
-          <div><dt>${o.serviceLabel}</dt><dd>${serviceLabel(locale, order.service)}</dd></div>
-          <div><dt>${o.packageLabel}</dt><dd>${packageLabel(locale, order.service, order.packageId)}</dd></div>
-          ${
-            order.addons.length
-              ? `<div><dt>${o.addonsLabel}</dt><dd>${addonLabels(locale, order.service, order.addons) || order.addons.join(', ')}</dd></div>`
+              ? `<div><dt>${o.orderLabel}</dt><dd>${refId}</dd></div>`
               : ''
           }
           ${
-            order.items.length > 1
+            multi
               ? `<div><dt>${o.itemsLabel}</dt><dd><ul class="order-items">${order.items
                   .map((line) => {
                     const extras = addonLabels(locale, line.service, line.addonIds)
-                    return `<li>${serviceLabel(locale, line.service)} · ${packageLabel(locale, line.service, line.packageId)}${extras ? ` (+ ${extras})` : ''}</li>`
+                    return `<li>${escapeHtml(serviceLabel(locale, line.service))} · ${escapeHtml(packageLabel(locale, line.service, line.packageId))}${extras ? ` (+ ${escapeHtml(extras)})` : ''}</li>`
                   })
                   .join('')}</ul></dd></div>`
+              : `
+          <div><dt>${o.serviceLabel}</dt><dd>${escapeHtml(serviceLabel(locale, order.service))}</dd></div>
+          <div><dt>${o.packageLabel}</dt><dd>${escapeHtml(packageLabel(locale, order.service, order.packageId))}</dd></div>
+          ${
+            order.addons.length
+              ? `<div><dt>${o.addonsLabel}</dt><dd>${escapeHtml(addonLabels(locale, order.service, order.addons) || order.addons.join(', '))}</dd></div>`
               : ''
+          }`
           }
           ${
             order.total
-              ? `<div><dt>${o.totalLabel}</dt><dd>${totalText}</dd></div>`
+              ? `<div><dt>${o.totalLabel}</dt><dd>${escapeHtml(totalText)}</dd></div>`
               : ''
           }
         </dl>
@@ -195,7 +221,7 @@ function render(locale: Locale) {
           <form class="contact-form shop-quote-form" data-order-portal novalidate>
             <label class="contact-field">
               <span>${o.portalEmail} <em>*</em></span>
-              <input type="email" name="email" required autocomplete="email" value="${order.email.replace(/"/g, '&quot;')}" />
+              <input type="email" name="email" required autocomplete="email" value="${emailAttr}" />
             </label>
             <p class="booking-error" data-portal-error hidden></p>
             <span class="glowborder">

@@ -354,6 +354,10 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
 
   const wanted = params.get('service')
   const wantedPackage = params.get('package') || ''
+  const wantedAddons = (params.get('addons') || '')
+    .split(/[,+]/)
+    .map((id) => id.trim())
+    .filter(Boolean)
   if (wanted && isBookingServiceKey(wanted)) {
     const radio = form.querySelector<HTMLInputElement>(`input[name="service"][value="${wanted}"]`)
     if (radio) radio.checked = true
@@ -391,7 +395,7 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
 
   if (!paid) trackEvent('booking_step_view', { step: 1, locale })
 
-  // Deep-link from /shop: ?service=&package=#booking → jump to options with package preselected
+  // Deep-link from /shop: ?service=&package=&addons=#booking → options + extras preselected
   if (!paid && wanted && isBookingServiceKey(wanted)) {
     const serviceRadio = form.querySelector<HTMLInputElement>(
       `input[name="service"][value="${wanted}"]`,
@@ -407,9 +411,20 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
           pkgRadio.dispatchEvent(new Event('change', { bubbles: true }))
         }
       }
+      const addonIds = wantedAddons.filter((id) => isAddonId(wanted, id))
+      for (const id of addonIds) {
+        const addonInput = form.querySelector<HTMLInputElement>(
+          `input[name="addon"][value="${id}"]`,
+        )
+        if (addonInput) {
+          addonInput.checked = true
+          addonInput.dispatchEvent(new Event('change', { bubbles: true }))
+        }
+      }
       trackEvent('booking_shop_deeplink', {
         service: wanted,
         package: wantedPackage || 'none',
+        addons: addonIds.join('|') || 'none',
         locale,
       })
     }

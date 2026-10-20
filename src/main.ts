@@ -327,17 +327,27 @@ function render(locale: Locale) {
   initSvcFramework(app)
   initBookingWizard(app, locale)
   aliasContactHash()
+  scrollToBookingHash()
+}
+
+function scrollToBookingHash() {
+  if (location.hash !== '#booking' && location.hash !== '#contact') return
+  requestAnimationFrame(() => {
+    document.getElementById('booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
 }
 
 function aliasContactHash() {
   if (location.hash === '#contact') {
     history.replaceState(null, '', `${location.pathname}${location.search}#booking`)
-    document.getElementById('booking')?.scrollIntoView()
+    scrollToBookingHash()
   }
   window.addEventListener('hashchange', () => {
     if (location.hash === '#contact') {
       history.replaceState(null, '', `${location.pathname}${location.search}#booking`)
-      document.getElementById('booking')?.scrollIntoView()
+      scrollToBookingHash()
+    } else if (location.hash === '#booking') {
+      scrollToBookingHash()
     }
   })
 }

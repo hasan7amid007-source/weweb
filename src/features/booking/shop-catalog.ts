@@ -108,8 +108,14 @@ export function isShopCategoryId(v: string): v is ShopCategoryId {
   return (SHOP_CATEGORY_IDS as readonly string[]).includes(v)
 }
 
-export function bookingHref(service: BookingServiceKey, packageId: string): string {
+export function bookingHref(
+  service: BookingServiceKey,
+  packageId: string,
+  addonIds: string[] = [],
+): string {
   const q = new URLSearchParams({ service, package: packageId })
+  const validAddons = addonIds.filter((id) => isAddonId(service, id))
+  if (validAddons.length) q.set('addons', validAddons.join(','))
   return `/?${q.toString()}#booking`
 }
 

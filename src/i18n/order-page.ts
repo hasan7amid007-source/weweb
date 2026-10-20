@@ -1,6 +1,8 @@
 export type OrderPageCopy = {
   metaTitle: string
   metaDescription: string
+  eyebrowDemo: string
+  eyebrowPaid: string
   titleDemo: string
   titlePaid: string
   leadDemo: string
@@ -37,6 +39,8 @@ export type OrderPageCopy = {
 export const orderPageDe: OrderPageCopy = {
   metaTitle: 'Bestellung — BDITEC',
   metaDescription: 'Bestätigung und digitales Briefing nach Ihrer BDITEC-Bestellung.',
+  eyebrowDemo: 'Demo',
+  eyebrowPaid: 'BDITEC',
   titleDemo: 'Demo-Bestellung erfasst',
   titlePaid: 'Zahlung eingegangen',
   leadDemo:
@@ -78,6 +82,8 @@ export const orderPageDe: OrderPageCopy = {
 export const orderPageEn: OrderPageCopy = {
   metaTitle: 'Order — BDITEC',
   metaDescription: 'Confirmation and digital briefing after your BDITEC order.',
+  eyebrowDemo: 'Demo',
+  eyebrowPaid: 'BDITEC',
   titleDemo: 'Demo order recorded',
   titlePaid: 'Payment received',
   leadDemo: 'No real card charge. Send the briefing so we can test the soft-launch flow.',
@@ -117,6 +123,8 @@ export const orderPageEn: OrderPageCopy = {
 export const orderPageAr: OrderPageCopy = {
   metaTitle: 'الطلب — BDITEC',
   metaDescription: 'تأكيد وإحاطة رقمية بعد طلب BDITEC.',
+  eyebrowDemo: 'تجريبي',
+  eyebrowPaid: 'BDITEC',
   titleDemo: 'تم تسجيل طلب تجريبي',
   titlePaid: 'تم استلام الدفع',
   leadDemo: 'لا خصم حقيقي على البطاقة. أرسل الإحاطة لاختبار مسار الإطلاق التجريبي.',

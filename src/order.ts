@@ -9,6 +9,12 @@ const root = document.querySelector<HTMLDivElement>('#app')
 if (!root) throw new Error('#app not found')
 const app = root
 
+type OrderLineView = {
+  service: string
+  packageId: string
+  addonIds: string[]
+}
+
 type OrderView = {
   demo: boolean
   sessionId: string
@@ -16,23 +22,53 @@ type OrderView = {
   service: string
   packageId: string
   addons: string[]
+  items: OrderLineView[]
   total: string
   email: string
   name: string
 }
 
+function parseItemsParam(raw: string): OrderLineView[] {
+  return raw
+    .split('|')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const [service = '', packageId = '', addonRaw = ''] = part.split(':')
+      return {
+        service: service.trim(),
+        packageId: packageId.trim(),
+        addonIds: addonRaw
+          .split('+')
+          .map((s) => s.trim())
+          .filter(Boolean),
+      }
+    })
+    .filter((line) => line.service && line.packageId)
+}
+
 function readOrder(): OrderView {
   const p = new URLSearchParams(location.search)
+  const service = (p.get('service') || '').trim()
+  const packageId = (p.get('package') || '').trim()
+  const addons = (p.get('addons') || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+  const items = parseItemsParam(p.get('items') || '')
   return {
     demo: p.get('demo') === '1' || (!p.get('session_id') && !!p.get('order')),
     sessionId: (p.get('session_id') || '').trim(),
     orderId: (p.get('order') || p.get('session_id') || '').trim(),
-    service: (p.get('service') || '').trim(),
-    packageId: (p.get('package') || '').trim(),
-    addons: (p.get('addons') || '')
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean),
+    service,
+    packageId,
+    addons,
+    items:
+      items.length > 0
+        ? items
+        : service && packageId
+          ? [{ service, packageId, addonIds: addons }]
+          : [],
     total: (p.get('total') || '').trim(),
     email: (p.get('email') || '').trim(),
     name: (p.get('name') || '').trim(),
@@ -53,6 +89,14 @@ function packageLabel(locale: Locale, service: string, packageId: string): strin
     return t(locale).bookingShop.packages[service][packageId]?.title ?? packageId
   }
   return packageId || '—'
+}
+
+function addonLabels(locale: Locale, service: string, addonIds: string[]): string {
+  if (!addonIds.length) return ''
+  if (!isBookingServiceKey(service)) return addonIds.join(', ')
+  return addonIds
+    .map((id) => t(locale).bookingShop.addons[service][id]?.title ?? id)
+    .join(', ')
 }
 
 function render(locale: Locale) {
@@ -87,6 +131,21 @@ function render(locale: Locale) {
           }
           <div><dt>${o.serviceLabel}</dt><dd>${serviceLabel(locale, order.service)}</dd></div>
           <div><dt>${o.packageLabel}</dt><dd>${packageLabel(locale, order.service, order.packageId)}</dd></div>
+          ${
+            order.addons.length
+              ? `<div><dt>${o.addonsLabel}</dt><dd>${addonLabels(locale, order.service, order.addons) || order.addons.join(', ')}</dd></div>`
+              : ''
+          }
+          ${
+            order.items.length > 1
+              ? `<div><dt>${o.itemsLabel}</dt><dd><ul class="order-items">${order.items
+                  .map((line) => {
+                    const extras = addonLabels(locale, line.service, line.addonIds)
+                    return `<li>${serviceLabel(locale, line.service)} · ${packageLabel(locale, line.service, line.packageId)}${extras ? ` (+ ${extras})` : ''}</li>`
+                  })
+                  .join('')}</ul></dd></div>`
+              : ''
+          }
           ${
             order.total
               ? `<div><dt>${o.totalLabel}</dt><dd>${totalText}</dd></div>`

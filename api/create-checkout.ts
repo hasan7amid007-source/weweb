@@ -234,7 +234,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       demoUrl.searchParams.set('name', name)
       demoUrl.searchParams.set(
         'items',
-        lines.map((l) => `${l.service}:${l.packageId}`).join('|'),
+        lines
+          .map((l) => {
+            const base = `${l.service}:${l.packageId}`
+            return l.addonIds.length ? `${base}:${l.addonIds.join('+')}` : base
+          })
+          .join('|'),
       )
       if (primary.addonIds.length) demoUrl.searchParams.set('addons', primary.addonIds.join(','))
       return res.status(200).json({

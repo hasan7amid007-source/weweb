@@ -65,8 +65,11 @@ export type ShopPageCopy = {
   cartCount: (n: number) => string
   cartAdd: string
   cartAdded: string
+  cartUpdated: string
   cartDuplicate: string
   cartFull: string
+  buyboxTotal: string
+  extrasSelectHint: string
   cartRemove: string
   cartClear: string
   cartCheckout: string
@@ -179,8 +182,11 @@ export const shopPageDe: ShopPageCopy = {
   cartCount: (n) => (n === 1 ? '1 Artikel' : `${n} Artikel`),
   cartAdd: 'In den Warenkorb',
   cartAdded: 'Hinzugefügt',
+  cartUpdated: 'Warenkorb aktualisiert',
   cartDuplicate: 'Bereits im Warenkorb',
   cartFull: 'Warenkorb voll (max. 8)',
+  buyboxTotal: 'Zwischensumme',
+  extrasSelectHint: 'Optionale Extras — Betrag aktualisiert sich sofort.',
   cartRemove: 'Entfernen',
   cartClear: 'Leeren',
   cartCheckout: 'Zur Kasse',
@@ -307,8 +313,11 @@ export const shopPageEn: ShopPageCopy = {
   cartCount: (n) => (n === 1 ? '1 item' : `${n} items`),
   cartAdd: 'Add to cart',
   cartAdded: 'Added',
+  cartUpdated: 'Cart updated',
   cartDuplicate: 'Already in cart',
   cartFull: 'Cart full (max 8)',
+  buyboxTotal: 'Subtotal',
+  extrasSelectHint: 'Optional extras — total updates instantly.',
   cartRemove: 'Remove',
   cartClear: 'Clear',
   cartCheckout: 'Proceed to checkout',
@@ -435,8 +444,11 @@ export const shopPageAr: ShopPageCopy = {
   cartCount: (n) => (n === 1 ? 'عنصر واحد' : `${n} عناصر`),
   cartAdd: 'أضف إلى السلة',
   cartAdded: 'تمت الإضافة',
+  cartUpdated: 'تم تحديث السلة',
   cartDuplicate: 'موجود مسبقاً في السلة',
   cartFull: 'السلة ممتلئة (حد أقصى 8)',
+  buyboxTotal: 'المجموع الفرعي',
+  extrasSelectHint: 'إضافات اختيارية — يتحدث المجموع فوراً.',
   cartRemove: 'إزالة',
   cartClear: 'تفريغ',
   cartCheckout: 'المتابعة للدفع',

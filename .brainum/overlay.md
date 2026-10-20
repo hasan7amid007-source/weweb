@@ -74,6 +74,9 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Agency plan-card polish (2026-10-20) — package highlights, price-first cards, checkmarks, featured scale, professional lead copy
 - [x] WooCommerce-aligned shop IA (2026-10-20) — catalog add-to-cart, sort, active filter chips, breadcrumbs, sticky buy box, related plans, proceed-to-checkout cart CTA
 - [x] Shop logic audit (2026-10-20, Brainum) — catalog SSOT + server price validation PASS; fixed calcOrderTotalEur invalid-id fallback + multi-cart API-fail silent first-line checkout; residual: shop UI cannot pick addons; mixed sub+one-time → payment mode until Stripe Price IDs
+- [x] Shop detail addon picker (2026-10-20) — buy-box extras with live subtotal; cart lines show addons; replace-on-readd from detail; server still validates addon prices
+- [x] Soft-launch order/cart continuity (2026-10-20) — demo items encode addons; order page shows extras + multi-line items; empty cart browse link
 - [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
+- [x] Brainum continuous mode confirmed (2026-10-20) — owner: continue using Brainum; code soft-launch gaps until human gates only remain
 - [ ] Ops: add Stripe **test** account to MCP/session; set Vercel `STRIPE_SECRET_KEY` (sk_test) + `STRIPE_WEBHOOK_SECRET`; create EUR Products/Prices; enable Customer Portal; attach KV/Upstash for webhook durability (checklist in `.env.example`)
 - [ ] Connect marketplace — deferred until Payments + Billing are live

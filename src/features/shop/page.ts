@@ -257,6 +257,7 @@ function renderRelated(locale: Locale, item: ShopListingItem): string {
 function renderDetail(locale: Locale, item: ShopListingItem): string {
   const m = t(locale)
   const shop = m.shopPage
+  const booking = m.bookingShop
   const copy = packageCopy(locale, item.service, item.package.id)
   const addons = shopFor(item.service).addons
   const serviceHref =
@@ -265,8 +266,12 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
   const cartable = canAddToCart(item.package.purchaseMode)
   const catTitle = shop.categories[item.package.shopCategory].title
   const highlights = copy?.highlights?.length ? copy.highlights : []
+  const existingLine = readCart().find(
+    (line) => line.service === item.service && line.packageId === item.package.id,
+  )
+  const selectedAddons = new Set(existingLine?.addonIds ?? [])
   const buyPrimary = cartable
-    ? `<button type="button" class="ts-btn pink solid" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
+    ? `<button type="button" class="ts-btn pink solid" data-shop-add-cart data-shop-detail-cart data-service="${item.service}" data-package="${item.package.id}" data-base-price="${item.package.priceEur}">${shop.cartAdd}</button>`
     : `<a class="ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
   const buySecondary = cartable
     ? `<a class="ts-btn pink" href="${checkoutHref}">${item.package.purchaseMode === 'subscription' ? shop.ctaSubscription : shop.ctaCheckout}</a>`
@@ -277,6 +282,44 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
       : `<a class="shop-secondary-cta" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
 
   const period = pricePeriod(locale, item.package.purchaseMode)
+  const addonPicker =
+    cartable && addons.length
+      ? `
+        <fieldset class="shop-buybox-extras" data-shop-addon-picker>
+          <legend>${booking.addonsHeading}</legend>
+          <p class="shop-note">${shop.extrasSelectHint}</p>
+          ${addons
+            .map((addon) => {
+              const a = addonCopy(locale, item.service, addon.id)
+              const checked = selectedAddons.has(addon.id) ? ' checked' : ''
+              return `
+                <label class="shop-addon-option">
+                  <input type="checkbox" name="addon" value="${addon.id}" data-addon-price="${addon.priceEur}"${checked} />
+                  <span class="shop-addon-copy">
+                    <strong>${a?.title ?? addon.id}</strong>
+                    <em>${a?.blurb ?? ''}</em>
+                  </span>
+                  <span class="shop-addon-price">+${formatEur(addon.priceEur, locale)}</span>
+                </label>`
+            })
+            .join('')}
+        </fieldset>`
+      : addons.length
+        ? `
+        <section class="shop-buybox-extras">
+          <h3>${shop.extrasTitle}</h3>
+          <p class="shop-note">${shop.extrasBody}</p>
+          <ul class="shop-extra-list">
+            ${addons
+              .map((addon) => {
+                const a = addonCopy(locale, item.service, addon.id)
+                return `<li><span>${a?.title ?? addon.id}</span><span>+${formatEur(addon.priceEur, locale)}</span></li>`
+              })
+              .join('')}
+          </ul>
+        </section>`
+        : ''
+
   return `
     <nav class="shop-breadcrumb" aria-label="Breadcrumb">
       <a href="/shop.html">${shop.breadcrumbShop}</a>
@@ -312,24 +355,17 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
               <h3>${shop.deliveryTitle}</h3>
               <p>${shop.deliveryBody}</p>
             </section>
-            <section>
-              <h3>${shop.extrasTitle}</h3>
-              <p>${shop.extrasBody}</p>
-              <ul class="shop-extra-list">
-                ${addons
-                  .map((addon) => {
-                    const a = addonCopy(locale, item.service, addon.id)
-                    return `<li><span>${a?.title ?? addon.id}</span><span>+${formatEur(addon.priceEur, locale)}</span></li>`
-                  })
-                  .join('')}
-              </ul>
-            </section>
           </div>
         </div>
-        <aside class="shop-buybox">
+        <aside class="shop-buybox" data-shop-buybox data-base-price="${item.package.priceEur}">
           <p class="shop-detail-price">
-            <span class="shop-plan-amount">${formatEur(item.package.priceEur, locale)}</span>
+            <span class="shop-plan-amount" data-shop-buybox-base>${formatEur(item.package.priceEur, locale)}</span>
             ${period ? `<span class="shop-plan-period">${period}</span>` : ''}
+          </p>
+          ${addonPicker}
+          <p class="shop-buybox-total">
+            <span>${shop.buyboxTotal}</span>
+            <strong data-shop-buybox-total>${formatEur(item.package.priceEur, locale)}</strong>
           </p>
           <p class="shop-note">${shop.startAmountNote}</p>
           <div class="shop-detail-actions">
@@ -357,18 +393,23 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
       </div>
       ${
         lines.length === 0
-          ? `<p class="shop-empty">${shop.cartEmpty}</p>`
+          ? `<p class="shop-empty">${shop.cartEmpty}</p>
+             <p class="shop-cart-continue"><a href="/shop.html">${shop.detailBack}</a></p>`
           : `
         <ul class="shop-cart-list">
           ${lines
             .map((line) => {
               const copy = packageCopy(locale, line.service, line.packageId)
               const lineTotal = cartTotalEur([line])
+              const addonLabels = line.addonIds
+                .map((id) => addonCopy(locale, line.service, id)?.title ?? id)
+                .filter(Boolean)
               return `
               <li class="shop-cart-line">
                 <div>
                   <strong>${copy?.title ?? line.packageId}</strong>
                   <span>${serviceTitle(locale, line.service)}</span>
+                  ${addonLabels.length ? `<span class="shop-cart-addons">${addonLabels.join(' · ')}</span>` : ''}
                 </div>
                 <div class="shop-cart-line-actions">
                   <span>${formatEur(lineTotal, locale)}</span>
@@ -735,15 +776,44 @@ export function initShopPage(
     }
   }
 
+  const buybox = host.querySelector<HTMLElement>('[data-shop-buybox]')
+  const updateBuyboxTotal = () => {
+    if (!buybox) return
+    const base = Number(buybox.dataset.basePrice || 0)
+    const checked = buybox.querySelectorAll<HTMLInputElement>('input[name="addon"]:checked')
+    let extra = 0
+    checked.forEach((input) => {
+      extra += Number(input.dataset.addonPrice || 0)
+    })
+    const totalEl = buybox.querySelector<HTMLElement>('[data-shop-buybox-total]')
+    if (totalEl) totalEl.textContent = formatEur(base + extra, locale)
+  }
+  buybox?.querySelectorAll<HTMLInputElement>('input[name="addon"]').forEach((input) => {
+    input.addEventListener('change', updateBuyboxTotal)
+  })
+  updateBuyboxTotal()
+
   host.querySelectorAll<HTMLButtonElement>('[data-shop-add-cart]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const service = btn.dataset.service || ''
       const packageId = btn.dataset.package || ''
-      const result = addToCart(service, packageId)
+      const fromDetail = btn.hasAttribute('data-shop-detail-cart')
+      const addonIds = fromDetail
+        ? Array.from(
+            host.querySelectorAll<HTMLInputElement>('input[name="addon"]:checked'),
+          ).map((input) => input.value)
+        : []
+      const result = addToCart(service, packageId, addonIds, { replaceAddons: fromDetail })
       const shop = t(locale).shopPage
       if (result.ok) {
-        setCartFlash(shop.cartAdded)
-        trackEvent('shop_cart_add', { service, package: packageId, locale })
+        setCartFlash(result.updated ? shop.cartUpdated : shop.cartAdded)
+        trackEvent('shop_cart_add', {
+          service,
+          package: packageId,
+          locale,
+          addons: addonIds.join('|') || 'none',
+          updated: result.updated ? '1' : '0',
+        })
         if (location.hash !== '#cart') history.replaceState(null, '', `${location.pathname}${location.search}#cart`)
         onRerender(state)
         return

@@ -3994,6 +3994,99 @@ html[dir='rtl'] .brand {
   margin: 0 0 0.65rem;
 }
 
+.shop-buybox-extras {
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+}
+
+.shop-buybox-extras legend,
+.shop-buybox-extras h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.shop-addon-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.55rem 0.65rem;
+  align-items: start;
+  margin: 0.55rem 0 0;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid #eeeef2;
+  cursor: pointer;
+}
+
+.shop-addon-option:hover,
+.shop-addon-option:has(input:checked) {
+  border-color: #cfc8dd;
+  background: rgba(233, 30, 140, 0.03);
+}
+
+.shop-addon-option input {
+  margin-top: 0.2rem;
+}
+
+.shop-addon-copy {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.shop-addon-copy strong {
+  font-size: 0.9rem;
+}
+
+.shop-addon-copy em {
+  font-style: normal;
+  font-size: 0.8rem;
+  color: #6a6a75;
+}
+
+.shop-addon-price {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #171023;
+  white-space: nowrap;
+}
+
+.shop-buybox-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid #eeeef2;
+  border-bottom: 1px solid #eeeef2;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.shop-buybox-total strong {
+  font-size: 1.15rem;
+  color: #171023;
+}
+
+.shop-cart-addons {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: #6a6a75;
+}
+
+.shop-cart-continue {
+  margin: 0.75rem 0 0;
+}
+
+.shop-cart-continue a {
+  font-weight: 600;
+  color: #171023;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .shop-detail-features {
   margin: 0 0 1.35rem;
 }
@@ -4377,6 +4470,15 @@ html[dir='rtl'] .brand {
   margin: 0;
   color: #6a6a75;
   font-size: 0.85rem;
+}
+
+.order-items {
+  margin: 0;
+  padding-inline-start: 1.1rem;
+}
+
+.order-items li {
+  margin: 0.2rem 0;
 }
 
 .order-meta dd {

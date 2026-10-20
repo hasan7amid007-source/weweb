@@ -73,9 +73,15 @@ export function takeCartFlash(): string | null {
   }
 }
 
-export function addToCart(service: string, packageId: string, addonIds: string[] = []): {
+export function addToCart(
+  service: string,
+  packageId: string,
+  addonIds: string[] = [],
+  opts: { replaceAddons?: boolean } = {},
+): {
   ok: boolean
   reason?: 'not-found' | 'quote-only' | 'full' | 'duplicate'
+  updated?: boolean
   cart: CartLine[]
 } {
   const item = findShopPackage(service, packageId)
@@ -86,13 +92,20 @@ export function addToCart(service: string, packageId: string, addonIds: string[]
     return { ok: false, reason: 'quote-only', cart: readCart() }
   }
   const cart = readCart()
+  const cleanAddons = addonIds.filter(Boolean)
   const nextLine: CartLine = {
     service,
     packageId,
-    addonIds: addonIds.filter(Boolean),
+    addonIds: cleanAddons,
   }
-  if (cart.some((line) => lineKey(line) === lineKey(nextLine))) {
-    return { ok: false, reason: 'duplicate', cart }
+  const existing = cart.findIndex((line) => lineKey(line) === lineKey(nextLine))
+  if (existing >= 0) {
+    if (!opts.replaceAddons) {
+      return { ok: false, reason: 'duplicate', cart }
+    }
+    const next = cart.map((line, i) => (i === existing ? nextLine : line))
+    writeCart(next)
+    return { ok: true, updated: true, cart: next }
   }
   if (cart.length >= CART_MAX_ITEMS) {
     return { ok: false, reason: 'full', cart }

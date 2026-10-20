@@ -8,6 +8,8 @@ export type OrderPageCopy = {
   orderLabel: string
   serviceLabel: string
   packageLabel: string
+  addonsLabel: string
+  itemsLabel: string
   totalLabel: string
   nextTitle: string
   nextBody: string
@@ -44,6 +46,8 @@ export const orderPageDe: OrderPageCopy = {
   orderLabel: 'Referenz',
   serviceLabel: 'Service',
   packageLabel: 'Paket',
+  addonsLabel: 'Extras',
+  itemsLabel: 'Positionen',
   totalLabel: 'Startbetrag',
   nextTitle: 'Nächste Schritte',
   nextBody:
@@ -81,6 +85,8 @@ export const orderPageEn: OrderPageCopy = {
   orderLabel: 'Reference',
   serviceLabel: 'Service',
   packageLabel: 'Package',
+  addonsLabel: 'Extras',
+  itemsLabel: 'Line items',
   totalLabel: 'Start amount',
   nextTitle: 'Next steps',
   nextBody:
@@ -118,6 +124,8 @@ export const orderPageAr: OrderPageCopy = {
   orderLabel: 'المرجع',
   serviceLabel: 'الخدمة',
   packageLabel: 'الباقة',
+  addonsLabel: 'إضافات',
+  itemsLabel: 'البنود',
   totalLabel: 'مبلغ البداية',
   nextTitle: 'الخطوات التالية',
   nextBody:

@@ -208,6 +208,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!email.includes('@') || !name) {
       return res.status(400).json({ error: 'Name and valid email required' })
     }
+    if (email.length > 254 || name.length > 120) {
+      return res.status(400).json({ error: 'Name or email too long' })
+    }
     const totalEur = lines.reduce((sum, line) => sum + line.lineTotal, 0)
     const locale = String(body.locale || 'de').slice(0, 5)
     const origin = originFromReq(req)

@@ -18,6 +18,8 @@ import {
   clearCart,
   readCart,
   removeFromCart,
+  setCartFlash,
+  takeCartFlash,
   type CartLine,
 } from './cart'
 import { SERVICE_ICONS, servicePath, type ServiceId } from '../../data/services'
@@ -346,7 +348,8 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
 
   const cartLines = readCart()
   const cartBar = `
-    <div class="wrap shop-cart-bar">
+    <div class="wrap shop-cart-bar" data-shop-cart-bar>
+      <p class="shop-cart-bar-status" data-shop-cart-bar-status role="status" aria-live="polite" hidden></p>
       <a class="shop-cart-bar-link" href="#cart">${shop.cartOpen} · ${shop.cartCount(cartLines.length)}</a>
     </div>`
 
@@ -483,10 +486,23 @@ export function initShopPage(
   })
 
   const feedback = (message: string) => {
-    const el = host.querySelector<HTMLElement>('[data-shop-cart-feedback]')
+    const el =
+      host.querySelector<HTMLElement>('[data-shop-cart-feedback]') ||
+      host.querySelector<HTMLElement>('[data-shop-cart-bar-status]')
     if (!el) return
     el.hidden = false
     el.textContent = message
+  }
+
+  const flash = takeCartFlash()
+  if (flash) {
+    feedback(flash)
+    const cartEl = host.querySelector('#cart')
+    if (cartEl) {
+      requestAnimationFrame(() => {
+        cartEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      })
+    }
   }
 
   host.querySelectorAll<HTMLButtonElement>('[data-shop-add-cart]').forEach((btn) => {
@@ -496,8 +512,9 @@ export function initShopPage(
       const result = addToCart(service, packageId)
       const shop = t(locale).shopPage
       if (result.ok) {
-        feedback(shop.cartAdded)
+        setCartFlash(shop.cartAdded)
         trackEvent('shop_cart_add', { service, package: packageId, locale })
+        if (location.hash !== '#cart') history.replaceState(null, '', `${location.pathname}${location.search}#cart`)
         onRerender(state)
         return
       }

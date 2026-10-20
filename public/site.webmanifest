@@ -14,5 +14,19 @@
       "type": "image/svg+xml",
       "purpose": "any"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Shop",
+      "short_name": "Shop",
+      "description": "Agentur-Pakete und Startbeträge",
+      "url": "/shop.html"
+    },
+    {
+      "name": "Bestellen",
+      "short_name": "Order",
+      "description": "Online-Checkout starten",
+      "url": "/#booking"
+    }
   ]
 }

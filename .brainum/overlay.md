@@ -69,6 +69,7 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch hardening+content (2026-10-19) — API CORS allowlist + same-site success/return URLs; HSTS/COOP headers; home+shop FAQPage JSON-LD; shop FAQ accordion; `/llms.txt`; robots Disallow `/order`
 - [x] Soft-launch perf/analytics polish (2026-10-19) — immutable `/assets` cache; `/page` SWR cache; 404→shop link + `page_404` event; shop FAQ `shop_faq_open` tracking
 - [x] Soft-launch agent/security surfaces (2026-10-19) — `/.well-known/security.txt`; home FAQ `home_faq_open`; service→shop prefetch
+- [x] Soft-launch cart UX + SEO polish (2026-10-19) — cart flash survives rerender + scroll to `#cart`; sticky cart bar; sitemap `lastmod`; manifest shortcuts; checkout name/email length limits; Stripe ops checklist in `.env.example`
 - [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
-- [ ] Ops: add Stripe **test** account to MCP/session; set Vercel `STRIPE_SECRET_KEY` (sk_test) + `STRIPE_WEBHOOK_SECRET`; create EUR Products/Prices; enable Customer Portal; attach KV/Upstash for webhook durability
+- [ ] Ops: add Stripe **test** account to MCP/session; set Vercel `STRIPE_SECRET_KEY` (sk_test) + `STRIPE_WEBHOOK_SECRET`; create EUR Products/Prices; enable Customer Portal; attach KV/Upstash for webhook durability (checklist in `.env.example`)
 - [ ] Connect marketplace — deferred until Payments + Billing are live

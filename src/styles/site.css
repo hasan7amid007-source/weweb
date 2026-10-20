@@ -3868,9 +3868,26 @@ html[dir='rtl'] .brand {
 }
 
 .shop-cart-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  padding: 0.25rem 0 0.75rem;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 0.55rem 0;
+  margin-bottom: 0.35rem;
+  background: color-mix(in srgb, var(--paper, #f7f6f9) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.shop-cart-bar-status {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1b7a3d;
 }
 
 .shop-cart-bar-link {

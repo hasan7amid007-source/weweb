@@ -6,6 +6,7 @@ import {
 import { isBookingServiceKey, type BookingServiceKey } from '../booking/catalog'
 
 export const SHOP_CART_KEY = 'bditec-shop-cart'
+export const SHOP_CART_FLASH_KEY = 'bditec-shop-cart-flash'
 export const CART_MAX_ITEMS = 8
 
 export type CartLine = {
@@ -51,6 +52,24 @@ export function clearCart() {
     sessionStorage.removeItem(SHOP_CART_KEY)
   } catch {
     /* ignore */
+  }
+}
+
+export function setCartFlash(message: string) {
+  try {
+    sessionStorage.setItem(SHOP_CART_FLASH_KEY, message)
+  } catch {
+    /* ignore */
+  }
+}
+
+export function takeCartFlash(): string | null {
+  try {
+    const msg = sessionStorage.getItem(SHOP_CART_FLASH_KEY)
+    if (msg) sessionStorage.removeItem(SHOP_CART_FLASH_KEY)
+    return msg
+  } catch {
+    return null
   }
 }
 

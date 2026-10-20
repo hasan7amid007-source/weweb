@@ -158,21 +158,6 @@ function render(locale: Locale) {
           <p>${o.nextBody}</p>
         </section>
 
-        <section class="shop-quote" id="portal">
-          <h2>${o.portalTitle}</h2>
-          <p class="lead">${o.portalLead}</p>
-          <form class="contact-form shop-quote-form" data-order-portal novalidate>
-            <label class="contact-field">
-              <span>${o.portalEmail} <em>*</em></span>
-              <input type="email" name="email" required autocomplete="email" value="${order.email.replace(/"/g, '&quot;')}" />
-            </label>
-            <p class="booking-error" data-portal-error hidden></p>
-            <span class="glowborder">
-              <button type="submit" class="ts-btn pink solid" data-portal-submit>${o.portalCta}</button>
-            </span>
-          </form>
-        </section>
-
         <section class="shop-quote" id="briefing">
           <h2>${o.briefingTitle}</h2>
           <p class="lead">${o.briefingLead}</p>
@@ -200,6 +185,25 @@ function render(locale: Locale) {
             </span>
           </form>
         </section>
+
+        ${
+          order.demo
+            ? ''
+            : `<section class="shop-quote" id="portal">
+          <h2>${o.portalTitle}</h2>
+          <p class="lead">${o.portalLead}</p>
+          <form class="contact-form shop-quote-form" data-order-portal novalidate>
+            <label class="contact-field">
+              <span>${o.portalEmail} <em>*</em></span>
+              <input type="email" name="email" required autocomplete="email" value="${order.email.replace(/"/g, '&quot;')}" />
+            </label>
+            <p class="booking-error" data-portal-error hidden></p>
+            <span class="glowborder">
+              <button type="submit" class="ts-btn pink solid" data-portal-submit>${o.portalCta}</button>
+            </span>
+          </form>
+        </section>`
+        }
 
         <div class="order-actions">
           <a class="shop-secondary-cta" href="/shop.html">${o.shopCta}</a>

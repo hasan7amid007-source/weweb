@@ -84,3 +84,4 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [ ] Ops (optional later): set `sk_test_…`, EUR Prices, Customer Portal, KV/Upstash; then re-verify Checkout + signed webhooks
 - [ ] Connect marketplace — deferred until Payments + Billing are live
 - [x] Soft-launch continuity (2026-10-20, Brainum) — unusable Stripe secret → demo checkout; cart line edit deep-links; order briefing multi-line items; client demo totals/items; name/email maxlength; sitemap lastmod + llms Care/SEA; breadcrumb/focus a11y
+- [x] Demo order UX (2026-10-20) — hide Stripe portal on demo orders; briefing section first (matches next-steps)

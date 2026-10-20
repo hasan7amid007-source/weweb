@@ -70,6 +70,10 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch perf/analytics polish (2026-10-19) — immutable `/assets` cache; `/page` SWR cache; 404→shop link + `page_404` event; shop FAQ `shop_faq_open` tracking
 - [x] Soft-launch agent/security surfaces (2026-10-19) — `/.well-known/security.txt`; home FAQ `home_faq_open`; service→shop prefetch
 - [x] Soft-launch cart UX + SEO polish (2026-10-19) — cart flash survives rerender + scroll to `#cart`; sticky cart bar; sitemap `lastmod`; manifest shortcuts; checkout name/email length limits; Stripe ops checklist in `.env.example`
+- [x] Agency shop/services redesign (2026-10-20) — plan tables grouped by service; dark shop hero; home services show from-price → shop; softer terms note
+- [x] Agency plan-card polish (2026-10-20) — package highlights, price-first cards, checkmarks, featured scale, professional lead copy
+- [x] WooCommerce-aligned shop IA (2026-10-20) — catalog add-to-cart, sort, active filter chips, breadcrumbs, sticky buy box, related plans, proceed-to-checkout cart CTA
+- [x] Shop logic audit (2026-10-20, Brainum) — catalog SSOT + server price validation PASS; fixed calcOrderTotalEur invalid-id fallback + multi-cart API-fail silent first-line checkout; residual: shop UI cannot pick addons; mixed sub+one-time → payment mode until Stripe Price IDs
 - [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
 - [ ] Ops: add Stripe **test** account to MCP/session; set Vercel `STRIPE_SECRET_KEY` (sk_test) + `STRIPE_WEBHOOK_SECRET`; create EUR Products/Prices; enable Customer Portal; attach KV/Upstash for webhook durability (checklist in `.env.example`)
 - [ ] Connect marketplace — deferred until Payments + Billing are live

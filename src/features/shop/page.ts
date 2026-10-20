@@ -26,12 +26,19 @@ import { SERVICE_ICONS, servicePath, type ServiceId } from '../../data/services'
 import { trackEvent } from '../../lib/telemetry'
 import { type Locale, t } from '../../i18n'
 
+export type ShopSort = 'popular' | 'price-asc' | 'price-desc' | 'name'
+
 export type ShopFilterState = {
   category: ShopCategoryId | 'all'
   mode: PurchaseMode | 'all'
+  sort: ShopSort
   query: string
   service: string
   packageId: string
+}
+
+function isShopSort(v: string): v is ShopSort {
+  return v === 'popular' || v === 'price-asc' || v === 'price-desc' || v === 'name'
 }
 
 function serviceTitle(locale: Locale, service: BookingServiceKey): string {
@@ -56,6 +63,7 @@ function readFiltersFromUrl(): ShopFilterState {
   const params = new URLSearchParams(location.search)
   const catRaw = params.get('cat') || 'all'
   const modeRaw = params.get('mode') || 'all'
+  const sortRaw = params.get('sort') || 'popular'
   const category =
     catRaw === 'all' || isShopCategoryId(catRaw) ? (catRaw as ShopFilterState['category']) : 'all'
   const mode =
@@ -68,6 +76,7 @@ function readFiltersFromUrl(): ShopFilterState {
   return {
     category,
     mode,
+    sort: isShopSort(sortRaw) ? sortRaw : 'popular',
     query: (params.get('q') || '').trim(),
     service: (params.get('service') || '').trim(),
     packageId: (params.get('package') || '').trim(),
@@ -77,11 +86,12 @@ function readFiltersFromUrl(): ShopFilterState {
 function writeFiltersToUrl(state: ShopFilterState, replace = true) {
   const url = new URL(location.href)
   const setOrDel = (key: string, value: string) => {
-    if (!value || value === 'all') url.searchParams.delete(key)
+    if (!value || value === 'all' || (key === 'sort' && value === 'popular')) url.searchParams.delete(key)
     else url.searchParams.set(key, value)
   }
   setOrDel('cat', state.category)
   setOrDel('mode', state.mode)
+  setOrDel('sort', state.sort)
   setOrDel('q', state.query)
   setOrDel('service', state.service)
   setOrDel('package', state.packageId)
@@ -111,27 +121,137 @@ function filterItems(locale: Locale, state: ShopFilterState): ShopListingItem[] 
   })
 }
 
-function renderCard(locale: Locale, item: ShopListingItem): string {
-  const m = t(locale)
-  const shop = m.shopPage
+function sortItems(locale: Locale, items: ShopListingItem[], sort: ShopSort): ShopListingItem[] {
+  const next = [...items]
+  next.sort((a, b) => {
+    if (sort === 'price-asc') return a.package.priceEur - b.package.priceEur
+    if (sort === 'price-desc') return b.package.priceEur - a.package.priceEur
+    if (sort === 'name') {
+      const at = packageCopy(locale, a.service, a.package.id)?.title ?? a.package.id
+      const bt = packageCopy(locale, b.service, b.package.id)?.title ?? b.package.id
+      return at.localeCompare(bt, locale)
+    }
+    const ar = a.package.recommended ? 0 : 1
+    const br = b.package.recommended ? 0 : 1
+    if (ar !== br) return ar - br
+    return a.package.priceEur - b.package.priceEur
+  })
+  return next
+}
+
+const SERVICE_ORDER: BookingServiceKey[] = [
+  'web-development',
+  'e-commerce',
+  'digital-marketing',
+  'web-hosting',
+  'mobile-app',
+  'offline-marketing',
+]
+
+function groupByService(items: ShopListingItem[]): { service: BookingServiceKey; items: ShopListingItem[] }[] {
+  const map = new Map<BookingServiceKey, ShopListingItem[]>()
+  for (const item of items) {
+    const list = map.get(item.service) ?? []
+    list.push(item)
+    map.set(item.service, list)
+  }
+  const groups: { service: BookingServiceKey; items: ShopListingItem[] }[] = []
+  for (const service of SERVICE_ORDER) {
+    const list = map.get(service)
+    if (list?.length) groups.push({ service, items: list })
+  }
+  for (const [service, list] of map) {
+    if (!SERVICE_ORDER.includes(service) && list.length) groups.push({ service, items: list })
+  }
+  return groups
+}
+
+function pricePeriod(locale: Locale, mode: PurchaseMode): string {
+  const shop = t(locale).shopPage
+  if (mode === 'subscription') return shop.monthSuffix
+  return ''
+}
+
+function renderPlanCard(locale: Locale, item: ShopListingItem): string {
+  const shop = t(locale).shopPage
   const copy = packageCopy(locale, item.service, item.package.id)
   const href = `/shop.html?service=${encodeURIComponent(item.service)}&package=${encodeURIComponent(item.package.id)}`
+  const featured = item.package.recommended ? ' is-featured' : ''
+  const period = pricePeriod(locale, item.package.purchaseMode)
+  const highlights = copy?.highlights?.length
+    ? copy.highlights
+    : [copy?.blurb ?? shop.modeBadge[item.package.purchaseMode]].filter(Boolean)
+  const cartable = canAddToCart(item.package.purchaseMode)
+  const primaryCta = cartable
+    ? `<button type="button" class="shop-plan-cta ts-btn pink solid" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
+    : `<a class="shop-plan-cta ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
   return `
-    <article class="shop-card">
-      <a class="shop-card-link" href="${href}">
-        <div class="shop-card-top">
-          <img src="${iconFor(item.service)}" width="28" height="28" alt="" />
-          <span class="shop-mode-badge shop-mode-badge--${item.package.purchaseMode}">${shop.modeBadge[item.package.purchaseMode]}</span>
-        </div>
-        <p class="shop-card-service">${serviceTitle(locale, item.service)}</p>
-        <h3 class="shop-card-title">${copy?.title ?? item.package.id}</h3>
-        <p class="shop-card-blurb">${copy?.blurb ?? ''}</p>
-        <div class="shop-card-foot">
-          <span class="shop-card-price">${shop.fromLabel} ${formatEur(item.package.priceEur, locale)}</span>
-          ${item.package.recommended ? `<span class="shop-card-rec">${shop.recommended}</span>` : ''}
-        </div>
-      </a>
+    <article class="shop-plan${featured}">
+      ${item.package.recommended ? `<p class="shop-plan-ribbon">${shop.recommended}</p>` : ''}
+      <p class="shop-plan-mode shop-mode-badge shop-mode-badge--${item.package.purchaseMode}">${shop.modeBadge[item.package.purchaseMode]}</p>
+      <h3 class="shop-plan-title">${copy?.title ?? item.package.id}</h3>
+      <p class="shop-plan-price">
+        <span class="shop-plan-amount">${formatEur(item.package.priceEur, locale)}</span>
+        ${period ? `<span class="shop-plan-period">${period}</span>` : ''}
+      </p>
+      <p class="shop-plan-blurb">${copy?.blurb ?? ''}</p>
+      <ul class="shop-plan-features" aria-label="${shop.planIncludes}">
+        ${highlights.map((line) => `<li>${line}</li>`).join('')}
+      </ul>
+      <div class="shop-plan-actions">
+        ${primaryCta}
+        <a class="shop-plan-details" href="${href}">${shop.viewDetails}</a>
+      </div>
     </article>`
+}
+
+function renderPlanGroup(locale: Locale, service: BookingServiceKey, items: ShopListingItem[]): string {
+  const shop = t(locale).shopPage
+  const serviceHref = service === 'general' ? '/#services' : servicePath(service as ServiceId)
+  const cat = items[0]?.package.shopCategory
+  const catBlurb = cat ? shop.categories[cat].blurb : ''
+  return `
+    <section class="shop-plan-group" data-shop-service="${service}">
+      <header class="shop-plan-group-head">
+        <div class="shop-plan-group-identity">
+          <img src="${iconFor(service)}" width="36" height="36" alt="" />
+          <div>
+            <h2 class="shop-plan-group-title">${serviceTitle(locale, service)}</h2>
+            <p class="shop-plan-group-blurb">${catBlurb}</p>
+          </div>
+        </div>
+        <a class="shop-plan-group-link" href="${serviceHref}">${shop.viewService}</a>
+      </header>
+      <div class="shop-plan-row">
+        ${items.map((item) => renderPlanCard(locale, item)).join('')}
+      </div>
+    </section>`
+}
+
+function renderRelated(locale: Locale, item: ShopListingItem): string {
+  const shop = t(locale).shopPage
+  const related = listShopPackages().filter(
+    (other) => other.service === item.service && other.package.id !== item.package.id,
+  )
+  if (!related.length) return ''
+  return `
+    <section class="shop-related" aria-labelledby="shop-related-title">
+      <h3 id="shop-related-title">${shop.relatedTitle}</h3>
+      <div class="shop-related-row">
+        ${related
+          .map((other) => {
+            const copy = packageCopy(locale, other.service, other.package.id)
+            const href = `/shop.html?service=${encodeURIComponent(other.service)}&package=${encodeURIComponent(other.package.id)}`
+            const period = pricePeriod(locale, other.package.purchaseMode)
+            return `
+              <a class="shop-related-card" href="${href}">
+                <span class="shop-related-title">${copy?.title ?? other.package.id}</span>
+                <span class="shop-related-price">${formatEur(other.package.priceEur, locale)}${period ? ` ${period}` : ''}</span>
+              </a>`
+          })
+          .join('')}
+      </div>
+    </section>`
 }
 
 function renderDetail(locale: Locale, item: ShopListingItem): string {
@@ -143,67 +263,86 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
     item.service === 'general' ? '/#services' : servicePath(item.service as ServiceId)
   const checkoutHref = bookingHref(item.service, item.package.id)
   const cartable = canAddToCart(item.package.purchaseMode)
-  const primaryCta =
-    item.package.purchaseMode === 'quote'
-      ? `<a class="ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
-      : item.package.purchaseMode === 'subscription'
-        ? `<a class="ts-btn pink solid" href="${checkoutHref}">${shop.ctaSubscription}</a>`
-        : `<a class="ts-btn pink solid" href="${checkoutHref}">${shop.ctaCheckout}</a>`
-  const addCartCta = cartable
-    ? `<button type="button" class="ts-btn pink" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
+  const catTitle = shop.categories[item.package.shopCategory].title
+  const highlights = copy?.highlights?.length ? copy.highlights : []
+  const buyPrimary = cartable
+    ? `<button type="button" class="ts-btn pink solid" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
+    : `<a class="ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
+  const buySecondary = cartable
+    ? `<a class="ts-btn pink" href="${checkoutHref}">${item.package.purchaseMode === 'subscription' ? shop.ctaSubscription : shop.ctaCheckout}</a>`
     : ''
-  const secondaryCta =
+  const quoteLink =
     item.package.purchaseMode === 'quote'
       ? ''
       : `<a class="shop-secondary-cta" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
 
+  const period = pricePeriod(locale, item.package.purchaseMode)
   return `
-    <a class="shop-back" href="/shop.html">${shop.detailBack}</a>
-    <div class="shop-detail-head">
-      <img src="${iconFor(item.service)}" width="40" height="40" alt="" />
-      <div>
-        <p class="shop-card-service">${serviceTitle(locale, item.service)} · ${shop.categories[item.package.shopCategory].title}</p>
-        <h2 class="shop-detail-title">${copy?.title ?? item.package.id}</h2>
-        <p class="shop-detail-blurb">${copy?.blurb ?? ''}</p>
+    <nav class="shop-breadcrumb" aria-label="Breadcrumb">
+      <a href="/shop.html">${shop.breadcrumbShop}</a>
+      <span aria-hidden="true">/</span>
+      <a href="/shop.html?cat=${encodeURIComponent(item.package.shopCategory)}">${catTitle}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">${copy?.title ?? item.package.id}</span>
+    </nav>
+    <div class="shop-detail-sheet">
+      <div class="shop-detail-layout">
+        <div class="shop-detail-main">
+          <p class="shop-card-service">${serviceTitle(locale, item.service)}</p>
+          <div class="shop-detail-title-row">
+            <h2 class="shop-detail-title">${copy?.title ?? item.package.id}</h2>
+            <span class="shop-mode-badge shop-mode-badge--${item.package.purchaseMode}">${shop.modeBadge[item.package.purchaseMode]}</span>
+          </div>
+          <p class="shop-detail-blurb">${copy?.blurb ?? ''}</p>
+          ${
+            highlights.length
+              ? `<ul class="shop-plan-features shop-detail-features" aria-label="${shop.planIncludes}">${highlights.map((line) => `<li>${line}</li>`).join('')}</ul>`
+              : ''
+          }
+          <div class="shop-detail-grid">
+            <section>
+              <h3>${shop.scopeTitle}</h3>
+              <p>${shop.scopeBody}</p>
+            </section>
+            <section>
+              <h3>${shop.exclusionsTitle}</h3>
+              <p>${shop.exclusionsBody}</p>
+            </section>
+            <section>
+              <h3>${shop.deliveryTitle}</h3>
+              <p>${shop.deliveryBody}</p>
+            </section>
+            <section>
+              <h3>${shop.extrasTitle}</h3>
+              <p>${shop.extrasBody}</p>
+              <ul class="shop-extra-list">
+                ${addons
+                  .map((addon) => {
+                    const a = addonCopy(locale, item.service, addon.id)
+                    return `<li><span>${a?.title ?? addon.id}</span><span>+${formatEur(addon.priceEur, locale)}</span></li>`
+                  })
+                  .join('')}
+              </ul>
+            </section>
+          </div>
+        </div>
+        <aside class="shop-buybox">
+          <p class="shop-detail-price">
+            <span class="shop-plan-amount">${formatEur(item.package.priceEur, locale)}</span>
+            ${period ? `<span class="shop-plan-period">${period}</span>` : ''}
+          </p>
+          <p class="shop-note">${shop.startAmountNote}</p>
+          <div class="shop-detail-actions">
+            <span class="glowborder">${buyPrimary}</span>
+            ${buySecondary ? `<span class="glowborder">${buySecondary}</span>` : ''}
+            ${quoteLink}
+            <a class="shop-secondary-cta" href="${serviceHref}">${shop.viewService}</a>
+            <p class="shop-cart-feedback" data-shop-cart-feedback role="status" aria-live="polite" hidden></p>
+          </div>
+        </aside>
       </div>
-      <span class="shop-mode-badge shop-mode-badge--${item.package.purchaseMode}">${shop.modeBadge[item.package.purchaseMode]}</span>
-    </div>
-    <p class="shop-detail-price">${formatEur(item.package.priceEur, locale)}</p>
-    <p class="shop-note">${shop.startAmountNote}</p>
-    <p class="shop-note shop-note--warn">${shop.missingTerms}</p>
-    <div class="shop-detail-grid">
-      <section>
-        <h3>${shop.scopeTitle}</h3>
-        <p>${shop.scopeBody}</p>
-        <p><strong>${copy?.title ?? item.package.id}</strong> — ${copy?.blurb ?? ''}</p>
-      </section>
-      <section>
-        <h3>${shop.exclusionsTitle}</h3>
-        <p>${shop.exclusionsBody}</p>
-      </section>
-      <section>
-        <h3>${shop.deliveryTitle}</h3>
-        <p>${shop.deliveryBody}</p>
-      </section>
-      <section>
-        <h3>${shop.extrasTitle}</h3>
-        <p>${shop.extrasBody}</p>
-        <ul class="shop-extra-list">
-          ${addons
-            .map((addon) => {
-              const a = addonCopy(locale, item.service, addon.id)
-              return `<li><span>${a?.title ?? addon.id}</span><span>+${formatEur(addon.priceEur, locale)}</span></li>`
-            })
-            .join('')}
-        </ul>
-      </section>
-    </div>
-    <div class="shop-detail-actions">
-      <span class="glowborder">${primaryCta}</span>
-      ${addCartCta ? `<span class="glowborder">${addCartCta}</span>` : ''}
-      ${secondaryCta}
-      <a class="shop-secondary-cta" href="${serviceHref}">${shop.ctaService}</a>
-      <p class="shop-cart-feedback" data-shop-cart-feedback role="status" aria-live="polite" hidden></p>
+      ${renderRelated(locale, item)}
+      <p class="shop-note shop-note--soft">${shop.missingTerms}</p>
     </div>`
 }
 
@@ -331,6 +470,37 @@ function renderQuoteForm(locale: Locale, prefillService = '', prefillPackage = '
     </section>`
 }
 
+function renderActiveFilters(locale: Locale, state: ShopFilterState): string {
+  const shop = t(locale).shopPage
+  const chips: { key: string; label: string }[] = []
+  if (state.category !== 'all') {
+    chips.push({ key: 'cat', label: shop.categories[state.category].title })
+  }
+  if (state.mode !== 'all') {
+    chips.push({ key: 'mode', label: shop.modeBadge[state.mode] })
+  }
+  if (state.query) {
+    chips.push({ key: 'q', label: `“${state.query}”` })
+  }
+  if (state.service && !state.packageId && isBookingServiceKey(state.service)) {
+    chips.push({ key: 'service', label: serviceTitle(locale, state.service) })
+  }
+  if (!chips.length) return ''
+  return `
+    <div class="shop-active-filters" role="group" aria-label="${shop.filterActiveLabel}">
+      ${chips
+        .map(
+          (chip) => `
+        <button type="button" class="shop-active-chip" data-shop-clear-chip="${chip.key}">
+          <span>${chip.label}</span>
+          <span aria-hidden="true">×</span>
+        </button>`,
+        )
+        .join('')}
+      <button type="button" class="shop-filter-clear" data-shop-clear-filters>${shop.filterClear}</button>
+    </div>`
+}
+
 export function renderShopMarkup(locale: Locale, state: ShopFilterState): string {
   const m = t(locale)
   const shop = m.shopPage
@@ -338,12 +508,18 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
     state.service && state.packageId
       ? findShopPackage(state.service, state.packageId)
       : undefined
-  const items = filterItems(locale, state)
+  const items = sortItems(locale, filterItems(locale, state), state.sort)
   const modeFilters: { id: PurchaseMode | 'all'; label: string }[] = [
-    { id: 'all', label: shop.filterAll },
+    { id: 'all', label: shop.filterModeAll },
     { id: 'checkout', label: shop.modeCheckout },
     { id: 'subscription', label: shop.modeSubscription },
     { id: 'quote', label: shop.modeQuote },
+  ]
+  const sortOptions: { id: ShopSort; label: string }[] = [
+    { id: 'popular', label: shop.sortPopular },
+    { id: 'price-asc', label: shop.sortPriceAsc },
+    { id: 'price-desc', label: shop.sortPriceDesc },
+    { id: 'name', label: shop.sortName },
   ]
 
   const cartLines = readCart()
@@ -368,14 +544,22 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
       </div>`
   }
 
+  const groups = groupByService(items)
+  const flattenCatalog = state.sort === 'price-asc' || state.sort === 'price-desc' || state.sort === 'name'
+  const catalogBody = !items.length
+    ? `<p class="shop-empty">${shop.empty}</p>`
+    : flattenCatalog
+      ? `<div class="shop-plan-row shop-plan-row--flat">${items.map((item) => renderPlanCard(locale, item)).join('')}</div>`
+      : groups.map((g) => renderPlanGroup(locale, g.service, g.items)).join('')
   return `
     <div class="shop-page" data-shop-root>
-      <div class="wrap shop-hero">
-        <p class="shop-eyebrow">${shop.eyebrow}</p>
-        <h1>${shop.title}</h1>
-        <p class="lead">${shop.lead}</p>
-        <p class="shop-note shop-note--warn">${shop.missingTerms}</p>
-      </div>
+      <header class="shop-hero-band">
+        <div class="wrap shop-hero">
+          <p class="shop-eyebrow">${shop.eyebrow}</p>
+          <h1>${shop.title}</h1>
+          <p class="lead">${shop.lead}</p>
+        </div>
+      </header>
       ${cartBar}
 
       <div class="wrap shop-toolbar">
@@ -398,15 +582,26 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
             )
             .join('')}
         </div>
-        <p class="shop-results" data-shop-count>${shop.results(items.length)}</p>
+        ${renderActiveFilters(locale, state)}
+        <div class="shop-toolbar-meta">
+          <p class="shop-results" data-shop-count>${shop.results(items.length)}</p>
+          <label class="shop-sort">
+            <span>${shop.sortLabel}</span>
+            <select data-shop-sort>
+              ${sortOptions
+                .map(
+                  (opt) =>
+                    `<option value="${opt.id}"${state.sort === opt.id ? ' selected' : ''}>${opt.label}</option>`,
+                )
+                .join('')}
+            </select>
+          </label>
+        </div>
       </div>
 
-      <div class="wrap shop-grid" data-shop-grid>
-        ${
-          items.length
-            ? items.map((item) => renderCard(locale, item)).join('')
-            : `<p class="shop-empty">${shop.empty}</p>`
-        }
+      <div class="wrap shop-catalog" data-shop-grid>
+        ${catalogBody}
+        <p class="shop-note shop-note--soft">${shop.missingTerms}</p>
       </div>
 
       <div class="wrap">
@@ -462,6 +657,41 @@ export function initShopPage(
       trackEvent('shop_filter_mode', { mode: state.mode, locale })
       onRerender(state)
     })
+  })
+
+  host.querySelector<HTMLSelectElement>('[data-shop-sort]')?.addEventListener('change', (event) => {
+    const value = (event.target as HTMLSelectElement).value
+    state = { ...state, sort: isShopSort(value) ? value : 'popular', packageId: '' }
+    writeFiltersToUrl(state)
+    trackEvent('shop_sort', { sort: state.sort, locale })
+    onRerender(state)
+  })
+
+  host.querySelectorAll<HTMLButtonElement>('[data-shop-clear-chip]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.shopClearChip || ''
+      if (key === 'cat') state = { ...state, category: 'all' }
+      else if (key === 'mode') state = { ...state, mode: 'all' }
+      else if (key === 'q') state = { ...state, query: '' }
+      else if (key === 'service') state = { ...state, service: '' }
+      state = { ...state, packageId: '' }
+      writeFiltersToUrl(state)
+      onRerender(state)
+    })
+  })
+
+  host.querySelector<HTMLButtonElement>('[data-shop-clear-filters]')?.addEventListener('click', () => {
+    state = {
+      ...state,
+      category: 'all',
+      mode: 'all',
+      query: '',
+      service: '',
+      packageId: '',
+    }
+    writeFiltersToUrl(state)
+    trackEvent('shop_filter_clear', { locale })
+    onRerender(state)
   })
 
   host.querySelectorAll<HTMLAnchorElement>('[data-shop-quote-prefill]').forEach((link) => {

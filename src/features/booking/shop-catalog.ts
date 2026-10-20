@@ -81,7 +81,8 @@ export function calcOrderTotalEur(
   addonIds: string[],
 ): number {
   const shop = SERVICE_SHOP[service]
-  const pkg = shop.packages.find((p) => p.id === packageId) ?? shop.packages[0]!
+  const pkg = shop.packages.find((p) => p.id === packageId)
+  if (!pkg) return 0
   const addons = shop.addons.filter((a) => addonIds.includes(a.id))
   return pkg.priceEur + addons.reduce((sum, a) => sum + a.priceEur, 0)
 }

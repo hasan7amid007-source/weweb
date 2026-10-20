@@ -1,6 +1,6 @@
 import type { BookingServiceKey } from '../features/booking/catalog'
 
-export type ShopItemCopy = { title: string; blurb: string }
+export type ShopItemCopy = { title: string; blurb: string; highlights?: string[] }
 
 export type BookingShopCopy = {
   packageHeading: string
@@ -26,39 +26,123 @@ export const bookingShopDe: BookingShopCopy = {
   addonsSummary: 'Extras',
   packages: {
     general: {
-      kickoff: { title: 'Kickoff', blurb: 'Kurzberatung & nächster Schritt' },
-      briefing: { title: 'Briefing', blurb: 'Ziele, Scope und Empfehlung' },
-      roadmap: { title: 'Roadmap', blurb: 'Priorisierte Projekt-Roadmap' },
+      kickoff: {
+        title: 'Kickoff',
+        blurb: 'Kurzberatung & nächster Schritt',
+        highlights: ['Kurzberatung', 'Nächster Schritt klar', 'Digitales Briefing'],
+      },
+      briefing: {
+        title: 'Briefing',
+        blurb: 'Ziele, Scope und Empfehlung',
+        highlights: ['Ziele & Scope', 'Empfehlung dokumentiert', 'Digitales Briefing'],
+      },
+      roadmap: {
+        title: 'Roadmap',
+        blurb: 'Priorisierte Projekt-Roadmap',
+        highlights: ['Priorisierte Roadmap', 'Meilensteine skizziert', 'Digitales Briefing'],
+      },
     },
     'web-hosting': {
-      shared: { title: 'Shared', blurb: 'Schlanke Sites & CMS' },
-      vps: { title: 'VPS', blurb: 'Mehr Leistung & Kontrolle' },
-      dedicated: { title: 'Dedicated', blurb: 'Hohe Last & Isolation' },
+      shared: {
+        title: 'Shared',
+        blurb: 'Schlanke Sites & CMS',
+        highlights: ['Setup für schlanke Sites', 'CMS-geeignete Basis', 'SSL & Backup-Grundlage', 'Digitales Briefing'],
+      },
+      vps: {
+        title: 'VPS',
+        blurb: 'Mehr Leistung & Kontrolle',
+        highlights: ['Mehr Ressourcen', 'Mehr Kontrolle', 'Betrieb & Härtung Start', 'Digitales Briefing'],
+      },
+      dedicated: {
+        title: 'Dedicated',
+        blurb: 'Hohe Last & Isolation',
+        highlights: ['Höhere Lastfähigkeit', 'Isolation & Kontrolle', 'Individuelles Setup', 'Angebot zur Feinabstimmung'],
+      },
     },
     'mobile-app': {
-      mvp: { title: 'MVP', blurb: 'Kernfunktionen zum Testen' },
-      launch: { title: 'Launch', blurb: 'Store-ready Basis' },
-      scale: { title: 'Scale', blurb: 'Erweitertes Produkt-Setup' },
+      mvp: {
+        title: 'MVP',
+        blurb: 'Kernfunktionen zum Testen',
+        highlights: ['Kernfunktionen', 'UX-Konzept Start', 'Validierung vor Launch', 'Digitales Briefing'],
+      },
+      launch: {
+        title: 'Launch',
+        blurb: 'Store-ready Basis',
+        highlights: ['Store-ready Grundlage', 'UI & Assets Start', 'API-Anbindung skizziert', 'Angebot zur Feinabstimmung'],
+      },
+      scale: {
+        title: 'Scale',
+        blurb: 'Erweitertes Produkt-Setup',
+        highlights: ['Erweitertes Setup', 'Mehr Integrationen', 'Wachstums-Scope', 'Angebot zur Feinabstimmung'],
+      },
     },
     'web-development': {
-      landing: { title: 'Landing', blurb: 'Eine starke Einstiegsseite' },
-      business: { title: 'Business', blurb: 'Mehrseitige Firmenwebsite' },
-      custom: { title: 'Custom', blurb: 'Individuelle Web-App' },
+      landing: {
+        title: 'Landing',
+        blurb: 'Eine starke Einstiegsseite',
+        highlights: ['Eine Einstiegsseite', 'Responsive Layout', 'Kontakt- / Lead-Form', 'Digitales Briefing'],
+      },
+      business: {
+        title: 'Business',
+        blurb: 'Mehrseitige Firmenwebsite',
+        highlights: ['Mehrseitige Struktur', 'CMS-fähige Basis', 'Tech-SEO Grundlagen', 'Digitales Briefing'],
+      },
+      custom: {
+        title: 'Custom',
+        blurb: 'Individuelle Web-App',
+        highlights: ['Individueller Scope', 'App- / Datenmodell Start', 'Maßgeschneiderte Flows', 'Angebot zur Feinabstimmung'],
+      },
     },
     'e-commerce': {
-      starter: { title: 'Starter', blurb: 'Shop-Grundsetup' },
-      growth: { title: 'Growth', blurb: 'Checkout & Conversion' },
-      scale: { title: 'Scale', blurb: 'Erweiterter Shop-Stack' },
+      starter: {
+        title: 'Starter',
+        blurb: 'Shop-Grundsetup',
+        highlights: ['Shop-Grundsetup', 'Katalogstruktur Start', 'Checkout-Basis', 'Digitales Briefing'],
+      },
+      growth: {
+        title: 'Growth',
+        blurb: 'Checkout & Conversion',
+        highlights: ['Checkout & Zahlungen', 'Conversion-Fokus', 'Produktstruktur', 'Digitales Briefing'],
+      },
+      scale: {
+        title: 'Scale',
+        blurb: 'Erweiterter Shop-Stack',
+        highlights: ['Erweiterter Stack', 'Versand & Regeln', 'Wachstums-Scope', 'Angebot zur Feinabstimmung'],
+      },
     },
     'digital-marketing': {
-      audit: { title: 'Audit', blurb: 'Status & Quick Wins' },
-      campaign: { title: 'Campaign', blurb: 'Kampagnen-Startpaket' },
-      retainer: { title: 'Retainer', blurb: 'Laufende Performance' },
+      audit: {
+        title: 'Audit',
+        blurb: 'Status & Quick Wins',
+        highlights: ['Status-Check', 'Quick Wins', 'Priorisierte Empfehlungen', 'Digitales Briefing'],
+      },
+      campaign: {
+        title: 'Campaign',
+        blurb: 'Kampagnen-Startpaket',
+        highlights: ['Kampagnen-Start', 'Konten & Tracking Start', 'Content-Grundlage', 'Digitales Briefing'],
+      },
+      retainer: {
+        title: 'Retainer',
+        blurb: 'Laufende Performance',
+        highlights: ['Laufende Betreuung', 'Performance-Fokus', 'Reporting-Start', 'Monatliche Abrechnung'],
+      },
     },
     'offline-marketing': {
-      print: { title: 'Print', blurb: 'Druckmedien-Konzept' },
-      campaign: { title: 'Kampagne', blurb: 'Offline-Kampagne vor Ort' },
-      event: { title: 'Event', blurb: 'Event-Auftritt & Produktion' },
+      print: {
+        title: 'Print',
+        blurb: 'Druckmedien-Konzept',
+        highlights: ['Druckmedien-Konzept', 'Visuelle Richtung', 'Produktionsabstimmung', 'Digitales Briefing'],
+      },
+      campaign: {
+        title: 'Kampagne',
+        blurb: 'Offline-Kampagne vor Ort',
+        highlights: ['Kampagnen-Konzept', 'Medienmix skizziert', 'Umsetzung vor Ort', 'Angebot zur Feinabstimmung'],
+      },
+      event: {
+        title: 'Event',
+        blurb: 'Event-Auftritt & Produktion',
+        highlights: ['Event-Auftritt', 'Produktion & Montage', 'Markenpräsenz vor Ort', 'Angebot zur Feinabstimmung'],
+      },
     },
   },
   addons: {
@@ -110,39 +194,123 @@ export const bookingShopEn: BookingShopCopy = {
   addonsSummary: 'Add-ons',
   packages: {
     general: {
-      kickoff: { title: 'Kickoff', blurb: 'Short consult & next step' },
-      briefing: { title: 'Briefing', blurb: 'Goals, scope & recommendation' },
-      roadmap: { title: 'Roadmap', blurb: 'Prioritised project roadmap' },
+      kickoff: {
+        title: 'Kickoff',
+        blurb: 'Short consult & next step',
+        highlights: ['Short consult', 'Clear next step', 'Digital briefing'],
+      },
+      briefing: {
+        title: 'Briefing',
+        blurb: 'Goals, scope & recommendation',
+        highlights: ['Goals & scope', 'Documented recommendation', 'Digital briefing'],
+      },
+      roadmap: {
+        title: 'Roadmap',
+        blurb: 'Prioritised project roadmap',
+        highlights: ['Prioritised roadmap', 'Milestones sketched', 'Digital briefing'],
+      },
     },
     'web-hosting': {
-      shared: { title: 'Shared', blurb: 'Lean sites & CMS' },
-      vps: { title: 'VPS', blurb: 'More power & control' },
-      dedicated: { title: 'Dedicated', blurb: 'High load & isolation' },
+      shared: {
+        title: 'Shared',
+        blurb: 'Lean sites & CMS',
+        highlights: ['Setup for lean sites', 'CMS-ready base', 'SSL & backup basics', 'Digital briefing'],
+      },
+      vps: {
+        title: 'VPS',
+        blurb: 'More power & control',
+        highlights: ['More resources', 'More control', 'Ops & hardening start', 'Digital briefing'],
+      },
+      dedicated: {
+        title: 'Dedicated',
+        blurb: 'High load & isolation',
+        highlights: ['Higher load capacity', 'Isolation & control', 'Custom setup', 'Quote for fine-tuning'],
+      },
     },
     'mobile-app': {
-      mvp: { title: 'MVP', blurb: 'Core features to validate' },
-      launch: { title: 'Launch', blurb: 'Store-ready foundation' },
-      scale: { title: 'Scale', blurb: 'Expanded product setup' },
+      mvp: {
+        title: 'MVP',
+        blurb: 'Core features to validate',
+        highlights: ['Core features', 'UX concept start', 'Validate before launch', 'Digital briefing'],
+      },
+      launch: {
+        title: 'Launch',
+        blurb: 'Store-ready foundation',
+        highlights: ['Store-ready foundation', 'UI & assets start', 'API wiring sketched', 'Quote for fine-tuning'],
+      },
+      scale: {
+        title: 'Scale',
+        blurb: 'Expanded product setup',
+        highlights: ['Expanded setup', 'More integrations', 'Growth scope', 'Quote for fine-tuning'],
+      },
     },
     'web-development': {
-      landing: { title: 'Landing', blurb: 'One strong entry page' },
-      business: { title: 'Business', blurb: 'Multi-page company site' },
-      custom: { title: 'Custom', blurb: 'Tailored web app' },
+      landing: {
+        title: 'Landing',
+        blurb: 'One strong entry page',
+        highlights: ['One entry page', 'Responsive layout', 'Contact / lead form', 'Digital briefing'],
+      },
+      business: {
+        title: 'Business',
+        blurb: 'Multi-page company site',
+        highlights: ['Multi-page structure', 'CMS-ready base', 'Tech-SEO foundations', 'Digital briefing'],
+      },
+      custom: {
+        title: 'Custom',
+        blurb: 'Tailored web app',
+        highlights: ['Custom scope', 'App / data model start', 'Tailored flows', 'Quote for fine-tuning'],
+      },
     },
     'e-commerce': {
-      starter: { title: 'Starter', blurb: 'Shop foundation' },
-      growth: { title: 'Growth', blurb: 'Checkout & conversion' },
-      scale: { title: 'Scale', blurb: 'Extended shop stack' },
+      starter: {
+        title: 'Starter',
+        blurb: 'Shop foundation',
+        highlights: ['Shop foundation', 'Catalogue structure start', 'Checkout base', 'Digital briefing'],
+      },
+      growth: {
+        title: 'Growth',
+        blurb: 'Checkout & conversion',
+        highlights: ['Checkout & payments', 'Conversion focus', 'Product structure', 'Digital briefing'],
+      },
+      scale: {
+        title: 'Scale',
+        blurb: 'Extended shop stack',
+        highlights: ['Extended stack', 'Shipping & rules', 'Growth scope', 'Quote for fine-tuning'],
+      },
     },
     'digital-marketing': {
-      audit: { title: 'Audit', blurb: 'Status & quick wins' },
-      campaign: { title: 'Campaign', blurb: 'Campaign start pack' },
-      retainer: { title: 'Retainer', blurb: 'Ongoing performance' },
+      audit: {
+        title: 'Audit',
+        blurb: 'Status & quick wins',
+        highlights: ['Status check', 'Quick wins', 'Prioritised recommendations', 'Digital briefing'],
+      },
+      campaign: {
+        title: 'Campaign',
+        blurb: 'Campaign start pack',
+        highlights: ['Campaign kickoff', 'Accounts & tracking start', 'Content foundation', 'Digital briefing'],
+      },
+      retainer: {
+        title: 'Retainer',
+        blurb: 'Ongoing performance',
+        highlights: ['Ongoing care', 'Performance focus', 'Reporting start', 'Billed monthly'],
+      },
     },
     'offline-marketing': {
-      print: { title: 'Print', blurb: 'Print media concept' },
-      campaign: { title: 'Campaign', blurb: 'Offline campaign on-site' },
-      event: { title: 'Event', blurb: 'Event presence & production' },
+      print: {
+        title: 'Print',
+        blurb: 'Print media concept',
+        highlights: ['Print media concept', 'Visual direction', 'Production alignment', 'Digital briefing'],
+      },
+      campaign: {
+        title: 'Campaign',
+        blurb: 'Offline campaign on-site',
+        highlights: ['Campaign concept', 'Media mix sketched', 'On-site execution', 'Quote for fine-tuning'],
+      },
+      event: {
+        title: 'Event',
+        blurb: 'Event presence & production',
+        highlights: ['Event presence', 'Production & install', 'On-site brand presence', 'Quote for fine-tuning'],
+      },
     },
   },
   addons: {
@@ -194,39 +362,123 @@ export const bookingShopAr: BookingShopCopy = {
   addonsSummary: 'الإضافات',
   packages: {
     general: {
-      kickoff: { title: 'انطلاقة', blurb: 'استشارة قصيرة والخطوة التالية' },
-      briefing: { title: 'إحاطة', blurb: 'أهداف ونطاق وتوصية' },
-      roadmap: { title: 'خارطة طريق', blurb: 'أولويات المشروع' },
+      kickoff: {
+        title: 'انطلاقة',
+        blurb: 'استشارة قصيرة والخطوة التالية',
+        highlights: ['استشارة قصيرة', 'خطوة تالية واضحة', 'إحاطة رقمية'],
+      },
+      briefing: {
+        title: 'إحاطة',
+        blurb: 'أهداف ونطاق وتوصية',
+        highlights: ['أهداف ونطاق', 'توصية موثّقة', 'إحاطة رقمية'],
+      },
+      roadmap: {
+        title: 'خارطة طريق',
+        blurb: 'أولويات المشروع',
+        highlights: ['خارطة أولويات', 'معالم مرسومة', 'إحاطة رقمية'],
+      },
     },
     'web-hosting': {
-      shared: { title: 'مشترك', blurb: 'مواقع خفيفة وCMS' },
-      vps: { title: 'VPS', blurb: 'أداء وتحكم أكبر' },
-      dedicated: { title: 'مخصص', blurb: 'حمل عالٍ وعزل' },
+      shared: {
+        title: 'مشترك',
+        blurb: 'مواقع خفيفة وCMS',
+        highlights: ['إعداد لمواقع خفيفة', 'أساس مناسب لـ CMS', 'SSL ونسخ احتياطي أساسي', 'إحاطة رقمية'],
+      },
+      vps: {
+        title: 'VPS',
+        blurb: 'أداء وتحكم أكبر',
+        highlights: ['موارد أكبر', 'تحكم أكثر', 'بداية تشغيل وتأمين', 'إحاطة رقمية'],
+      },
+      dedicated: {
+        title: 'مخصص',
+        blurb: 'حمل عالٍ وعزل',
+        highlights: ['قدرة حمل أعلى', 'عزل وتحكم', 'إعداد مخصص', 'عرض سعر للضبط'],
+      },
     },
     'mobile-app': {
-      mvp: { title: 'MVP', blurb: 'وظائف أساسية للتجربة' },
-      launch: { title: 'إطلاق', blurb: 'أساس جاهز للمتاجر' },
-      scale: { title: 'توسّع', blurb: 'إعداد منتج أوسع' },
+      mvp: {
+        title: 'MVP',
+        blurb: 'وظائف أساسية للتجربة',
+        highlights: ['وظائف أساسية', 'بداية مفهوم UX', 'تحقق قبل الإطلاق', 'إحاطة رقمية'],
+      },
+      launch: {
+        title: 'إطلاق',
+        blurb: 'أساس جاهز للمتاجر',
+        highlights: ['أساس جاهز للمتاجر', 'بداية واجهة وأصول', 'تخطيط ربط API', 'عرض سعر للضبط'],
+      },
+      scale: {
+        title: 'توسّع',
+        blurb: 'إعداد منتج أوسع',
+        highlights: ['إعداد موسّع', 'تكاملات أكثر', 'نطاق نمو', 'عرض سعر للضبط'],
+      },
     },
     'web-development': {
-      landing: { title: 'صفحة هبوط', blurb: 'صفحة دخول قوية' },
-      business: { title: 'أعمال', blurb: 'موقع شركة متعدد الصفحات' },
-      custom: { title: 'مخصص', blurb: 'تطبيق ويب حسب الطلب' },
+      landing: {
+        title: 'صفحة هبوط',
+        blurb: 'صفحة دخول قوية',
+        highlights: ['صفحة دخول واحدة', 'تصميم متجاوب', 'نموذج تواصل / عملاء', 'إحاطة رقمية'],
+      },
+      business: {
+        title: 'أعمال',
+        blurb: 'موقع شركة متعدد الصفحات',
+        highlights: ['هيكل متعدد الصفحات', 'أساس جاهز لـ CMS', 'أساسيات SEO تقني', 'إحاطة رقمية'],
+      },
+      custom: {
+        title: 'مخصص',
+        blurb: 'تطبيق ويب حسب الطلب',
+        highlights: ['نطاق مخصص', 'بداية نموذج التطبيق / البيانات', 'مسارات مخصّصة', 'عرض سعر للضبط'],
+      },
     },
     'e-commerce': {
-      starter: { title: 'بداية', blurb: 'أساس المتجر' },
-      growth: { title: 'نمو', blurb: 'دفع وتحويل' },
-      scale: { title: 'توسّع', blurb: 'حزمة متجر أوسع' },
+      starter: {
+        title: 'بداية',
+        blurb: 'أساس المتجر',
+        highlights: ['أساس المتجر', 'بداية هيكل الكتالوج', 'أساس الدفع', 'إحاطة رقمية'],
+      },
+      growth: {
+        title: 'نمو',
+        blurb: 'دفع وتحويل',
+        highlights: ['دفع ومدفوعات', 'تركيز التحويل', 'هيكل المنتجات', 'إحاطة رقمية'],
+      },
+      scale: {
+        title: 'توسّع',
+        blurb: 'حزمة متجر أوسع',
+        highlights: ['حزمة أوسع', 'شحن وقواعد', 'نطاق نمو', 'عرض سعر للضبط'],
+      },
     },
     'digital-marketing': {
-      audit: { title: 'تدقيق', blurb: 'وضع حالي وفرص سريعة' },
-      campaign: { title: 'حملة', blurb: 'حزمة بدء الحملة' },
-      retainer: { title: 'اشتراك', blurb: 'أداء مستمر' },
+      audit: {
+        title: 'تدقيق',
+        blurb: 'وضع حالي وفرص سريعة',
+        highlights: ['فحص الوضع', 'فرص سريعة', 'توصيات مرتّبة', 'إحاطة رقمية'],
+      },
+      campaign: {
+        title: 'حملة',
+        blurb: 'حزمة بدء الحملة',
+        highlights: ['انطلاق الحملة', 'بداية حسابات وتتبع', 'أساس المحتوى', 'إحاطة رقمية'],
+      },
+      retainer: {
+        title: 'اشتراك',
+        blurb: 'أداء مستمر',
+        highlights: ['رعاية مستمرة', 'تركيز الأداء', 'بداية التقارير', 'فوترة شهرية'],
+      },
     },
     'offline-marketing': {
-      print: { title: 'طباعة', blurb: 'مفهوم مواد مطبوعة' },
-      campaign: { title: 'حملة', blurb: 'حملة ميدانية' },
-      event: { title: 'فعالية', blurb: 'حضور وإنتاج للفعالية' },
+      print: {
+        title: 'طباعة',
+        blurb: 'مفهوم مواد مطبوعة',
+        highlights: ['مفهوم مواد مطبوعة', 'اتجاه بصري', 'تنسيق الإنتاج', 'إحاطة رقمية'],
+      },
+      campaign: {
+        title: 'حملة',
+        blurb: 'حملة ميدانية',
+        highlights: ['مفهوم الحملة', 'مزيج إعلامي مرسوم', 'تنفيذ ميداني', 'عرض سعر للضبط'],
+      },
+      event: {
+        title: 'فعالية',
+        blurb: 'حضور وإنتاج للفعالية',
+        highlights: ['حضور الفعالية', 'إنتاج وتركيب', 'حضور العلامة ميدانياً', 'عرض سعر للضبط'],
+      },
     },
   },
   addons: {

@@ -1,7 +1,9 @@
 import './styles/site.css'
 import './features/hero/hero.css'
 import './styles/effects.css'
-import { SERVICE_ICONS, SERVICE_IDS, servicePath } from './data/services'
+import { SERVICE_ICONS, SERVICE_IDS } from './data/services'
+import { fromPriceEur } from './features/booking/shop-catalog'
+import { formatEur } from './features/booking/catalog'
 import { initTelemetry } from './lib/telemetry'
 import { initAccordions } from './features/accordion'
 import { initBookingWizard, renderBookingFormMarkup } from './features/booking'
@@ -167,8 +169,10 @@ function render(locale: Locale) {
           ${SERVICE_IDS.map((id, i) => {
             const page = m.servicePages[id]
             const n = String(i + 1).padStart(2, '0')
+            const tone = (i % 6) + 1
+            const from = fromPriceEur(id)
             return `
-            <a class="svc-fw-card tone-1" href="${servicePath(id)}" style="--fw-i:${i}">
+            <a class="svc-fw-card tone-${tone}" href="/shop.html?service=${encodeURIComponent(id)}" style="--fw-i:${i}">
               <div class="svc-fw-head">
                 <span class="svc-fw-num">${n}</span>
                 <span class="svc-fw-icon" aria-hidden="true">
@@ -176,13 +180,14 @@ function render(locale: Locale) {
                 </span>
               </div>
               <h3 class="svc-fw-title">${page.title}</h3>
+              <p class="svc-fw-from">${m.shopPage.fromLabel} ${formatEur(from, locale)}</p>
               <ul class="svc-fw-list">
                 ${page.highlights
                   .slice(0, 3)
                   .map((item) => `<li>${item}</li>`)
                   .join('')}
               </ul>
-              <span class="svc-fw-more">${m.serviceUi.details} →</span>
+              <span class="svc-fw-more">${m.shopPage.choosePlan} →</span>
             </a>`
           }).join('')}
         </div>

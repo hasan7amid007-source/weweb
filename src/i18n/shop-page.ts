@@ -10,6 +10,14 @@ export type ShopPageCopy = {
   searchPlaceholder: string
   filterAll: string
   filterModeLabel: string
+  filterModeAll: string
+  filterClear: string
+  filterActiveLabel: string
+  sortLabel: string
+  sortPopular: string
+  sortPriceAsc: string
+  sortPriceDesc: string
+  sortName: string
   modeCheckout: string
   modeSubscription: string
   modeQuote: string
@@ -18,9 +26,16 @@ export type ShopPageCopy = {
   empty: string
   recommended: string
   fromLabel: string
+  monthSuffix: string
+  choosePlan: string
+  viewDetails: string
+  viewService: string
+  planIncludes: string
   startAmountNote: string
   missingTerms: string
   detailBack: string
+  breadcrumbShop: string
+  relatedTitle: string
   scopeTitle: string
   scopeBody: string
   exclusionsTitle: string
@@ -31,6 +46,7 @@ export type ShopPageCopy = {
   extrasBody: string
   ctaCheckout: string
   ctaSubscription: string
+  ctaSubscriptionShort: string
   ctaQuote: string
   ctaService: string
   quoteTitle: string
@@ -68,15 +84,23 @@ export const shopPageDe: ShopPageCopy = {
   metaTitle: 'Shop — BDITEC Agentur-Pakete',
   metaDescription:
     'BDITEC Shop: feste Startpakete online bestellen oder individuelles Angebot anfragen — Web, Marketing, SEO, Hosting, Apps und Offline.',
-  eyebrow: 'Agentur-Shop',
-  title: 'Pakete & Startbeträge',
-  lead: 'Wählen Sie ein klar umrissenes Startpaket zum Online-Checkout — oder fordern Sie ein Angebot für individuelle Projekte an.',
+  eyebrow: 'BDITEC Plans',
+  title: 'Pläne & Pakete',
+  lead: 'Starterpläne nach Service vergleichen. Online starten und bezahlen — oder für größeren Scope ein individuelles Angebot anfragen.',
   searchLabel: 'Pakete suchen',
   searchPlaceholder: 'z. B. Audit, Landing, Hosting…',
   filterAll: 'Alle Kategorien',
   filterModeLabel: 'Kaufart',
-  modeCheckout: 'Sofort bestellen',
-  modeSubscription: 'Abo / laufend',
+  filterModeAll: 'Alle',
+  filterClear: 'Filter zurücksetzen',
+  filterActiveLabel: 'Aktive Filter',
+  sortLabel: 'Sortieren',
+  sortPopular: 'Beliebtheit',
+  sortPriceAsc: 'Preis: aufsteigend',
+  sortPriceDesc: 'Preis: absteigend',
+  sortName: 'Name A–Z',
+  modeCheckout: 'Einmalig',
+  modeSubscription: 'Monatlich',
   modeQuote: 'Angebot',
   categories: {
     'web-design': {
@@ -106,12 +130,19 @@ export const shopPageDe: ShopPageCopy = {
   },
   results: (n) => (n === 1 ? '1 Paket' : `${n} Pakete`),
   empty: 'Keine Pakete für diese Filter. Filter zurücksetzen oder Angebot anfragen.',
-  recommended: 'Empfohlen',
+  recommended: 'Beliebt',
   fromLabel: 'ab',
+  monthSuffix: '/ Monat',
+  choosePlan: 'Plan wählen',
+  viewDetails: 'Details ansehen',
+  viewService: 'Zur Service-Seite',
+  planIncludes: 'Enthalten im Start',
   startAmountNote: 'Angezeigter Betrag ist ein Start-/Anzahlungswert in EUR und wird auf das Projekt angerechnet.',
   missingTerms:
-    'Endgültige Preise, Lieferzeiten, Leistungsumfang und Vertragsbedingungen stehen noch unter Geschäftsprüfung — der Soft-Launch-Checkout kann Demo sein.',
-  detailBack: 'Zurück zum Shop',
+    'Preise und Konditionen sind Orientierungswerte — finale Vereinbarung im Briefing. Soft-Launch kann Demo-Checkout nutzen.',
+  detailBack: 'Alle Pläne',
+  breadcrumbShop: 'Shop',
+  relatedTitle: 'Weitere Pläne in diesem Service',
   scopeTitle: 'Leistungsumfang (Orientierung)',
   scopeBody:
     'Der gewählte Paket-Titel und die Kurzbeschreibung skizzieren den Start. Der verbindliche Scope wird im Briefing nach der Bestellung festgehalten.',
@@ -125,6 +156,7 @@ export const shopPageDe: ShopPageCopy = {
   extrasBody: 'Extras können im Checkout-Assistenten ergänzt werden.',
   ctaCheckout: 'Zur Bestellung',
   ctaSubscription: 'Abo starten (Checkout)',
+  ctaSubscriptionShort: 'Abo wählen',
   ctaQuote: 'Angebot anfragen',
   ctaService: 'Service-Seite',
   quoteTitle: 'Individuelles Angebot',
@@ -138,8 +170,8 @@ export const shopPageDe: ShopPageCopy = {
   quoteHint: 'Öffnet Ihr E-Mail-Programm an info@bditec.com. Es wird kein Konto angelegt und keine Zahlung ausgeführt.',
   quoteSuccess: 'E-Mail-Entwurf geöffnet. Senden Sie die Nachricht ab, um die Anfrage zu übermitteln.',
   modeBadge: {
-    checkout: 'Checkout',
-    subscription: 'Abo',
+    checkout: 'Einmalig',
+    subscription: 'Monatlich',
     quote: 'Angebot',
   },
   cartTitle: 'Warenkorb',
@@ -151,7 +183,7 @@ export const shopPageDe: ShopPageCopy = {
   cartFull: 'Warenkorb voll (max. 8)',
   cartRemove: 'Entfernen',
   cartClear: 'Leeren',
-  cartCheckout: 'Warenkorb bezahlen',
+  cartCheckout: 'Zur Kasse',
   cartOpen: 'Warenkorb öffnen',
   cartName: 'Name',
   cartEmail: 'E-Mail',
@@ -180,15 +212,23 @@ export const shopPageEn: ShopPageCopy = {
   metaTitle: 'Shop — BDITEC agency packages',
   metaDescription:
     'BDITEC shop: order scoped starter packages online or request a custom quote — web, marketing, SEO, hosting, apps, and offline.',
-  eyebrow: 'Agency shop',
-  title: 'Packages & start amounts',
-  lead: 'Pick a clearly scoped starter package for online checkout — or request a quote for custom work.',
+  eyebrow: 'BDITEC Plans',
+  title: 'Plans & packages',
+  lead: 'Compare starter plans by service. Pay online to begin — or request a custom quote for larger scope.',
   searchLabel: 'Search packages',
   searchPlaceholder: 'e.g. audit, landing, hosting…',
   filterAll: 'All categories',
-  filterModeLabel: 'Purchase type',
-  modeCheckout: 'Buy now',
-  modeSubscription: 'Subscription',
+  filterModeLabel: 'Billing type',
+  filterModeAll: 'All',
+  filterClear: 'Clear filters',
+  filterActiveLabel: 'Active filters',
+  sortLabel: 'Sort by',
+  sortPopular: 'Popularity',
+  sortPriceAsc: 'Price: low to high',
+  sortPriceDesc: 'Price: high to low',
+  sortName: 'Name A–Z',
+  modeCheckout: 'One-time',
+  modeSubscription: 'Monthly',
   modeQuote: 'Quote',
   categories: {
     'web-design': {
@@ -218,12 +258,19 @@ export const shopPageEn: ShopPageCopy = {
   },
   results: (n) => (n === 1 ? '1 package' : `${n} packages`),
   empty: 'No packages for these filters. Reset filters or request a quote.',
-  recommended: 'Recommended',
+  recommended: 'Popular',
   fromLabel: 'from',
+  monthSuffix: '/ month',
+  choosePlan: 'Choose plan',
+  viewDetails: 'View details',
+  viewService: 'Service page',
+  planIncludes: 'Included to start',
   startAmountNote: 'Shown amount is a start / deposit value in EUR and is credited toward the project.',
   missingTerms:
-    'Final prices, delivery times, scope, and contract terms still need business review — soft-launch checkout may be demo mode.',
-  detailBack: 'Back to shop',
+    'Listed amounts are orientation prices — final scope is confirmed in the briefing. Soft-launch may use demo checkout.',
+  detailBack: 'All plans',
+  breadcrumbShop: 'Shop',
+  relatedTitle: 'More plans in this service',
   scopeTitle: 'Scope (orientation)',
   scopeBody:
     'The package title and short blurb outline the start. Binding scope is confirmed in the post-order briefing.',
@@ -237,6 +284,7 @@ export const shopPageEn: ShopPageCopy = {
   extrasBody: 'Extras can be added in the checkout wizard.',
   ctaCheckout: 'Go to checkout',
   ctaSubscription: 'Start subscription (checkout)',
+  ctaSubscriptionShort: 'Choose subscription',
   ctaQuote: 'Request a quote',
   ctaService: 'Service page',
   quoteTitle: 'Custom quote',
@@ -250,8 +298,8 @@ export const shopPageEn: ShopPageCopy = {
   quoteHint: 'Opens your email app to info@bditec.com. No account is created and no payment is taken.',
   quoteSuccess: 'Email draft opened. Send the message to submit your request.',
   modeBadge: {
-    checkout: 'Checkout',
-    subscription: 'Subscription',
+    checkout: 'One-time',
+    subscription: 'Monthly',
     quote: 'Quote',
   },
   cartTitle: 'Cart',
@@ -263,7 +311,7 @@ export const shopPageEn: ShopPageCopy = {
   cartFull: 'Cart full (max 8)',
   cartRemove: 'Remove',
   cartClear: 'Clear',
-  cartCheckout: 'Pay cart',
+  cartCheckout: 'Proceed to checkout',
   cartOpen: 'Open cart',
   cartName: 'Name',
   cartEmail: 'Email',
@@ -292,15 +340,23 @@ export const shopPageAr: ShopPageCopy = {
   metaTitle: 'المتجر — باقات وكالة BDITEC',
   metaDescription:
     'متجر BDITEC: اطلب باقات البداية المحددة عبر الإنترنت أو اطلب عرض سعر مخصص — ويب، تسويق، SEO، استضافة، تطبيقات وأوفلاين.',
-  eyebrow: 'متجر الوكالة',
-  title: 'الباقات ومبالغ البداية',
-  lead: 'اختر باقة بداية واضحة للدفع عبر الإنترنت — أو اطلب عرض سعر للمشاريع المخصصة.',
+  eyebrow: 'خطط BDITEC',
+  title: 'الخطط والباقات',
+  lead: 'قارن خطط البداية حسب الخدمة. ادفع أونلاين للبدء — أو اطلب عرض سعر مخصص لنطاق أكبر.',
   searchLabel: 'البحث في الباقات',
   searchPlaceholder: 'مثل: تدقيق، صفحة هبوط، استضافة…',
   filterAll: 'كل الفئات',
-  filterModeLabel: 'نوع الشراء',
-  modeCheckout: 'اطلب الآن',
-  modeSubscription: 'اشتراك',
+  filterModeLabel: 'نوع الفوترة',
+  filterModeAll: 'الكل',
+  filterClear: 'مسح الفلاتر',
+  filterActiveLabel: 'الفلاتر النشطة',
+  sortLabel: 'ترتيب حسب',
+  sortPopular: 'الأكثر طلباً',
+  sortPriceAsc: 'السعر: من الأقل',
+  sortPriceDesc: 'السعر: من الأعلى',
+  sortName: 'الاسم أ–ي',
+  modeCheckout: 'مرة واحدة',
+  modeSubscription: 'شهري',
   modeQuote: 'عرض سعر',
   categories: {
     'web-design': {
@@ -330,12 +386,19 @@ export const shopPageAr: ShopPageCopy = {
   },
   results: (n) => (n === 1 ? 'باقة واحدة' : `${n} باقات`),
   empty: 'لا باقات لهذه الفلاتر. أعد الضبط أو اطلب عرض سعر.',
-  recommended: 'موصى به',
+  recommended: 'الأكثر طلباً',
   fromLabel: 'من',
+  monthSuffix: '/ شهر',
+  choosePlan: 'اختر الخطة',
+  viewDetails: 'عرض التفاصيل',
+  viewService: 'صفحة الخدمة',
+  planIncludes: 'يشمل للبداية',
   startAmountNote: 'المبلغ المعروض قيمة بداية / عربون باليورو ويُحتسب ضمن المشروع.',
   missingTerms:
-    'الأسعار النهائية وأوقات التسليم والنطاق وشروط العقد ما زالت قيد مراجعة الأعمال — قد يكون الدفع في الإطلاق التجريبي وضعاً تجريبياً.',
-  detailBack: 'العودة للمتجر',
+    'المبالغ توجيهية — النطاق النهائي يُؤكد في الإحاطة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
+  detailBack: 'كل الخطط',
+  breadcrumbShop: 'المتجر',
+  relatedTitle: 'خطط أخرى في هذه الخدمة',
   scopeTitle: 'نطاق الخدمة (توجيهي)',
   scopeBody:
     'عنوان الباقة والوصف القصير يحددان البداية. النطاق الملزم يُثبت في الإحاطة بعد الطلب.',
@@ -349,6 +412,7 @@ export const shopPageAr: ShopPageCopy = {
   extrasBody: 'يمكن إضافة الإضافات في معالج الدفع.',
   ctaCheckout: 'إلى الطلب',
   ctaSubscription: 'بدء الاشتراك (دفع)',
+  ctaSubscriptionShort: 'اختر الاشتراك',
   ctaQuote: 'طلب عرض سعر',
   ctaService: 'صفحة الخدمة',
   quoteTitle: 'عرض سعر مخصص',
@@ -362,8 +426,8 @@ export const shopPageAr: ShopPageCopy = {
   quoteHint: 'يفتح تطبيق البريد إلى info@bditec.com. لا يُنشأ حساب ولا يُؤخذ دفع.',
   quoteSuccess: 'فُتح مسودة البريد. أرسل الرسالة لإتمام الطلب.',
   modeBadge: {
-    checkout: 'دفع',
-    subscription: 'اشتراك',
+    checkout: 'مرة واحدة',
+    subscription: 'شهري',
     quote: 'عرض',
   },
   cartTitle: 'السلة',
@@ -375,7 +439,7 @@ export const shopPageAr: ShopPageCopy = {
   cartFull: 'السلة ممتلئة (حد أقصى 8)',
   cartRemove: 'إزالة',
   cartClear: 'تفريغ',
-  cartCheckout: 'ادفع السلة',
+  cartCheckout: 'المتابعة للدفع',
   cartOpen: 'فتح السلة',
   cartName: 'الاسم',
   cartEmail: 'البريد',

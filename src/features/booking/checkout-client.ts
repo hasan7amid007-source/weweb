@@ -110,7 +110,10 @@ export async function startCartCheckout(input: {
   })
   if (api) return api
 
-  // No API: check out first line via Payment Link / demo
+  // Multi-item carts require server validation — do not silently charge only the first line.
+  if (input.items.length > 1) {
+    return { mode: 'unavailable', error: 'Cart checkout unavailable' }
+  }
   return startCheckout({
     service: primary.service,
     packageId: primary.packageId,

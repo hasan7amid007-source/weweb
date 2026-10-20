@@ -158,21 +158,30 @@ export const de: Messages = {
     next: 'Weiter',
     back: 'Zurück',
     depositLabel: 'Online-Startpreis',
+    monthlyLabel: 'Monatsbetrag (Orientierung)',
     depositHint: 'Paket + Extras jetzt online starten. Weitere Leistungen später nach Bedarf.',
+    monthlyHint:
+      'Monatsbetrag ohne Werbebudget/Hosting, sofern nicht genannt. Extras sind einmalig. Abos brauchen Stripe Price IDs.',
+    extrasOnceLabel: 'Extras (einmalig)',
+    quotePackagesHeading: 'Nur auf Anfrage',
+    quotePackageCta: 'Angebot per E-Mail',
     summaryTitle: 'Ihre Bestellung',
     payCta: 'Jetzt bezahlen',
     paySecure: 'Sichere Online-Zahlung (Karte / Stripe)',
     paySecureDemo: 'Demo-Checkout — keine echte Kartenzahlung',
+    paySecurePending:
+      'Modus bestätigt der Server beim Bezahlen: Demo ohne sk_test_/sk_live_, sonst Stripe Checkout.',
     payProcessing: 'Zahlung wird vorbereitet…',
     payUnavailable:
-      'Online-Zahlung ist noch nicht konfiguriert. Bitte Stripe Payment Links in der .env setzen.',
+      'Checkout nicht möglich. Monatspakete brauchen Stripe Price IDs ohne Einmal-Extras — oder Demo/Server ist nicht erreichbar.',
     successTitle: 'Bestellung abgeschlossen',
     successBody:
       'Zahlung erhalten. Sie bekommen die Bestätigung per E-Mail — der Rest läuft digital, ohne persönlichen Termin.',
     successBodyDemo:
       'Demo-Bestellung erfasst (keine echte Belastung). Wir melden uns per E-Mail — der Rest läuft digital.',
     successAgain: 'Weitere Bestellung',
-    demoPayNote: 'Demo-Modus: keine echte Belastung. Für Live-Zahlungen Stripe Payment Links in .env hinterlegen.',
+    demoPayNote:
+      'Soft-Launch: ohne nutzbaren Stripe-Secret-Key (sk_test_…) läuft der Checkout als Demo — keine echte Belastung.',
   },
   bookingShop: bookingShopDe,
   shopPage: shopPageDe,

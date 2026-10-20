@@ -72,7 +72,9 @@ export function isAddonId(service: BookingServiceKey, id: string): boolean {
 
 export function defaultPackageId(service: BookingServiceKey): string {
   const shop = SERVICE_SHOP[service]
-  return shop.packages.find((p) => p.recommended)?.id ?? shop.packages[0]!.id
+  const payable = shop.packages.filter((p) => p.purchaseMode !== 'quote')
+  const pool = payable.length ? payable : shop.packages
+  return pool.find((p) => p.recommended)?.id ?? pool[0]!.id
 }
 
 export function calcOrderTotalEur(

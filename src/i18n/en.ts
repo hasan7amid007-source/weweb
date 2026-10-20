@@ -155,21 +155,30 @@ export const en: Messages = {
     next: 'Continue',
     back: 'Back',
     depositLabel: 'Online start price',
+    monthlyLabel: 'Monthly amount (orientation)',
     depositHint: 'Start online with a package + optional extras. More scope later as needed.',
+    monthlyHint:
+      'Monthly fee excludes ad spend/hosting unless listed. Extras are one-time. Subscriptions need Stripe Price IDs.',
+    extrasOnceLabel: 'Extras (one-time)',
+    quotePackagesHeading: 'Quote only',
+    quotePackageCta: 'Email for a quote',
     summaryTitle: 'Your order',
     payCta: 'Pay now',
     paySecure: 'Secure online payment (card / Stripe)',
     paySecureDemo: 'Demo checkout — no real card charge',
+    paySecurePending:
+      'Checkout mode is confirmed by the server when you pay: demo without sk_test_/sk_live_, otherwise Stripe Checkout.',
     payProcessing: 'Preparing payment…',
     payUnavailable:
-      'Online payment is not configured yet. Add Stripe Payment Links in .env.',
+      'Checkout unavailable. Monthly packages need Stripe Price IDs without one-time extras — or the server/demo path is unreachable.',
     successTitle: 'Order complete',
     successBody:
       'Payment received. Confirmation comes by email — everything continues digitally, with no personal appointment.',
     successBodyDemo:
       'Demo order recorded (no real charge). We will follow up by email — everything continues digitally.',
     successAgain: 'Place another order',
-    demoPayNote: 'Demo mode: no real charge. Add Stripe Payment Links in .env for live payments.',
+    demoPayNote:
+      'Soft-launch: without a usable Stripe secret key (sk_test_…) checkout stays demo — no real charge.',
   },
   bookingShop: bookingShopEn,
   shopPage: shopPageEn,

@@ -169,11 +169,17 @@ export type Messages = {
     next: string
     back: string
     depositLabel: string
+    monthlyLabel: string
     depositHint: string
+    monthlyHint: string
+    extrasOnceLabel: string
+    quotePackagesHeading: string
+    quotePackageCta: string
     summaryTitle: string
     payCta: string
     paySecure: string
     paySecureDemo: string
+    paySecurePending: string
     payProcessing: string
     payUnavailable: string
     successTitle: string

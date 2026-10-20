@@ -88,3 +88,4 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch continuity (2026-10-20, Brainum) — unusable Stripe secret → demo checkout; cart line edit deep-links; order briefing multi-line items; client demo totals/items; name/email maxlength; sitemap lastmod + llms Care/SEA; breadcrumb/focus a11y
 - [x] Demo order UX (2026-10-20) — hide Stripe portal on demo orders; briefing section first (matches next-steps)
 - [x] Soft-launch auto batch (2026-10-20) — `#booking` scroll + addon deep-link; mobile cart bar dock; invalid shop package URL cleanup + empty-filter CTA; order escapeHtml/i18n eyebrow/meta; `shop_page_view`/`shop_detail_view` analytics
+- [x] Top UX/logic fixes (2026-10-20) — server-owned success URL; subscription hard-fail; booking quote gate + Startbetrag/Monatlich badges; step-4 mode from API (`paySecurePending`), not Payment Links

@@ -1,9 +1,7 @@
 import {
   BOOKING_STORAGE_KEY,
   formatEur,
-  hasLiveStripeCheckout,
   isBookingServiceKey,
-  resolveCheckout,
   type BookingServiceKey,
 } from './catalog'
 import { startCheckout } from './checkout-client'
@@ -14,6 +12,7 @@ import {
   isAddonId,
   isPackageId,
   shopFor,
+  type PurchaseMode,
 } from './shop-catalog'
 import { type Locale, t } from '../../i18n'
 import { SERVICE_IDS, SERVICE_ICONS } from '../../data/services'
@@ -94,34 +93,45 @@ function setStep(root: HTMLElement, step: Step) {
   })
 }
 
+function packageMode(service: BookingServiceKey, packageId: string): PurchaseMode {
+  return shopFor(service).packages.find((p) => p.id === packageId)?.purchaseMode ?? 'checkout'
+}
+
 function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingServiceKey) {
   const host = root.querySelector('[data-booking-options]')
   if (!host) return
   const m = t(locale)
   const shop = m.bookingShop
+  const page = m.shopPage
   const catalog = shopFor(service)
+  const payable = catalog.packages.filter((pkg) => pkg.purchaseMode !== 'quote')
+  const quoteOnly = catalog.packages.filter((pkg) => pkg.purchaseMode === 'quote')
   const prevPkg = root.querySelector<HTMLInputElement>('input[name="package"]:checked')?.value
   const prevAddons = new Set(
     [...root.querySelectorAll<HTMLInputElement>('input[name="addon"]:checked')].map((el) => el.value),
   )
   const selectedPkg =
-    (prevPkg && isPackageId(service, prevPkg) ? prevPkg : null) || defaultPackageId(service)
+    (prevPkg && payable.some((p) => p.id === prevPkg) ? prevPkg : null) || defaultPackageId(service)
+  const selectedMode = packageMode(service, selectedPkg)
+  const allowAddons = selectedMode === 'checkout' && catalog.addons.length > 0
 
   host.innerHTML = `
     <p class="booking-step-label">${shop.packageHeading} <em>*</em></p>
     <div class="booking-option-grid" role="radiogroup" aria-label="${shop.packageHeading}">
-      ${catalog.packages
+      ${payable
         .map((pkg) => {
           const copy = shop.packages[service][pkg.id]
           const checked = pkg.id === selectedPkg
+          const period = pkg.purchaseMode === 'subscription' ? page.monthSuffix : ''
           return `
           <label class="booking-option-card">
             <input type="radio" name="package" value="${pkg.id}" required ${checked ? 'checked' : ''} />
             <span class="booking-option-card-inner">
               <span class="booking-option-top">
                 <span class="booking-option-name">${copy?.title ?? pkg.id}</span>
+                <span class="booking-option-badge">${page.modeBadge[pkg.purchaseMode]}</span>
                 ${pkg.recommended ? `<span class="booking-option-badge">${shop.recommended}</span>` : ''}
-                <span class="booking-option-price">${formatEur(pkg.priceEur, locale)}</span>
+                <span class="booking-option-price">${formatEur(pkg.priceEur, locale)}${period ? ` ${period}` : ''}</span>
               </span>
               <span class="booking-option-blurb">${copy?.blurb ?? ''}</span>
             </span>
@@ -130,7 +140,28 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
         .join('')}
     </div>
     ${
-      catalog.addons.length
+      quoteOnly.length
+        ? `
+    <p class="booking-step-label booking-step-label--spaced">${m.contact.quotePackagesHeading}</p>
+    <ul class="booking-quote-list">
+      ${quoteOnly
+        .map((pkg) => {
+          const copy = shop.packages[service][pkg.id]
+          const subject = encodeURIComponent(`BDITEC Angebot — ${service} / ${pkg.id}`)
+          const body = encodeURIComponent(
+            `Service: ${service}\nPaket: ${copy?.title ?? pkg.id}\nRichtwert: ${formatEur(pkg.priceEur, locale)}\n\nKurzbeschreibung:\n`,
+          )
+          return `<li>
+            <span>${copy?.title ?? pkg.id} · ${page.priceKindQuote} ${formatEur(pkg.priceEur, locale)}</span>
+            <a class="booking-quote-link" href="mailto:info@bditec.com?subject=${subject}&body=${body}">${m.contact.quotePackageCta}</a>
+          </li>`
+        })
+        .join('')}
+    </ul>`
+        : ''
+    }
+    ${
+      allowAddons
         ? `
     <p class="booking-step-label booking-step-label--spaced">${shop.addonsHeading}</p>
     <p class="booking-hint">${shop.addonsHint}</p>
@@ -153,7 +184,9 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
         })
         .join('')}
     </div>`
-        : ''
+        : selectedMode === 'subscription'
+          ? `<p class="booking-hint booking-step-label--spaced">${m.contact.monthlyHint}</p>`
+          : ''
     }
     <p class="booking-running-total" data-booking-total aria-live="polite"></p>
   `
@@ -162,14 +195,36 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
     const form = root.querySelector<HTMLFormElement>('#booking-form')
     if (!form) return
     const draft = readForm(form)
-    const total = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds)
+    const mode = packageMode(draft.service, draft.packageId)
+    const pkg = shopFor(draft.service).packages.find((p) => p.id === draft.packageId)
+    const packageEur = pkg?.priceEur ?? 0
+    const addonEur = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds) - packageEur
     const el = root.querySelector('[data-booking-total]')
-    if (el) {
-      el.textContent = `${shop.runningTotal}: ${formatEur(total, locale)}`
+    if (!el) return
+    if (mode === 'subscription') {
+      el.textContent = `${page.priceKindSubscription}: ${formatEur(packageEur, locale)}${page.monthSuffix}`
+      return
     }
+    const total = packageEur + Math.max(0, addonEur)
+    el.textContent = `${shop.runningTotal}: ${formatEur(total, locale)}`
   }
 
-  host.querySelectorAll('input[name="package"], input[name="addon"]').forEach((input) => {
+  const onPackageChange = () => {
+    const form = root.querySelector<HTMLFormElement>('#booking-form')
+    if (!form) return
+    const draft = readForm(form)
+    if (packageMode(draft.service, draft.packageId) !== 'checkout') {
+      form.querySelectorAll<HTMLInputElement>('input[name="addon"]').forEach((input) => {
+        input.checked = false
+      })
+    }
+    renderOptionsPanel(root, locale, service)
+  }
+
+  host.querySelectorAll('input[name="package"]').forEach((input) => {
+    input.addEventListener('change', onPackageChange)
+  })
+  host.querySelectorAll('input[name="addon"]').forEach((input) => {
     input.addEventListener('change', syncTotal)
   })
   syncTotal()
@@ -178,30 +233,42 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
 function renderSummary(root: HTMLElement, locale: Locale, draft: BookingDraft) {
   const m = t(locale)
   const shop = m.bookingShop
+  const page = m.shopPage
   const box = root.querySelector('[data-booking-summary]')
   if (!box) return
-  const total = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds)
-  const price = formatEur(total, locale)
+  const mode = packageMode(draft.service, draft.packageId)
+  const pkg = shopFor(draft.service).packages.find((p) => p.id === draft.packageId)
+  const packageEur = pkg?.priceEur ?? 0
+  const addonEur = Math.max(
+    0,
+    calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds) - packageEur,
+  )
   const addonNames = draft.addonIds.map((id) => addonLabel(locale, draft.service, id))
+  const payLabel = mode === 'subscription' ? m.contact.monthlyLabel : m.contact.depositLabel
+  const payHint = mode === 'subscription' ? m.contact.monthlyHint : m.contact.depositHint
+  const payValue =
+    mode === 'subscription'
+      ? `${formatEur(packageEur, locale)}${page.monthSuffix}`
+      : formatEur(packageEur + addonEur, locale)
   box.innerHTML = `
     <h3 class="booking-summary-title">${m.contact.summaryTitle}</h3>
     <dl class="booking-summary-list">
       <div><dt>${m.contact.serviceLabel}</dt><dd>${serviceLabel(locale, draft.service)}</dd></div>
-      <div><dt>${shop.packageLabel}</dt><dd>${packageLabel(locale, draft.service, draft.packageId)}</dd></div>
+      <div><dt>${shop.packageLabel}</dt><dd>${packageLabel(locale, draft.service, draft.packageId)} · ${page.modeBadge[mode]}</dd></div>
       ${
-        addonNames.length
-          ? `<div><dt>${shop.addonsSummary}</dt><dd>${addonNames.join(', ')}</dd></div>`
+        addonNames.length && mode === 'checkout'
+          ? `<div><dt>${m.contact.extrasOnceLabel}</dt><dd>${addonNames.join(', ')} (+${formatEur(addonEur, locale)})</dd></div>`
           : ''
       }
       <div><dt>${m.contact.nameLabel}</dt><dd>${draft.name}</dd></div>
       <div><dt>${m.contact.emailLabel}</dt><dd>${draft.email}</dd></div>
       ${draft.phone ? `<div><dt>${m.contact.phoneLabel}</dt><dd>${draft.phone}</dd></div>` : ''}
       <div class="booking-summary-pay">
-        <dt>${m.contact.depositLabel}</dt>
-        <dd><strong>${price}</strong></dd>
+        <dt>${payLabel}</dt>
+        <dd><strong>${payValue}</strong></dd>
       </div>
     </dl>
-    <p class="booking-hint">${m.contact.depositHint}</p>
+    <p class="booking-hint">${payHint}</p>
   `
 }
 
@@ -340,14 +407,11 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
   const params = new URLSearchParams(location.search)
   const paid = params.get('booking') === 'success' || params.get('paid') === '1'
   if (paid) {
-    showSuccess(
-      wizard,
-      true,
-      hasLiveStripeCheckout() ? undefined : m.contact.successBodyDemo,
-    )
+    const wasDemo = params.get('demo') === '1' || (!params.get('session_id') && params.get('paid') === '1')
+    showSuccess(wizard, true, wasDemo ? m.contact.successBodyDemo : undefined)
     trackEvent('booking_success_view', {
       locale,
-      mode: hasLiveStripeCheckout() ? 'stripe' : 'demo',
+      mode: wasDemo ? 'demo' : 'stripe',
     })
     clearDraft()
   }
@@ -382,14 +446,12 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     if (step === 4) {
       saveDraft(draft)
       renderSummary(wizard, locale, draft)
-      const checkout = resolveCheckout(draft.service, draft.email, draft.packageId)
+      // Mode is owned by /api/create-checkout (sk_test_/sk_live_ → Stripe, else demo).
+      // Do not infer live from client Payment Links.
       const demoNote = wizard.querySelector<HTMLElement>('[data-booking-demo-note]')
       const secure = wizard.querySelector<HTMLElement>('[data-booking-secure]')
-      if (demoNote) demoNote.hidden = checkout.mode !== 'demo'
-      if (secure) {
-        secure.textContent =
-          checkout.mode === 'demo' ? m.contact.paySecureDemo : m.contact.paySecure
-      }
+      if (demoNote) demoNote.hidden = false
+      if (secure) secure.textContent = m.contact.paySecurePending
     }
   }
 
@@ -460,10 +522,22 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
           return
         }
         const draft = readForm(form)
+        if (packageMode(draft.service, draft.packageId) === 'quote') {
+          form.reportValidity()
+          return
+        }
+        const mode = packageMode(draft.service, draft.packageId)
+        const addonIds = mode === 'checkout' ? draft.addonIds : []
+        if (mode !== 'checkout') {
+          form.querySelectorAll<HTMLInputElement>('input[name="addon"]').forEach((input) => {
+            input.checked = false
+          })
+        }
         trackEvent('booking_options_selected', {
           service: draft.service,
           package: draft.packageId,
-          addons: draft.addonIds.join('|') || 'none',
+          addons: addonIds.join('|') || 'none',
+          mode,
           locale,
         })
         go(3)
@@ -494,9 +568,24 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     const draft = readForm(form)
     if (!draft.service || !draft.name || !draft.email || !draft.packageId) return
 
-    saveDraft(draft)
+    const mode = packageMode(draft.service, draft.packageId)
     const payBtn = form.querySelector<HTMLButtonElement>('[data-booking-pay]')
     const err = wizard.querySelector<HTMLElement>('[data-booking-error]')
+    const secure = wizard.querySelector<HTMLElement>('[data-booking-secure]')
+    const demoNote = wizard.querySelector<HTMLElement>('[data-booking-demo-note]')
+
+    if (mode === 'quote') {
+      if (err) {
+        err.hidden = false
+        err.textContent = m.contact.payUnavailable
+      }
+      return
+    }
+
+    const addonIds = mode === 'checkout' ? draft.addonIds : []
+    const payDraft = { ...draft, addonIds }
+    saveDraft(payDraft)
+
     if (err) {
       err.hidden = true
       err.textContent = ''
@@ -506,20 +595,22 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       payBtn.textContent = m.contact.payProcessing
     }
 
-    const total = calcOrderTotalEur(draft.service, draft.packageId, draft.addonIds)
+    const total = calcOrderTotalEur(payDraft.service, payDraft.packageId, payDraft.addonIds)
     const checkout = await startCheckout({
-      service: draft.service,
-      packageId: draft.packageId,
-      addonIds: draft.addonIds,
-      email: draft.email,
-      name: draft.name,
+      service: payDraft.service,
+      packageId: payDraft.packageId,
+      addonIds: payDraft.addonIds,
+      email: payDraft.email,
+      name: payDraft.name,
       locale,
     })
 
     if (checkout.mode === 'stripe') {
+      if (secure) secure.textContent = m.contact.paySecure
+      if (demoNote) demoNote.hidden = true
       trackEvent('booking_checkout_stripe', {
-        service: draft.service,
-        package: draft.packageId,
+        service: payDraft.service,
+        package: payDraft.packageId,
         total: checkout.totalEur ?? total,
         locale,
       })
@@ -529,10 +620,12 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     }
 
     if (checkout.mode === 'demo') {
+      if (secure) secure.textContent = m.contact.paySecureDemo
+      if (demoNote) demoNote.hidden = false
       trackEvent('booking_checkout_demo', {
-        service: draft.service,
-        package: draft.packageId,
-        addons: draft.addonIds.join('|') || 'none',
+        service: payDraft.service,
+        package: payDraft.packageId,
+        addons: payDraft.addonIds.join('|') || 'none',
         total: checkout.totalEur ?? total,
         locale,
       })

@@ -154,20 +154,30 @@ export const ar: Messages = {
     next: 'متابعة',
     back: 'رجوع',
     depositLabel: 'سعر البدء أونلاين',
+    monthlyLabel: 'المبلغ الشهري (توجيهي)',
     depositHint: 'ابدأوا أونلاين بباقة وإضافات اختيارية. المزيد لاحقاً حسب الحاجة.',
+    monthlyHint:
+      'الأتعاب الشهرية بلا ميزانية إعلان/استضافة ما لم تُذكر. الإضافات لمرة واحدة. الاشتراكات تحتاج Stripe Price IDs.',
+    extrasOnceLabel: 'إضافات (مرة واحدة)',
+    quotePackagesHeading: 'بعرض سعر فقط',
+    quotePackageCta: 'طلب عرض بالبريد',
     summaryTitle: 'طلبكم',
     payCta: 'ادفع الآن',
     paySecure: 'دفع أونلاين آمن (بطاقة / Stripe)',
     paySecureDemo: 'دفع تجريبي — بلا خصم حقيقي على البطاقة',
+    paySecurePending:
+      'يؤكد الخادم وضع الدفع عند الدفع: تجريبي بدون sk_test_/sk_live_، وإلا Stripe Checkout.',
     payProcessing: 'جارٍ تجهيز الدفع…',
-    payUnavailable: 'الدفع الأونلاين غير مُعدّ بعد. أضيفوا روابط Stripe في .env.',
+    payUnavailable:
+      'الدفع غير متاح. الباقات الشهرية تحتاج Stripe Price IDs بلا إضافات لمرة واحدة — أو الخادم/العرض غير متاح.',
     successTitle: 'اكتمل الطلب',
     successBody:
       'تم استلام الدفع. التأكيد بالبريد — والمتابعة رقمية بلا موعد شخصي.',
     successBodyDemo:
       'تم تسجيل طلب تجريبي (بلا خصم حقيقي). سنتواصل بالبريد — والمتابعة رقمية.',
     successAgain: 'طلب آخر',
-    demoPayNote: 'وضع تجريبي: بلا خصم حقيقي. للدفع الحي أضيفوا روابط Stripe في .env.',
+    demoPayNote:
+      'إطلاق تجريبي: بدون مفتاح Stripe سري صالح (sk_test_…) يبقى الدفع تجريبياً — بلا خصم حقيقي.',
   },
   bookingShop: bookingShopAr,
   shopPage: shopPageAr,

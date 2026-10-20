@@ -184,6 +184,36 @@ function useSubscriptionMode(lines: ResolvedLine[]): boolean {
   )
 }
 
+function encodeCartItems(lines: ResolvedLine[]): string {
+  return lines
+    .map((l) => {
+      const base = `${l.service}:${l.packageId}`
+      return l.addonIds.length ? `${base}:${l.addonIds.join('+')}` : base
+    })
+    .join('|')
+}
+
+/** Always build order success URL from validated cart (do not trust client query fidelity). */
+function buildStripeSuccessUrl(
+  origin: string,
+  lines: ResolvedLine[],
+  totalEur: number,
+  email: string,
+  name: string,
+): string {
+  const primary = lines[0]!
+  const params = new URLSearchParams()
+  params.set('service', primary.service)
+  params.set('package', primary.packageId)
+  params.set('total', String(totalEur))
+  params.set('email', email)
+  params.set('name', name)
+  params.set('items', encodeCartItems(lines))
+  if (primary.addonIds.length) params.set('addons', primary.addonIds.join(','))
+  // Stripe requires the literal placeholder unencoded.
+  return `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&${params.toString()}`
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (!applyApiCors(req, res)) {
@@ -215,10 +245,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const locale = String(body.locale || 'de').slice(0, 5)
     const origin = originFromReq(req)
     const primary = lines[0]!
-    const successUrl = safeSameSiteUrl(
-      body.successUrl,
-      `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(primary.service)}&package=${encodeURIComponent(primary.packageId)}&total=${totalEur}&email=${encodeURIComponent(email)}`,
-    )
+    const successUrl = buildStripeSuccessUrl(origin, lines, totalEur, email, name)
     const cancelUrl = safeSameSiteUrl(body.cancelUrl, `${origin}/shop.html#cart`)
 
     const secret = (process.env.STRIPE_SECRET_KEY || '').trim()
@@ -234,15 +261,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       demoUrl.searchParams.set('total', String(totalEur))
       demoUrl.searchParams.set('email', email)
       demoUrl.searchParams.set('name', name)
-      demoUrl.searchParams.set(
-        'items',
-        lines
-          .map((l) => {
-            const base = `${l.service}:${l.packageId}`
-            return l.addonIds.length ? `${base}:${l.addonIds.join('+')}` : base
-          })
-          .join('|'),
-      )
+      demoUrl.searchParams.set('items', encodeCartItems(lines))
       if (primary.addonIds.length) demoUrl.searchParams.set('addons', primary.addonIds.join(','))
       return res.status(200).json({
         mode: 'demo',
@@ -253,9 +272,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     }
 
+    const hasSubscriptionLine = lines.some((line) => line.purchaseMode === 'subscription')
+    const subscriptionMode = useSubscriptionMode(lines)
+    if (hasSubscriptionLine && !subscriptionMode) {
+      return res.status(400).json({
+        error: 'Subscription checkout unavailable',
+        detail:
+          'Monthly packages need Stripe recurring Price IDs (STRIPE_PRICE_*) and cannot be mixed with one-time add-ons or one-time packages in the same cart.',
+      })
+    }
+
     const { default: Stripe } = await import('stripe')
     const stripe = new Stripe(secret)
-    const subscriptionMode = useSubscriptionMode(lines)
     const checkoutMode = subscriptionMode ? 'subscription' : 'payment'
 
     const line_items = lines.flatMap((line) => {
@@ -309,7 +337,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ...(checkoutMode === 'payment' ? { customer_creation: 'always' as const } : {}),
       metadata: {
         itemCount: String(lines.length),
-        items: lines.map((l) => `${l.service}:${l.packageId}`).join('|').slice(0, 450),
+        items: encodeCartItems(lines).slice(0, 450),
         customerName: name.slice(0, 200),
         locale,
         totalEur: String(totalEur),

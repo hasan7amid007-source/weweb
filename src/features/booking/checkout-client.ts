@@ -1,5 +1,4 @@
 import type { BookingServiceKey } from './catalog'
-import { resolveCheckout } from './catalog'
 import { calcOrderTotalEur } from './shop-catalog'
 import type { CartLine } from '../shop/cart'
 
@@ -49,12 +48,11 @@ async function postCheckout(payload: Record<string, unknown>): Promise<CheckoutR
 }
 
 /**
- * Prefer server /api/create-checkout (validated totals).
- * Fall back to Payment Links, then demo.
+ * Prefer server /api/create-checkout (validated totals + server-owned success URL).
+ * Fall back to local demo only (Payment Links no longer used as live signal).
  */
 export async function startCheckout(req: CheckoutRequest): Promise<CheckoutResult> {
   const origin = window.location.origin
-  const successUrl = `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(req.service)}&package=${encodeURIComponent(req.packageId)}`
   const cancelUrl = `${origin}/?service=${encodeURIComponent(req.service)}&package=${encodeURIComponent(req.packageId)}#booking`
 
   const api = await postCheckout({
@@ -64,14 +62,9 @@ export async function startCheckout(req: CheckoutRequest): Promise<CheckoutResul
     email: req.email,
     name: req.name,
     locale: req.locale,
-    successUrl,
     cancelUrl,
   })
   if (api) return api
-
-  const link = resolveCheckout(req.service, req.email, req.packageId)
-  if (link.mode === 'stripe') return { mode: 'stripe', url: link.url }
-  if (link.mode === 'unavailable') return { mode: 'unavailable' }
 
   const totalEur = calcOrderTotalEur(req.service, req.packageId, req.addonIds)
   const demoId = `demo_${Date.now().toString(36)}`
@@ -102,7 +95,6 @@ export async function startCartCheckout(input: {
   if (!input.items.length) return { mode: 'unavailable', error: 'Cart is empty' }
   const origin = window.location.origin
   const primary = input.items[0]!
-  const successUrl = `${origin}/order.html?session_id={CHECKOUT_SESSION_ID}&service=${encodeURIComponent(primary.service)}&package=${encodeURIComponent(primary.packageId)}`
   const cancelUrl = `${origin}/shop.html#cart`
 
   const api = await postCheckout({
@@ -114,7 +106,6 @@ export async function startCartCheckout(input: {
     email: input.email,
     name: input.name,
     locale: input.locale,
-    successUrl,
     cancelUrl,
   })
   if (api) return api

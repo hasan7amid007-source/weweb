@@ -2,7 +2,7 @@ import './styles/site.css'
 import './features/hero/hero.css'
 import './styles/effects.css'
 import { SERVICE_ICONS, SERVICE_IDS } from './data/services'
-import { fromPriceEur } from './features/booking/shop-catalog'
+import { fromPriceEur, shopServiceHref } from './features/booking/shop-catalog'
 import { formatEur } from './features/booking/catalog'
 import { initTelemetry } from './lib/telemetry'
 import { initAccordions } from './features/accordion'
@@ -172,7 +172,7 @@ function render(locale: Locale) {
             const tone = (i % 6) + 1
             const from = fromPriceEur(id)
             return `
-            <a class="svc-fw-card tone-${tone}" href="/shop.html?service=${encodeURIComponent(id)}" style="--fw-i:${i}">
+            <a class="svc-fw-card tone-${tone}" href="${shopServiceHref(id)}" style="--fw-i:${i}">
               <div class="svc-fw-head">
                 <span class="svc-fw-num">${n}</span>
                 <span class="svc-fw-icon" aria-hidden="true">

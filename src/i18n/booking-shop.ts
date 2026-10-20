@@ -33,8 +33,8 @@ export const bookingShopDe: BookingShopCopy = {
       },
       briefing: {
         title: 'Briefing',
-        blurb: 'Ziele, Scope und Empfehlung',
-        highlights: ['Ziele & Scope', 'Empfehlung dokumentiert', 'Digitales Briefing'],
+        blurb: 'Ziele, Leistungsumfang und Empfehlung',
+        highlights: ['Ziele & Leistungsumfang', 'Empfehlung dokumentiert', 'Digitales Briefing'],
       },
       roadmap: {
         title: 'Roadmap',
@@ -55,7 +55,7 @@ export const bookingShopDe: BookingShopCopy = {
       },
       care: {
         title: 'Care',
-        blurb: 'Wartung mit Stunden-Deckel (Hosting separat)',
+        blurb: 'Wartung mit enthaltenem Zeitkontingent (Hosting separat)',
         highlights: [
           'Updates & Backups',
           'Sicherheits-Checks',
@@ -95,7 +95,7 @@ export const bookingShopDe: BookingShopCopy = {
       scale: {
         title: 'Scale',
         blurb: 'Erweitertes Produkt-Setup',
-        highlights: ['Erweitertes Setup', 'Mehr Integrationen', 'Wachstums-Scope', 'Angebot zur Feinabstimmung'],
+        highlights: ['Erweitertes Setup', 'Mehr Integrationen', 'Wachstumsvorbereitung', 'Angebot zur Feinabstimmung'],
       },
     },
     'web-development': {
@@ -107,12 +107,18 @@ export const bookingShopDe: BookingShopCopy = {
       business: {
         title: 'Business',
         blurb: 'Mehrseitige Firmenwebsite',
-        highlights: ['Mehrseitige Struktur', 'CMS-fähige Basis', 'Tech-SEO Grundlagen', 'Analytics-Start', 'Digitales Briefing'],
+        highlights: [
+          'Mehrseitige Struktur',
+          'CMS-fähige Basis',
+          'Tech-SEO Grundlagen',
+          'Messung / Analytics Einrichtung',
+          'Digitales Briefing',
+        ],
       },
       custom: {
         title: 'Custom',
         blurb: 'Individuelle Web-App',
-        highlights: ['Individueller Scope', 'App- / Datenmodell Start', 'Schnittstellen möglich', 'Angebot zur Feinabstimmung'],
+        highlights: ['Individueller Leistungsumfang', 'App- / Datenmodell Start', 'Schnittstellen möglich', 'Angebot zur Feinabstimmung'],
       },
     },
     'e-commerce': {
@@ -129,7 +135,7 @@ export const bookingShopDe: BookingShopCopy = {
       scale: {
         title: 'Scale',
         blurb: 'Erweiterter Shop-Stack',
-        highlights: ['Erweiterter Stack', 'Versand & Regeln', 'Wachstums-Scope', 'Angebot zur Feinabstimmung'],
+        highlights: ['Erweiterter Stack', 'Versand & Regeln', 'Wachstumsvorbereitung', 'Angebot zur Feinabstimmung'],
       },
     },
     'digital-marketing': {
@@ -141,11 +147,16 @@ export const bookingShopDe: BookingShopCopy = {
       campaign: {
         title: 'Campaign',
         blurb: 'Kampagnen-Startpaket',
-        highlights: ['Kampagnen-Start', 'Konten & Tracking Start', 'Content-Grundlage', 'Digitales Briefing'],
+        highlights: [
+          'Kampagnen-Start',
+          'Werbekonten und Conversion-Messung einrichten',
+          'Content-Grundlage',
+          'Digitales Briefing',
+        ],
       },
       sea: {
         title: 'SEA Start',
-        blurb: 'Leichte Google-Ads-Betreuung (Stunden-Deckel)',
+        blurb: 'Leichte Google-Ads-Betreuung (enthaltenes Zeitkontingent)',
         highlights: [
           'Begrenzte Optimierungsstunden / Monat',
           'Kampagnen-Check & Reporting',
@@ -162,7 +173,7 @@ export const bookingShopDe: BookingShopCopy = {
           'Technische Basis-Checks',
           'Google-Unternehmensprofil Pflege',
           'Monatsbericht',
-          'Orientierungspreis — Scope im Briefing',
+          'Orientierungspreis — Leistungsumfang im Briefing',
         ],
       },
       social: {
@@ -278,7 +289,7 @@ export const bookingShopEn: BookingShopCopy = {
       },
       care: {
         title: 'Care',
-        blurb: 'Maintenance with hour cap (hosting separate)',
+        blurb: 'Maintenance with included time allowance (hosting separate)',
         highlights: [
           'Updates & backups',
           'Security checks',
@@ -318,7 +329,7 @@ export const bookingShopEn: BookingShopCopy = {
       scale: {
         title: 'Scale',
         blurb: 'Expanded product setup',
-        highlights: ['Expanded setup', 'More integrations', 'Growth scope', 'Quote for fine-tuning'],
+        highlights: ['Expanded setup', 'More integrations', 'Growth preparation', 'Quote for fine-tuning'],
       },
     },
     'web-development': {
@@ -330,12 +341,18 @@ export const bookingShopEn: BookingShopCopy = {
       business: {
         title: 'Business',
         blurb: 'Multi-page company site',
-        highlights: ['Multi-page structure', 'CMS-ready base', 'Tech-SEO foundations', 'Analytics start', 'Digital briefing'],
+        highlights: [
+          'Multi-page structure',
+          'CMS-ready base',
+          'Tech-SEO foundations',
+          'Analytics / measurement setup',
+          'Digital briefing',
+        ],
       },
       custom: {
         title: 'Custom',
         blurb: 'Tailored web app',
-        highlights: ['Custom scope', 'App / data model start', 'Integrations possible', 'Quote for fine-tuning'],
+        highlights: ['Custom deliverables', 'App / data model start', 'Integrations possible', 'Quote for fine-tuning'],
       },
     },
     'e-commerce': {
@@ -352,7 +369,7 @@ export const bookingShopEn: BookingShopCopy = {
       scale: {
         title: 'Scale',
         blurb: 'Extended shop stack',
-        highlights: ['Extended stack', 'Shipping & rules', 'Growth scope', 'Quote for fine-tuning'],
+        highlights: ['Extended stack', 'Shipping & rules', 'Growth preparation', 'Quote for fine-tuning'],
       },
     },
     'digital-marketing': {
@@ -364,11 +381,16 @@ export const bookingShopEn: BookingShopCopy = {
       campaign: {
         title: 'Campaign',
         blurb: 'Campaign start pack',
-        highlights: ['Campaign kickoff', 'Accounts & tracking start', 'Content foundation', 'Digital briefing'],
+        highlights: [
+          'Campaign kickoff',
+          'Ad accounts and conversion measurement setup',
+          'Content foundation',
+          'Digital briefing',
+        ],
       },
       sea: {
         title: 'SEA Start',
-        blurb: 'Light Google Ads care (hour-capped)',
+        blurb: 'Light Google Ads care (included time allowance)',
         highlights: [
           'Limited optimisation hours / month',
           'Campaign check & reporting',
@@ -385,7 +407,7 @@ export const bookingShopEn: BookingShopCopy = {
           'Technical baseline checks',
           'Google Business Profile care',
           'Monthly report',
-          'Orientation price — scope in briefing',
+          'Orientation price — deliverables in briefing',
         ],
       },
       social: {

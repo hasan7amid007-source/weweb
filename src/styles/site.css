@@ -1128,6 +1128,173 @@ body.nav-open .nav-toggle-bars::after {
   background: #fff5fa;
 }
 
+.shop-plan-amount--quote {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.shop-cart-split {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #e4e2ea;
+  background: var(--paper, #f7f6f9);
+}
+
+.shop-cart-split div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.92rem;
+}
+
+.shop-cart-split dt {
+  margin: 0;
+  color: #555560;
+}
+
+.shop-cart-split dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.shop-quote-email {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.shop-quote-summary {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border: 1px dashed #d2cfd8;
+  background: #fafafb;
+  white-space: pre-wrap;
+  font: inherit;
+  font-size: 0.85rem;
+  max-height: 12rem;
+  overflow: auto;
+}
+
+.shop-quote-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+}
+
+.shop-taxonomy-note {
+  max-width: 42rem;
+  margin: 0.75rem 0 0;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.shop-note--gate,
+.shop-note--warn {
+  color: #6a4a12;
+  background: #fff8eb;
+  border: 1px solid #f0d9a8;
+  padding: 0.55rem 0.7rem;
+}
+
+.shop-compare-pick {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.65rem 0 0;
+  font-size: 0.82rem;
+  color: #555560;
+  cursor: pointer;
+}
+
+.shop-compare-dock {
+  position: sticky;
+  bottom: 0.75rem;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 1rem auto;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e4e2ea;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(13, 13, 15, 0.08);
+}
+
+.shop-compare-panel {
+  margin: 1rem auto 2rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e4e2ea;
+  background: var(--paper, #f7f6f9);
+}
+
+.shop-compare-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.shop-compare-table-wrap {
+  overflow-x: auto;
+}
+
+.shop-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.shop-compare-table th,
+.shop-compare-table td {
+  border: 1px solid #e4e2ea;
+  padding: 0.55rem 0.65rem;
+  text-align: start;
+  vertical-align: top;
+}
+
+.shop-compare-price {
+  font-weight: 700;
+  color: var(--pink);
+}
+
+.shop-after {
+  margin: 0 0 1.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e4e2ea;
+  background: var(--paper, #f7f6f9);
+}
+
+.shop-after-order {
+  margin: 0.5rem 0 0;
+  padding-inline-start: 1.2rem;
+  line-height: 1.55;
+}
+
+@media print {
+  .shop-cart-bar,
+  .shop-toolbar,
+  header.site-header,
+  footer.site-footer,
+  .shop-quote,
+  .shop-cart,
+  .shop-compare-dock,
+  .shop-compare-pick,
+  .shop-detail-actions .glowborder,
+  [data-shop-print] {
+    display: none !important;
+  }
+
+  .shop-buybox {
+    break-inside: avoid;
+  }
+}
+
 .booking-quote-link {
   font-weight: 600;
   color: var(--pink, #e91e8c);
@@ -4361,19 +4528,113 @@ html[dir='rtl'] .brand {
 }
 
 .shop-quote {
-  margin-top: 2.5rem;
-  padding: 1.75rem 0 1rem;
+  margin-top: 2.75rem;
+  padding: 2rem 0 1.25rem;
   border-top: 1px solid #e4e2ea;
 }
 
-.shop-quote h2 {
-  margin: 0 0 0.5rem;
+.shop-quote-panel {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .shop-quote-panel {
+    grid-template-columns: minmax(16rem, 0.95fr) minmax(0, 1.35fr);
+    gap: 2rem;
+  }
+}
+
+.shop-quote-aside {
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  background:
+    linear-gradient(160deg, rgba(91, 46, 245, 0.06), transparent 55%),
+    #f7f6f9;
+  border: 1px solid #e4e2ea;
+}
+
+.shop-quote-eyebrow {
+  margin: 0 0 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6a5a8a;
+}
+
+.shop-quote-aside h2 {
+  margin: 0 0 0.65rem;
   font-family: 'Bodoni Moda', Georgia, serif;
+  font-size: clamp(1.55rem, 2.8vw, 2rem);
+  line-height: 1.2;
+}
+
+.shop-quote-lead {
+  margin: 0 0 1.25rem;
+  color: #555560;
+  line-height: 1.55;
+  max-width: 34rem;
+}
+
+.shop-quote-aside-title {
+  margin: 0 0 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2c2c36;
+}
+
+.shop-quote-steps {
+  margin: 0 0 1rem;
+  padding-inline-start: 1.15rem;
+  color: #3a3a44;
+  line-height: 1.55;
+}
+
+.shop-quote-steps li + li {
+  margin-top: 0.45rem;
+}
+
+.shop-quote-note {
+  margin: 0 0 0.85rem;
+  color: #6a6a75;
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 .shop-quote-form {
-  max-width: 36rem;
-  margin-top: 1rem;
+  margin: 0;
+  max-width: none;
+}
+
+.shop-quote-selected {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0 0 0.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #e4e2ea;
+  background: #fafafb;
+}
+
+.shop-quote-selected-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6a6a75;
+}
+
+.shop-quote-selected strong {
+  font-size: 0.98rem;
+  color: #2c2c36;
+}
+
+.shop-quote-field-hint {
+  margin: 0;
+  color: #6a6a75;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .shop-quote-ok {

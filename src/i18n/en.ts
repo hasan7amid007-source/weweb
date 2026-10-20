@@ -158,22 +158,21 @@ export const en: Messages = {
     monthlyLabel: 'Monthly amount (orientation)',
     depositHint: 'Start online with a package + optional extras. More scope later as needed.',
     monthlyHint:
-      'Monthly fee excludes ad spend/hosting unless listed. Extras are one-time. Subscriptions need Stripe Price IDs.',
+      'Monthly fee excludes ad spend/hosting unless listed. Extras are one-time and cannot be combined with monthly packages.',
     extrasOnceLabel: 'Extras (one-time)',
     quotePackagesHeading: 'Quote only',
     quotePackageCta: 'Email for a quote',
     quoteMailtoSubject: 'BDITEC quote — {{service}} / {{package}}',
     quoteMailtoBody:
-      'Service: {{service}}\nPackage: {{title}}\nIndicative: {{price}}\n\nShort description:\n',
+      'Service: {{service}}\nPackage: {{title}}\nPrice: on request\n\nShort description:\n',
     summaryTitle: 'Your order',
     payCta: 'Pay now',
     paySecure: 'Secure online payment (card / Stripe)',
     paySecureDemo: 'Demo checkout — no real card charge',
     paySecurePending:
-      'Checkout mode is confirmed by the server when you pay: demo without sk_test_/sk_live_, otherwise Stripe Checkout.',
+      'The server confirms at payment whether demo (no real card charge) or Stripe Checkout is active.',
     payProcessing: 'Preparing payment…',
-    payUnavailable:
-      'Checkout unavailable. Monthly packages need Stripe Price IDs without one-time extras — or the server/demo path is unreachable.',
+    payUnavailable: 'Online booking is currently unavailable. Please request a quote.',
     successTitle: 'Order complete',
     successBody:
       'Payment received. Confirmation comes by email — everything continues digitally, with no personal appointment.',
@@ -181,7 +180,7 @@ export const en: Messages = {
       'Demo order recorded (no real charge). We will follow up by email — everything continues digitally.',
     successAgain: 'Place another order',
     demoPayNote:
-      'Soft-launch: without a usable Stripe secret key (sk_test_…) checkout stays demo — no real charge.',
+      'Soft-launch: checkout may run as demo — no real card charge. Demo orders are clearly labeled.',
   },
   bookingShop: bookingShopEn,
   shopPage: shopPageEn,
@@ -192,7 +191,7 @@ export const en: Messages = {
     related: 'More services',
     cta: 'Order online',
     ctaSecondary: 'Go to checkout',
-    ctaShop: 'Packages in the shop',
+    ctaShop: 'View packages',
     overview: 'Overview',
     details: 'Learn more',
     included: 'What’s included',

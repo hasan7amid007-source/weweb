@@ -38,6 +38,7 @@ export type ShopPageCopy = {
   priceKindCheckout: string
   priceKindSubscription: string
   priceKindQuote: string
+  priceOnRequest: string
   vatNote: string
   missingTerms: string
   detailBack: string
@@ -59,14 +60,29 @@ export type ShopPageCopy = {
   ctaService: string
   quoteTitle: string
   quoteLead: string
+  quoteEyebrow: string
+  quoteAsideTitle: string
+  quoteSteps: string[]
+  quoteResponseNote: string
+  quoteSelectedPackage: string
   quoteName: string
   quoteEmail: string
   quotePhone: string
+  quoteCompany: string
   quoteService: string
+  quoteBudget: string
+  quoteBudgetOptions: { value: string; label: string }[]
+  quoteTiming: string
+  quoteTimingOptions: { value: string; label: string }[]
   quoteMessage: string
+  quoteMessageHint: string
   quoteSubmit: string
   quoteHint: string
   quoteSuccess: string
+  quoteEmailVisible: string
+  quoteCopySummary: string
+  quoteCopied: string
+  quoteCopyFailed: string
   modeBadge: Record<PurchaseMode, string>
   cartTitle: string
   cartEmpty: string
@@ -81,6 +97,10 @@ export type ShopPageCopy = {
   subscriptionNoExtras: string
   cartRemove: string
   cartEdit: string
+  cartViewPackage: string
+  cartOnceLabel: string
+  cartMonthlyLabel: string
+  cartMixedBilling: string
   cartClear: string
   cartCheckout: string
   cartOpen: string
@@ -89,6 +109,21 @@ export type ShopPageCopy = {
   cartPayHint: string
   cartProcessing: string
   cartError: string
+  checkoutUnavailable: string
+  termsGateNote: string
+  orientationAmountNote: string
+  afterOrderTitle: string
+  afterOrderSteps: string[]
+  afterOrderNote: string
+  printSummary: string
+  compareAdd: string
+  compareOpen: string
+  compareClear: string
+  compareClose: string
+  compareTitle: string
+  compareFeature: string
+  compareCount: (n: number) => string
+  taxonomyNote: string
   faqTitle: string
   faq: { q: string; a: string }[]
 }
@@ -99,7 +134,7 @@ export const shopPageDe: ShopPageCopy = {
     'BDITEC Shop: feste Startpakete online bestellen oder individuelles Angebot anfragen — Web, Marketing, SEO, Hosting, Apps und Offline.',
   eyebrow: 'BDITEC Plans',
   title: 'Pläne & Pakete',
-  lead: 'Starterpläne nach Service vergleichen. Online starten und bezahlen — oder für größeren Scope ein individuelles Angebot anfragen.',
+  lead: 'Starterpläne nach Service vergleichen. Online starten und bezahlen — oder für größeren Leistungsumfang ein individuelles Angebot anfragen.',
   searchLabel: 'Pakete suchen',
   searchPlaceholder: 'z. B. Audit, Landing, Hosting…',
   filterAll: 'Alle Kategorien',
@@ -143,7 +178,7 @@ export const shopPageDe: ShopPageCopy = {
   },
   results: (n) => (n === 1 ? '1 Paket' : `${n} Pakete`),
   empty: 'Keine Pakete für diese Filter. Filter zurücksetzen oder Angebot anfragen.',
-  recommended: 'Beliebt',
+  recommended: 'Empfohlen',
   fromLabel: 'ab',
   monthSuffix: '/ Monat',
   choosePlan: 'Plan wählen',
@@ -151,29 +186,32 @@ export const shopPageDe: ShopPageCopy = {
   viewService: 'Zur Service-Seite',
   planIncludes: 'Enthalten im Start',
   planIncludesSubscription: 'Orientierung (monatlich)',
-  startAmountNote: 'Angezeigter Betrag ist ein Start-/Anzahlungswert in EUR und wird auf das Projekt angerechnet — kein Festpreis für das Gesamtprojekt.',
+  startAmountNote:
+    'Angezeigter Betrag ist ein Start-/Anzahlungswert in EUR und wird auf das Projekt angerechnet — kein Festpreis für das Gesamtprojekt.',
   subscriptionAmountNote:
-    'Monatsbetrag (Orientierung, zzgl. MwSt.). Werbebudget, Hosting und Lizenzen nur wenn ausdrücklich genannt. Soft-Launch kann Demo-Checkout nutzen.',
-  quoteAmountNote: 'Richtwert für die Anfrage — verbindliches Angebot folgt nach Briefing.',
+    'Monatsbetrag (Orientierung). Werbebudget, Hosting und Lizenzen nur wenn ausdrücklich genannt.',
+  quoteAmountNote:
+    'Preis auf Anfrage — der Leistungsumfang wird vor der Bestellung im Angebot geklärt. Kein Online-Kauf für dieses Paket.',
   priceKindCheckout: 'Startbetrag',
   priceKindSubscription: 'pro Monat',
-  priceKindQuote: 'Richtwert',
-  vatNote: 'Alle Beträge in EUR zzgl. MwSt., sofern nicht anders angegeben.',
+  priceKindQuote: 'Auf Anfrage',
+  priceOnRequest: 'Preis auf Anfrage',
+  vatNote: 'Alle Beträge in EUR zzgl. MwSt., sofern nicht anders angegeben (B2B-Hinweis — bitte bei Bedarf rechtlich prüfen).',
   missingTerms:
-    'Preise und Konditionen sind Orientierungswerte (kein Festpreis wie bei manchen Agenturen) — finale Vereinbarung im Briefing. Soft-Launch kann Demo-Checkout nutzen.',
+    'Angezeigte Beträge sind Orientierungswerte, kein Agentur-Festpreis. Der aufgelistete Leistungsumfang gilt als Orientierung vor der Bestellung; Feinabstimmung im Briefing.',
   detailBack: 'Alle Pläne',
   breadcrumbNav: 'Brotkrumen',
   breadcrumbShop: 'Shop',
   relatedTitle: 'Weitere Pläne in diesem Service',
   scopeTitle: 'Leistungsumfang (Orientierung)',
   scopeBody:
-    'Der gewählte Paket-Titel und die Kurzbeschreibung skizzieren den Start. Der verbindliche Scope wird im Briefing nach der Bestellung festgehalten.',
+    'Die aufgelisteten Punkte beschreiben den Orientierungs-Leistungsumfang vor der Bestellung. Feinabstimmung folgt im Briefing — ohne dass hier feste Mindestlaufzeiten oder Kündigungsfristen zugesichert werden.',
   exclusionsTitle: 'Nicht automatisch enthalten',
   exclusionsBody:
     'Medienbudget, Drittanbieter-Lizenzen, Sonderwünsche außerhalb des Pakets und laufende Werbekosten sind nicht pauschal enthalten — Details im Briefing.',
   deliveryTitle: 'Ablauf & Lieferung',
   deliveryBody:
-    'Nach Zahlung bzw. Angebotsannahme folgt ein digitales Briefing und die Datei-/Zugangsabbfrage. Konkrete Termine werden dann vereinbart — keine festen Lieferzeiten auf dieser Seite.',
+    'Nach Zahlung bzw. Angebotsannahme folgt ein digitales Briefing und die Datei-/Zugangsabfrage. Konkrete Termine werden dann vereinbart — keine festen Lieferzeiten auf dieser Seite.',
   extrasTitle: 'Optionale Extras',
   extrasBody: 'Extras können im Checkout-Assistenten ergänzt werden.',
   ctaCheckout: 'Zur Bestellung',
@@ -181,16 +219,51 @@ export const shopPageDe: ShopPageCopy = {
   ctaSubscriptionShort: 'Abo wählen',
   ctaQuote: 'Angebot anfragen',
   ctaService: 'Service-Seite',
-  quoteTitle: 'Individuelles Angebot',
-  quoteLead: 'Beschreiben Sie kurz Ihr Vorhaben — wir antworten per E-Mail. Keine Zahlung in diesem Schritt.',
+  quoteTitle: 'Individuelles Angebot anfragen',
+  quoteLead:
+    'Für individuelle Projekte und Monats-Pakete ohne Sofortkauf: kurz beschreiben, was Sie brauchen — wir antworten per E-Mail. In diesem Schritt findet keine Zahlung statt.',
+  quoteEyebrow: 'BDITEC Anfrage',
+  quoteAsideTitle: 'So läuft die Anfrage',
+  quoteSteps: [
+    'Formular ausfüllen — Paket und Bereich werden mitgeschickt, wenn ausgewählt',
+    'E-Mail-Entwurf prüfen und absenden (oder Zusammenfassung kopieren)',
+    'Wir melden uns mit Rückfragen oder einem konkreten Angebot',
+  ],
+  quoteResponseNote:
+    'Keine festen Antwortzeiten auf dieser Seite. Ohne abgesendete E-Mail ist die Anfrage nicht bei uns eingegangen.',
+  quoteSelectedPackage: 'Gewähltes Paket',
   quoteName: 'Name',
   quoteEmail: 'E-Mail',
   quotePhone: 'Telefon (optional)',
-  quoteService: 'Bereich',
-  quoteMessage: 'Kurzbeschreibung',
-  quoteSubmit: 'Anfrage per E-Mail öffnen',
-  quoteHint: 'Öffnet Ihr E-Mail-Programm an info@bditec.com. Es wird kein Konto angelegt und keine Zahlung ausgeführt.',
-  quoteSuccess: 'E-Mail-Entwurf geöffnet. Senden Sie die Nachricht ab, um die Anfrage zu übermitteln.',
+  quoteCompany: 'Unternehmen (optional)',
+  quoteService: 'Leistungsbereich',
+  quoteBudget: 'Budgetrahmen (optional, Orientierung)',
+  quoteBudgetOptions: [
+    { value: '', label: 'Noch offen' },
+    { value: 'under-1k', label: 'Unter 1.000 €' },
+    { value: '1k-3k', label: 'ca. 1.000–3.000 €' },
+    { value: '3k-8k', label: 'ca. 3.000–8.000 €' },
+    { value: '8k-plus', label: 'Über 8.000 €' },
+  ],
+  quoteTiming: 'Zeitrahmen (optional)',
+  quoteTimingOptions: [
+    { value: '', label: 'Noch offen' },
+    { value: 'asap', label: 'So bald wie sinnvoll' },
+    { value: '1-3m', label: 'In 1–3 Monaten' },
+    { value: 'later', label: 'Später / Planung' },
+  ],
+  quoteMessage: 'Projektbeschreibung',
+  quoteMessageHint:
+    'Ziele, Ist-Zustand, gewünschte Ergebnisse — je klarer, desto gezielter die Rückmeldung. Keine Passwörter oder Zugangsdaten hier eintragen.',
+  quoteSubmit: 'Anfrage per E-Mail vorbereiten',
+  quoteHint:
+    'Öffnet Ihr E-Mail-Programm mit vorausgefülltem Text. Gesendet ist die Anfrage erst, wenn Sie die E-Mail absenden. Es wird kein Konto angelegt.',
+  quoteSuccess:
+    'Entwurf vorbereitet. Bitte die E-Mail absenden — oder die Zusammenfassung kopieren und an info@bditec.com senden.',
+  quoteEmailVisible: 'Direkt an',
+  quoteCopySummary: 'Zusammenfassung kopieren',
+  quoteCopied: 'Kopiert',
+  quoteCopyFailed: 'Kopieren nicht möglich — bitte manuell markieren',
   modeBadge: {
     checkout: 'Startbetrag',
     subscription: 'Monatlich',
@@ -207,31 +280,68 @@ export const shopPageDe: ShopPageCopy = {
   buyboxTotal: 'Zwischensumme',
   extrasSelectHint: 'Optionale Extras — Betrag aktualisiert sich sofort.',
   subscriptionNoExtras:
-    'Monatspakete ohne einmalige Extras im Warenkorb — Add-ons nur bei Startbetrag-Paketen.',
+    'Monatspakete ohne einmalige Extras im Warenkorb — Extras nur bei Startbetrag-Paketen.',
   cartRemove: 'Entfernen',
   cartEdit: 'Extras bearbeiten',
+  cartViewPackage: 'Paket ansehen',
+  cartOnceLabel: 'Einmalig jetzt',
+  cartMonthlyLabel: 'Monatlich',
+  cartMixedBilling:
+    'Einmalige und monatliche Pakete können nicht in einem Checkout kombiniert werden. Bitte den Warenkorb auf eine Kaufart beschränken oder ein Angebot anfragen.',
   cartClear: 'Leeren',
   cartCheckout: 'Zur Kasse',
   cartOpen: 'Warenkorb öffnen',
   cartName: 'Name',
   cartEmail: 'E-Mail',
   cartPayHint:
-    'Beträge werden serverseitig geprüft. Ohne Stripe-Schlüssel läuft der Soft-Launch als Demo.',
+    'Beträge prüft der Server. Soft-Launch: ohne echte Kartenzahlung erscheint ein klar gekennzeichneter Demo-Auftrag.',
   cartProcessing: 'Checkout wird vorbereitet…',
   cartError: 'Checkout fehlgeschlagen. Bitte erneut versuchen oder Angebot anfragen.',
+  checkoutUnavailable:
+    'Die Online-Buchung ist derzeit nicht verfügbar. Bitte fragen Sie ein Angebot an.',
+  termsGateNote:
+    'Online-Kauf für dieses Monats-Paket ist vorübergehend nur über Angebot möglich — bis Mindestlaufzeit, Kündigung und verbindlicher Leistungsumfang freigegeben sind. Der angezeigte Betrag ist Orientierung.',
+  orientationAmountNote: 'Orientierungsbetrag — noch kein Online-Checkout für dieses Paket.',
+  afterOrderTitle: 'Nach der Bestellung',
+  afterOrderSteps: [
+    'Bestätigung / Demo-Kennzeichnung erhalten',
+    'Digitales Briefing und benötigte Dateien/Zugänge (keine Passwörter in Formularen)',
+    'Abstimmung des Leistungsumfangs',
+    'Umsetzung und Rückmeldung',
+  ],
+  afterOrderNote:
+    'Eine Aufruf der Erfolgsseite allein beweist keine Zahlung. Demo-Aufträge sind klar gekennzeichnet. Liefertermine starten erst nach abgestimmtem Briefing — sofern nicht anders vereinbart.',
+  printSummary: 'Zusammenfassung drucken',
+  compareAdd: 'Vergleichen',
+  compareOpen: 'Vergleich öffnen',
+  compareClear: 'Auswahl leeren',
+  compareClose: 'Schließen',
+  compareTitle: 'Paketvergleich',
+  compareFeature: 'Punkt',
+  compareCount: (n) => `${n} Pakete ausgewählt (max. 3)`,
+  taxonomyNote:
+    'Hinweis: Shops (E-Commerce) liegen unter der Filterkategorie „Webdesign & Entwicklung“. SEO-Pakete nutzen den Filter „SEO & Analytics“, gehören aber zum Service Digitales Marketing.',
   faqTitle: 'Shop FAQ',
   faq: [
     {
       q: 'Was bedeuten die Startbeträge?',
-      a: 'Einmalige Pakete zeigen einen Online-Start-/Anzahlungswert — kein Festpreis für das Gesamtprojekt. Monatliche Pakete (Care, SEA Start, SEO Pflege, Social) sind Orientierungshonorare pro Monat; Werbebudget und Hosting sind nur inklusive, wenn ausdrücklich genannt.',
+      a: 'Einmalige Pakete zeigen einen Online-Start-/Anzahlungswert — kein Festpreis für das Gesamtprojekt. Monatliche Pakete sind Orientierungshonorare pro Monat; Werbebudget und Hosting sind nur inklusive, wenn ausdrücklich genannt.',
     },
     {
-      q: 'Warum Demo-Checkout?',
-      a: 'Ohne konfigurierten Stripe-Testschlüssel bleibt der Soft-Launch im Demo-Modus — kein echter Karteneinzug. Live-/Test-Zahlung folgt nach Ops-Setup.',
+      q: 'Sind Texte, Hosting und Domains inklusive?',
+      a: 'Nur wenn im Paket ausdrücklich genannt. Ansonsten separat oder im Angebot klären.',
     },
     {
-      q: 'Wie funktionieren Abos?',
-      a: 'Monatliche Pakete nutzen Stripe Billing, sobald Test-Keys und wiederkehrende Price IDs gesetzt sind. Bis dahin läuft der Soft-Launch als Demo. Konditionen (Stunden-Deckel, Kündigung) werden im Briefing bestätigt.',
+      q: 'Ist Werbebudget inklusive?',
+      a: 'Nein — Werbeausgaben (z. B. Google/Meta) zahlt der Kunde an die Plattform, sofern nicht ausdrücklich anders vereinbart.',
+    },
+    {
+      q: 'Ist die Online-Zahlung live?',
+      a: 'Der Soft-Launch kann einen Demo-Checkout ohne echte Kartenzahlung nutzen. Live-Zahlung folgt nach Freigabe. Demo-Aufträge sind klar als Demo gekennzeichnet.',
+    },
+    {
+      q: 'Wie funktionieren Monats-Pakete?',
+      a: 'Monatsbeträge wiederholen sich monatlich. Enthaltenes Zeitkontingent und Ausschlüsse stehen in den Paketpunkten. Ohne freigegebene Kündigung/Mindestlaufzeit führt der Shop zum Angebot statt zum Sofortkauf.',
     },
   ],
 }
@@ -286,7 +396,7 @@ export const shopPageEn: ShopPageCopy = {
   },
   results: (n) => (n === 1 ? '1 package' : `${n} packages`),
   empty: 'No packages for these filters. Reset filters or request a quote.',
-  recommended: 'Popular',
+  recommended: 'Recommended',
   fromLabel: 'from',
   monthSuffix: '/ month',
   choosePlan: 'Choose plan',
@@ -297,21 +407,23 @@ export const shopPageEn: ShopPageCopy = {
   startAmountNote:
     'Shown amount is a start / deposit value in EUR credited toward the project — not a full-project Festpreis.',
   subscriptionAmountNote:
-    'Monthly orientation fee (excl. VAT). Ad spend, hosting, and licenses only when explicitly listed. Soft-launch may use demo checkout.',
-  quoteAmountNote: 'Indicative amount for the request — binding quote follows after briefing.',
+    'Monthly orientation fee. Ad spend, hosting, and licenses only when explicitly listed.',
+  quoteAmountNote:
+    'Price on request — scope is agreed in a quote before ordering. No online purchase for this package.',
   priceKindCheckout: 'Start amount',
   priceKindSubscription: 'per month',
-  priceKindQuote: 'Indicative',
-  vatNote: 'All amounts in EUR excl. VAT unless stated otherwise.',
+  priceKindQuote: 'On request',
+  priceOnRequest: 'Price on request',
+  vatNote: 'All amounts in EUR excl. VAT unless stated otherwise (B2B note — confirm with counsel if needed).',
   missingTerms:
-    'Listed amounts are orientation start prices (not full agency Festpreise) — final scope is confirmed in the briefing. Soft-launch may use demo checkout.',
+    'Listed amounts are orientation prices, not agency Festpreise. Listed deliverables are orientation before purchase; fine-tuning follows in the briefing.',
   detailBack: 'All plans',
   breadcrumbNav: 'Breadcrumb',
   breadcrumbShop: 'Shop',
   relatedTitle: 'More plans in this service',
-  scopeTitle: 'Scope (orientation)',
+  scopeTitle: 'Deliverables (orientation)',
   scopeBody:
-    'The package title and short blurb outline the start. Binding scope is confirmed in the post-order briefing.',
+    'The listed points describe orientation deliverables before purchase. Fine-tuning follows in the briefing — without fixing minimum terms or cancellation windows here.',
   exclusionsTitle: 'Not included by default',
   exclusionsBody:
     'Ad media spend, third-party licenses, out-of-scope custom work, and ongoing ad costs are not blanket-included — details in the briefing.',
@@ -325,16 +437,51 @@ export const shopPageEn: ShopPageCopy = {
   ctaSubscriptionShort: 'Choose subscription',
   ctaQuote: 'Request a quote',
   ctaService: 'Service page',
-  quoteTitle: 'Custom quote',
-  quoteLead: 'Briefly describe your project — we reply by email. No payment in this step.',
+  quoteTitle: 'Request a custom quote',
+  quoteLead:
+    'For tailored projects and monthly plans without instant checkout: briefly describe what you need — we reply by email. No payment happens in this step.',
+  quoteEyebrow: 'BDITEC inquiry',
+  quoteAsideTitle: 'How the request works',
+  quoteSteps: [
+    'Fill in the form — selected package and area are included when set',
+    'Review the email draft and send it (or copy the summary)',
+    'We follow up with questions or a concrete proposal',
+  ],
+  quoteResponseNote:
+    'No fixed response times on this page. Without a sent email, the request has not reached us.',
+  quoteSelectedPackage: 'Selected package',
   quoteName: 'Name',
   quoteEmail: 'Email',
   quotePhone: 'Phone (optional)',
-  quoteService: 'Area',
-  quoteMessage: 'Short description',
-  quoteSubmit: 'Open email request',
-  quoteHint: 'Opens your email app to info@bditec.com. No account is created and no payment is taken.',
-  quoteSuccess: 'Email draft opened. Send the message to submit your request.',
+  quoteCompany: 'Company (optional)',
+  quoteService: 'Service area',
+  quoteBudget: 'Budget range (optional, orientation)',
+  quoteBudgetOptions: [
+    { value: '', label: 'Not sure yet' },
+    { value: 'under-1k', label: 'Under €1,000' },
+    { value: '1k-3k', label: 'Approx. €1,000–3,000' },
+    { value: '3k-8k', label: 'Approx. €3,000–8,000' },
+    { value: '8k-plus', label: 'Over €8,000' },
+  ],
+  quoteTiming: 'Timeline (optional)',
+  quoteTimingOptions: [
+    { value: '', label: 'Not sure yet' },
+    { value: 'asap', label: 'As soon as practical' },
+    { value: '1-3m', label: 'In 1–3 months' },
+    { value: 'later', label: 'Later / planning' },
+  ],
+  quoteMessage: 'Project description',
+  quoteMessageHint:
+    'Goals, current state, desired outcomes — clearer input means a more useful reply. Do not include passwords or access credentials here.',
+  quoteSubmit: 'Prepare email request',
+  quoteHint:
+    'Opens your email app with a prefilled draft. The request is only sent when you send the email. No account is created.',
+  quoteSuccess:
+    'Draft prepared. Please send the email — or copy the summary and send it to info@bditec.com.',
+  quoteEmailVisible: 'Direct to',
+  quoteCopySummary: 'Copy summary',
+  quoteCopied: 'Copied',
+  quoteCopyFailed: 'Could not copy — select the text manually',
   modeBadge: {
     checkout: 'Start amount',
     subscription: 'Monthly',
@@ -354,28 +501,64 @@ export const shopPageEn: ShopPageCopy = {
     'Monthly plans exclude one-time extras in the cart — add-ons are only for start-amount packages.',
   cartRemove: 'Remove',
   cartEdit: 'Edit extras',
+  cartViewPackage: 'View package',
+  cartOnceLabel: 'Due now (one-time)',
+  cartMonthlyLabel: 'Monthly',
+  cartMixedBilling:
+    'One-time and monthly packages cannot share a single checkout. Keep the cart to one billing type or request a quote.',
   cartClear: 'Clear',
   cartCheckout: 'Proceed to checkout',
   cartOpen: 'Open cart',
   cartName: 'Name',
   cartEmail: 'Email',
   cartPayHint:
-    'Amounts are validated server-side. Without a Stripe secret key, soft-launch stays in demo mode.',
+    'Amounts are checked on the server. Soft-launch may use a clearly labeled demo order without a real card charge.',
   cartProcessing: 'Preparing checkout…',
   cartError: 'Checkout failed. Try again or request a quote.',
+  checkoutUnavailable: 'Online booking is currently unavailable. Please request a quote.',
+  termsGateNote:
+    'Online purchase for this monthly package is temporarily quote-only until minimum term, cancellation, and binding deliverables are approved. The amount shown is orientation only.',
+  orientationAmountNote: 'Orientation amount — online checkout is not open for this package yet.',
+  afterOrderTitle: 'After ordering',
+  afterOrderSteps: [
+    'Receive confirmation / demo labeling',
+    'Digital briefing and required files/access (no passwords in forms)',
+    'Agree deliverables',
+    'Delivery and feedback',
+  ],
+  afterOrderNote:
+    'Visiting a success page alone does not prove payment. Demo orders are clearly labeled. Delivery timing starts after an agreed briefing unless otherwise confirmed.',
+  printSummary: 'Print summary',
+  compareAdd: 'Compare',
+  compareOpen: 'Open comparison',
+  compareClear: 'Clear selection',
+  compareClose: 'Close',
+  compareTitle: 'Package comparison',
+  compareFeature: 'Item',
+  compareCount: (n) => `${n} packages selected (max 3)`,
+  taxonomyNote:
+    'Note: E-Commerce packages use the “Web design & development” filter. SEO packages use “SEO & analytics” while belonging to the Digital marketing service.',
   faqTitle: 'Shop FAQ',
   faq: [
     {
       q: 'What do the start amounts mean?',
-      a: 'One-time packages show an online start/deposit — not a full-project Festpreis. Monthly packages (Care, SEA Start, SEO Care, Social) are orientation retainers; ad spend and hosting are included only when explicitly stated.',
+      a: 'One-time packages show an online start/deposit — not a full-project Festpreis. Monthly packages are orientation retainers; ad spend and hosting are included only when explicitly stated.',
     },
     {
-      q: 'Why demo checkout?',
-      a: 'Until a Stripe test secret is configured, soft-launch stays in demo mode — no real card charge. Live/test payment follows the ops setup.',
+      q: 'Are copy, hosting, and domains included?',
+      a: 'Only when the package explicitly says so. Otherwise agree separately or via quote.',
     },
     {
-      q: 'How do subscriptions work?',
-      a: 'Monthly packages use Stripe Billing once test keys and recurring Price IDs are set. Until then soft-launch stays demo. Hour caps and cancellation are confirmed in the briefing.',
+      q: 'Is advertising spend included?',
+      a: 'No — media spend (e.g. Google/Meta) is paid by the client to the platform unless explicitly agreed otherwise.',
+    },
+    {
+      q: 'Is online payment live?',
+      a: 'Soft-launch may use a demo checkout without a real card charge. Live payment follows approval. Demo orders are clearly labeled as demo.',
+    },
+    {
+      q: 'How do monthly packages work?',
+      a: 'Monthly amounts recur each month. Included time allowances and exclusions are listed on the package. Without approved cancellation/minimum term, the shop routes to a quote instead of instant purchase.',
     },
   ],
 }
@@ -430,7 +613,7 @@ export const shopPageAr: ShopPageCopy = {
   },
   results: (n) => (n === 1 ? 'باقة واحدة' : `${n} باقات`),
   empty: 'لا باقات لهذه الفلاتر. أعد الضبط أو اطلب عرض سعر.',
-  recommended: 'الأكثر طلباً',
+  recommended: 'موصى به',
   fromLabel: 'من',
   monthSuffix: '/ شهر',
   choosePlan: 'اختر الخطة',
@@ -441,21 +624,23 @@ export const shopPageAr: ShopPageCopy = {
   startAmountNote:
     'المبلغ المعروض قيمة بداية / عربون باليورو ويُحتسب ضمن المشروع — وليس سعر مشروع كامل.',
   subscriptionAmountNote:
-    'أتعاب شهرية توجيهية (بدون ضريبة ما لم يُذكر). ميزانية الإعلان والاستضافة والتراخيص فقط إن ذُكرت صراحة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
-  quoteAmountNote: 'مبلغ توجيهي للطلب — العرض الملزم بعد الإحاطة.',
+    'أتعاب شهرية توجيهية. ميزانية الإعلان والاستضافة والتراخيص فقط إن ذُكرت صراحة.',
+  quoteAmountNote:
+    'السعر عند الطلب — يُتفق على النطاق في العرض قبل الطلب. لا شراء أونلاين لهذه الباقة.',
   priceKindCheckout: 'مبلغ بداية',
   priceKindSubscription: 'شهرياً',
-  priceKindQuote: 'توجيهي',
-  vatNote: 'جميع المبالغ باليورو بدون ضريبة القيمة المضافة ما لم يُذكر خلاف ذلك.',
+  priceKindQuote: 'عند الطلب',
+  priceOnRequest: 'السعر عند الطلب',
+  vatNote: 'جميع المبالغ باليورو بدون ضريبة القيمة المضافة ما لم يُذكر خلاف ذلك (ملاحظة B2B — راجع قانونياً عند الحاجة).',
   missingTerms:
-    'المبالغ توجيهية لمبالغ البداية (وليست أسعار مشاريع كاملة) — النطاق النهائي يُؤكد في الإحاطة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
+    'المبالغ توجيهية وليست أسعار مشاريع كاملة. النقاط المدرجة توجيه قبل الشراء؛ التفاصيل في الإحاطة.',
   detailBack: 'كل الخطط',
   breadcrumbNav: 'مسار التنقل',
   breadcrumbShop: 'المتجر',
   relatedTitle: 'خطط أخرى في هذه الخدمة',
   scopeTitle: 'نطاق الخدمة (توجيهي)',
   scopeBody:
-    'عنوان الباقة والوصف القصير يحددان البداية. النطاق الملزم يُثبت في الإحاطة بعد الطلب.',
+    'النقاط المدرجة تصف نطاق التوجيه قبل الشراء. التفاصيل في الإحاطة — دون تعهد بمدد أو إلغاء ثابت هنا.',
   exclusionsTitle: 'غير مشمول افتراضياً',
   exclusionsBody:
     'ميزانيات الإعلانات وتراخيص الطرف الثالث والعمل خارج النطاق وتكاليف الإعلانات المستمرة غير مشمولة تلقائياً — التفاصيل في الإحاطة.',
@@ -469,16 +654,51 @@ export const shopPageAr: ShopPageCopy = {
   ctaSubscriptionShort: 'اختر الاشتراك',
   ctaQuote: 'طلب عرض سعر',
   ctaService: 'صفحة الخدمة',
-  quoteTitle: 'عرض سعر مخصص',
-  quoteLead: 'صف مشروعك باختصار — نرد عبر البريد. لا دفع في هذه الخطوة.',
+  quoteTitle: 'طلب عرض سعر مخصص',
+  quoteLead:
+    'للمشاريع المخصصة والباقات الشهرية بدون شراء فوري: صف باختصار ما تحتاجه — نرد عبر البريد. لا يتم أي دفع في هذه الخطوة.',
+  quoteEyebrow: 'استفسار BDITEC',
+  quoteAsideTitle: 'كيف تعمل الطلبية',
+  quoteSteps: [
+    'املأ النموذج — تُرسل الباقة والمجال المختاران إن وُجدا',
+    'راجع مسودة البريد وأرسلها (أو انسخ الملخص)',
+    'نتابع بأسئلة أو بعرض واضح',
+  ],
+  quoteResponseNote:
+    'لا مواعيد رد ثابتة في هذه الصفحة. بدون إرسال البريد لم تصلنا الطلبية.',
+  quoteSelectedPackage: 'الباقة المختارة',
   quoteName: 'الاسم',
   quoteEmail: 'البريد',
   quotePhone: 'الهاتف (اختياري)',
-  quoteService: 'المجال',
-  quoteMessage: 'وصف مختصر',
-  quoteSubmit: 'فتح طلب بالبريد',
-  quoteHint: 'يفتح تطبيق البريد إلى info@bditec.com. لا يُنشأ حساب ولا يُؤخذ دفع.',
-  quoteSuccess: 'فُتح مسودة البريد. أرسل الرسالة لإتمام الطلب.',
+  quoteCompany: 'الشركة (اختياري)',
+  quoteService: 'مجال الخدمة',
+  quoteBudget: 'نطاق الميزانية (اختياري، توجيه)',
+  quoteBudgetOptions: [
+    { value: '', label: 'غير محدد بعد' },
+    { value: 'under-1k', label: 'أقل من 1.000 €' },
+    { value: '1k-3k', label: 'حوالي 1.000–3.000 €' },
+    { value: '3k-8k', label: 'حوالي 3.000–8.000 €' },
+    { value: '8k-plus', label: 'أكثر من 8.000 €' },
+  ],
+  quoteTiming: 'الإطار الزمني (اختياري)',
+  quoteTimingOptions: [
+    { value: '', label: 'غير محدد بعد' },
+    { value: 'asap', label: 'في أقرب وقت مناسب' },
+    { value: '1-3m', label: 'خلال 1–3 أشهر' },
+    { value: 'later', label: 'لاحقاً / تخطيط' },
+  ],
+  quoteMessage: 'وصف المشروع',
+  quoteMessageHint:
+    'الأهداف والوضع الحالي والنتائج المرغوبة — كلما أوضح الوصف كانت الردود أدق. لا تُدخل كلمات مرور أو بيانات وصول هنا.',
+  quoteSubmit: 'تجهيز طلب بالبريد',
+  quoteHint:
+    'يفتح تطبيق البريد بمسودة جاهزة. يُرسل الطلب فقط عند إرسال الرسالة. لا يُنشأ حساب.',
+  quoteSuccess:
+    'تم تجهيز المسودة. أرسل البريد — أو انسخ الملخص وأرسله إلى info@bditec.com.',
+  quoteEmailVisible: 'مباشرة إلى',
+  quoteCopySummary: 'نسخ الملخص',
+  quoteCopied: 'تم النسخ',
+  quoteCopyFailed: 'تعذر النسخ — حدّد النص يدوياً',
   modeBadge: {
     checkout: 'مبلغ بداية',
     subscription: 'شهري',
@@ -498,28 +718,64 @@ export const shopPageAr: ShopPageCopy = {
     'الباقات الشهرية بدون إضافات لمرة واحدة في السلة — الإضافات فقط لحزم مبلغ البداية.',
   cartRemove: 'إزالة',
   cartEdit: 'تعديل الإضافات',
+  cartViewPackage: 'عرض الباقة',
+  cartOnceLabel: 'مرة واحدة الآن',
+  cartMonthlyLabel: 'شهرياً',
+  cartMixedBilling:
+    'لا يمكن دمج باقات لمرة واحدة وشهرية في دفع واحد. اقتصر السلة على نوع واحد أو اطلب عرض سعر.',
   cartClear: 'تفريغ',
   cartCheckout: 'المتابعة للدفع',
   cartOpen: 'فتح السلة',
   cartName: 'الاسم',
   cartEmail: 'البريد',
   cartPayHint:
-    'تُتحقق المبالغ على الخادم. بدون مفتاح Stripe يبقى الإطلاق التجريبي في وضع العرض.',
+    'يتحقق الخادم من المبالغ. الإطلاق التجريبي قد يستخدم طلباً تجريبياً واضحاً بلا خصم حقيقي.',
   cartProcessing: 'جاري تجهيز الدفع…',
   cartError: 'فشل الدفع. حاول مجدداً أو اطلب عرض سعر.',
+  checkoutUnavailable: 'الحجز أونلاين غير متاح حالياً. يُرجى طلب عرض سعر.',
+  termsGateNote:
+    'الشراء أونلاين لهذه الباقة الشهرية مؤقتاً عبر عرض سعر فقط حتى اعتماد المدة والإلغاء والنطاق الملزم. المبلغ المعروض توجيهي.',
+  orientationAmountNote: 'مبلغ توجيهي — الدفع أونلاين غير مفتوح لهذه الباقة بعد.',
+  afterOrderTitle: 'بعد الطلب',
+  afterOrderSteps: [
+    'استلام التأكيد / وسم العرض التجريبي',
+    'إحاطة رقمية والملفات/الوصول المطلوب (بدون كلمات مرور في النماذج)',
+    'الاتفاق على نطاق الخدمة',
+    'التنفيذ والملاحظات',
+  ],
+  afterOrderNote:
+    'زيارة صفحة النجاح وحدها لا تثبت الدفع. الطلبات التجريبية مُعلَّمة. مواعيد التسليم تبدأ بعد إحاطة متفق عليها ما لم يُؤكد خلاف ذلك.',
+  printSummary: 'طباعة الملخص',
+  compareAdd: 'مقارنة',
+  compareOpen: 'فتح المقارنة',
+  compareClear: 'مسح الاختيار',
+  compareClose: 'إغلاق',
+  compareTitle: 'مقارنة الباقات',
+  compareFeature: 'بند',
+  compareCount: (n) => `${n} باقات محددة (حد أقصى 3)`,
+  taxonomyNote:
+    'ملاحظة: باقات التجارة الإلكترونية ضمن فلتر «تصميم وتطوير الويب». باقات SEO ضمن «SEO والتحليلات» وتنتمي لخدمة التسويق الرقمي.',
   faqTitle: 'أسئلة المتجر',
   faq: [
     {
       q: 'ماذا تعني مبالغ البداية؟',
-      a: 'الباقات لمرة واحدة تعرض مبلغ بداية/عربون — وليس سعر مشروع كامل. الباقات الشهرية (Care وSEA Start ورعاية SEO وسوشيال) أتعاب توجيهية؛ ميزانية الإعلان والاستضافة فقط إن ذُكرت صراحة.',
+      a: 'الباقات لمرة واحدة تعرض مبلغ بداية/عربون — وليس سعر مشروع كامل. الباقات الشهرية أتعاب توجيهية؛ ميزانية الإعلان والاستضافة فقط إن ذُكرت صراحة.',
     },
     {
-      q: 'لماذا وضع العرض (Demo)؟',
-      a: 'بدون مفتاح Stripe للاختبار يبقى الإطلاق التجريبي في وضع العرض — بلا خصم حقيقي. الدفع الحي/الاختباري يتبع إعداد العمليات.',
+      q: 'هل النصوص والاستضافة والنطاق مشمولة؟',
+      a: 'فقط إن ذُكرت صراحة في الباقة. وإلا تُتفق منفصلاً أو عبر عرض سعر.',
     },
     {
-      q: 'كيف تعمل الاشتراكات؟',
-      a: 'الباقات الشهرية تستخدم Stripe Billing بعد ضبط مفاتيح الاختبار وأسعار متكررة. حتى ذلك يبقى الإطلاق التجريبي في وضع العرض. حدود الساعات والإلغاء تُؤكد في الإحاطة.',
+      q: 'هل ميزانية الإعلان مشمولة؟',
+      a: 'لا — يدفع العميل الإنفاق الإعلاني للمنصة ما لم يُتفق خلاف ذلك صراحة.',
+    },
+    {
+      q: 'هل الدفع أونلاين فعّال؟',
+      a: 'الإطلاق التجريبي قد يستخدم دفعاً تجريبياً بلا خصم حقيقي. الدفع الحي بعد الموافقة. الطلبات التجريبية مُعلَّمة بوضوح.',
+    },
+    {
+      q: 'كيف تعمل الباقات الشهرية؟',
+      a: 'المبالغ تتكرر شهرياً. الوقت والاستثناءات في نقاط الباقة. بدون مدة/إلغاء معتمدة يوجّه المتجر لعرض السعر بدل الشراء الفوري.',
     },
   ],
 }

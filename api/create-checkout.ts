@@ -49,6 +49,7 @@ type Shop = {
     purchaseMode: PurchaseMode
     shopCategory?: string
     recommended?: boolean
+    directCheckout?: boolean
   }[]
   addons: { id: string; priceEur: number }[]
 }
@@ -138,15 +139,24 @@ function resolveLines(
     if (!pkg) {
       return { ok: false, error: 'Invalid package', status: 400 }
     }
-    if (pkg.purchaseMode === 'quote') {
+    if (pkg.purchaseMode === 'quote' || pkg.directCheckout === false) {
       return { ok: false, error: 'Package requires a quote, not checkout', status: 400 }
     }
     const key = `${serviceRaw}:${packageId}`
     if (seen.has(key)) continue
     seen.add(key)
-    const addonIds = (Array.isArray(raw.addonIds) ? raw.addonIds : [])
+    const requestedAddons = (Array.isArray(raw.addonIds) ? raw.addonIds : [])
       .map((id) => String(id))
       .filter((id) => catalog[serviceRaw].addons.some((a) => a.id === id))
+    // Subscription lines never accept one-time add-ons (Billing Checkout constraint).
+    if (pkg.purchaseMode === 'subscription' && requestedAddons.length > 0) {
+      return {
+        ok: false,
+        error: 'Subscription packages cannot include one-time add-ons',
+        status: 400,
+      }
+    }
+    const addonIds = pkg.purchaseMode === 'subscription' ? [] : requestedAddons
     const addonPrices = catalog[serviceRaw].addons
       .filter((a) => addonIds.includes(a.id))
       .map((a) => ({

@@ -7,6 +7,7 @@ import {
 import { startCheckout } from './checkout-client'
 import {
   calcOrderTotalEur,
+  canPurchaseDirect,
   defaultPackageId,
   fromPriceEur,
   isAddonId,
@@ -104,8 +105,8 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
   const shop = m.bookingShop
   const page = m.shopPage
   const catalog = shopFor(service)
-  const payable = catalog.packages.filter((pkg) => pkg.purchaseMode !== 'quote')
-  const quoteOnly = catalog.packages.filter((pkg) => pkg.purchaseMode === 'quote')
+  const payable = catalog.packages.filter((pkg) => canPurchaseDirect(pkg))
+  const quoteOnly = catalog.packages.filter((pkg) => !canPurchaseDirect(pkg))
   const prevPkg = root.querySelector<HTMLInputElement>('input[name="package"]:checked')?.value
   const prevAddons = new Set(
     [...root.querySelectorAll<HTMLInputElement>('input[name="addon"]:checked')].map((el) => el.value),

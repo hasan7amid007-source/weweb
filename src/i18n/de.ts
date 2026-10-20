@@ -161,22 +161,22 @@ export const de: Messages = {
     monthlyLabel: 'Monatsbetrag (Orientierung)',
     depositHint: 'Paket + Extras jetzt online starten. Weitere Leistungen später nach Bedarf.',
     monthlyHint:
-      'Monatsbetrag ohne Werbebudget/Hosting, sofern nicht genannt. Extras sind einmalig. Abos brauchen Stripe Price IDs.',
+      'Monatsbetrag ohne Werbebudget/Hosting, sofern nicht genannt. Extras sind einmalig und nicht mit Monats-Paketen kombinierbar.',
     extrasOnceLabel: 'Extras (einmalig)',
     quotePackagesHeading: 'Nur auf Anfrage',
     quotePackageCta: 'Angebot per E-Mail',
     quoteMailtoSubject: 'BDITEC Angebot — {{service}} / {{package}}',
     quoteMailtoBody:
-      'Service: {{service}}\nPaket: {{title}}\nRichtwert: {{price}}\n\nKurzbeschreibung:\n',
+      'Service: {{service}}\nPaket: {{title}}\nPreis: auf Anfrage\n\nKurzbeschreibung:\n',
     summaryTitle: 'Ihre Bestellung',
     payCta: 'Jetzt bezahlen',
     paySecure: 'Sichere Online-Zahlung (Karte / Stripe)',
     paySecureDemo: 'Demo-Checkout — keine echte Kartenzahlung',
     paySecurePending:
-      'Modus bestätigt der Server beim Bezahlen: Demo ohne sk_test_/sk_live_, sonst Stripe Checkout.',
+      'Der Server bestätigt beim Bezahlen, ob Demo (ohne echte Kartenzahlung) oder Stripe Checkout aktiv ist.',
     payProcessing: 'Zahlung wird vorbereitet…',
     payUnavailable:
-      'Checkout nicht möglich. Monatspakete brauchen Stripe Price IDs ohne Einmal-Extras — oder Demo/Server ist nicht erreichbar.',
+      'Die Online-Buchung ist derzeit nicht verfügbar. Bitte fragen Sie ein Angebot an.',
     successTitle: 'Bestellung abgeschlossen',
     successBody:
       'Zahlung erhalten. Sie bekommen die Bestätigung per E-Mail — der Rest läuft digital, ohne persönlichen Termin.',
@@ -184,7 +184,7 @@ export const de: Messages = {
       'Demo-Bestellung erfasst (keine echte Belastung). Wir melden uns per E-Mail — der Rest läuft digital.',
     successAgain: 'Weitere Bestellung',
     demoPayNote:
-      'Soft-Launch: ohne nutzbaren Stripe-Secret-Key (sk_test_…) läuft der Checkout als Demo — keine echte Belastung.',
+      'Soft-Launch: Checkout kann als Demo laufen — keine echte Kartenzahlung. Demo-Aufträge sind klar gekennzeichnet.',
   },
   bookingShop: bookingShopDe,
   shopPage: shopPageDe,
@@ -195,7 +195,7 @@ export const de: Messages = {
     related: 'Weitere Services',
     cta: 'Online bestellen',
     ctaSecondary: 'Zum Checkout',
-    ctaShop: 'Pakete im Shop',
+    ctaShop: 'Pakete ansehen',
     overview: 'Übersicht',
     details: 'Mehr erfahren',
     included: 'Das ist enthalten',

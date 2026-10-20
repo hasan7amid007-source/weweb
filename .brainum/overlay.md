@@ -90,3 +90,5 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch auto batch (2026-10-20) — `#booking` scroll + addon deep-link; mobile cart bar dock; invalid shop package URL cleanup + empty-filter CTA; order escapeHtml/i18n eyebrow/meta; `shop_page_view`/`shop_detail_view` analytics
 - [x] Top UX/logic fixes (2026-10-20) — server-owned success URL; subscription hard-fail; booking quote gate + Startbetrag/Monatlich badges; step-4 mode from API (`paySecurePending`), not Payment Links
 - [x] Soft-launch continuity batch (2026-10-20) — shop hides subscription add-ons; quote booking deeplink highlight; drop dead Payment Link client path; order monthly total label; booking quote mailto i18n + `booking_quote_mailto`
+- [ ] Shop retainers gated (`directCheckout: false`) until owner approves Kündigung/Mindestlaufzeit/scope — Care/Care Pro/VPS/SEA/SEO Pflege/Social/Retainer (prices unchanged)
+- [ ] Taxonomy decision: E-Commerce filter vs web-design category; SEO filter vs Digital Marketing service group

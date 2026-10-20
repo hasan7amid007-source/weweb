@@ -1,7 +1,7 @@
 import {
   SHOP_CATEGORY_IDS,
   bookingHref,
-  canAddToCart,
+  canPurchaseDirect,
   findShopPackage,
   isShopCategoryId,
   listShopPackages,
@@ -22,6 +22,12 @@ import {
   takeCartFlash,
   type CartLine,
 } from './cart'
+import {
+  cartHasMixedBilling,
+  cartSplitTotals,
+  formatCartMoneySummary,
+  linePurchaseMode,
+} from './cart-rules'
 import { SERVICE_ICONS, servicePath, type ServiceId } from '../../data/services'
 import { trackEvent } from '../../lib/telemetry'
 import { type Locale, t } from '../../i18n'
@@ -213,24 +219,37 @@ function renderPlanCard(locale: Locale, item: ShopListingItem): string {
   const highlights = copy?.highlights?.length
     ? copy.highlights
     : [copy?.blurb ?? shop.modeBadge[item.package.purchaseMode]].filter(Boolean)
-  const cartable = canAddToCart(item.package.purchaseMode)
+  const cartable = canPurchaseDirect(item.package)
+  // Quote-only: on request. Gated retainers: still show orientation monthly amount + quote CTA.
+  const amountHtml =
+    item.package.purchaseMode === 'quote'
+      ? `<span class="shop-plan-amount shop-plan-amount--quote">${shop.priceOnRequest}</span>`
+      : `<span class="shop-plan-amount">${formatEur(item.package.priceEur, locale)}</span>
+        ${period ? `<span class="shop-plan-period">${period}</span>` : ''}`
   const primaryCta = cartable
     ? `<button type="button" class="shop-plan-cta ts-btn pink solid" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
     : `<a class="shop-plan-cta ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
+  const compareId = `${item.service}:${item.package.id}`
   return `
-    <article class="shop-plan${featured}">
+    <article class="shop-plan${featured}" data-shop-plan="${compareId}">
       ${item.package.recommended ? `<p class="shop-plan-ribbon">${shop.recommended}</p>` : ''}
       <p class="shop-plan-mode shop-mode-badge shop-mode-badge--${item.package.purchaseMode}">${shop.modeBadge[item.package.purchaseMode]}</p>
       <h3 class="shop-plan-title">${copy?.title ?? item.package.id}</h3>
-      <p class="shop-plan-price">
-        <span class="shop-plan-amount">${formatEur(item.package.priceEur, locale)}</span>
-        ${period ? `<span class="shop-plan-period">${period}</span>` : ''}
-      </p>
+      <p class="shop-plan-price">${amountHtml}</p>
       <p class="shop-plan-price-kind">${kind}</p>
+      ${
+        item.package.directCheckout === false
+          ? `<p class="shop-note shop-note--gate">${shop.termsGateNote}</p>`
+          : ''
+      }
       <p class="shop-plan-blurb">${copy?.blurb ?? ''}</p>
       <ul class="shop-plan-features" aria-label="${includesLabel}">
         ${highlights.map((line) => `<li>${line}</li>`).join('')}
       </ul>
+      <label class="shop-compare-pick">
+        <input type="checkbox" data-shop-compare value="${compareId}" />
+        <span>${shop.compareAdd}</span>
+      </label>
       <div class="shop-plan-actions">
         ${primaryCta}
         <a class="shop-plan-details" href="${href}">${shop.viewDetails}</a>
@@ -276,10 +295,14 @@ function renderRelated(locale: Locale, item: ShopListingItem): string {
             const copy = packageCopy(locale, other.service, other.package.id)
             const href = `/shop.html?service=${encodeURIComponent(other.service)}&package=${encodeURIComponent(other.package.id)}`
             const period = pricePeriod(locale, other.package.purchaseMode)
+            const relatedPrice =
+              other.package.purchaseMode === 'quote'
+                ? shop.priceOnRequest
+                : `${formatEur(other.package.priceEur, locale)}${period ? ` ${period}` : ''}`
             return `
               <a class="shop-related-card" href="${href}">
                 <span class="shop-related-title">${copy?.title ?? other.package.id}</span>
-                <span class="shop-related-price">${formatEur(other.package.priceEur, locale)}${period ? ` ${period}` : ''}</span>
+                <span class="shop-related-price">${relatedPrice}</span>
               </a>`
           })
           .join('')}
@@ -295,7 +318,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
   const addons = shopFor(item.service).addons
   const serviceHref =
     item.service === 'general' ? '/#services' : servicePath(item.service as ServiceId)
-  const cartable = canAddToCart(item.package.purchaseMode)
+  const cartable = canPurchaseDirect(item.package)
   const catTitle = shop.categories[item.package.shopCategory].title
   const highlights = copy?.highlights?.length ? copy.highlights : []
   const existingLine = readCart().find(
@@ -314,7 +337,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
     ? `<a class="ts-btn pink" href="${checkoutHref}" data-shop-booking-cta data-service="${item.service}" data-package="${item.package.id}">${item.package.purchaseMode === 'subscription' ? shop.ctaSubscription : shop.ctaCheckout}</a>`
     : ''
   const quoteLink =
-    item.package.purchaseMode === 'quote'
+    item.package.purchaseMode === 'quote' || !cartable
       ? ''
       : `<a class="shop-secondary-cta" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
 
@@ -395,24 +418,48 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
               <h3>${shop.deliveryTitle}</h3>
               <p>${shop.deliveryBody}</p>
             </section>
+            <section>
+              <h3>${shop.afterOrderTitle}</h3>
+              <ol class="shop-after-order">
+                ${shop.afterOrderSteps.map((step) => `<li>${step}</li>`).join('')}
+              </ol>
+            </section>
           </div>
+          ${
+            item.package.directCheckout === false
+              ? `<p class="shop-note shop-note--warn">${shop.termsGateNote}</p>`
+              : ''
+          }
         </div>
-        <aside class="shop-buybox" data-shop-buybox data-base-price="${item.package.priceEur}">
+        <aside class="shop-buybox" data-shop-buybox data-base-price="${item.package.priceEur}" data-period="${period}">
           <p class="shop-detail-price">
-            <span class="shop-plan-amount" data-shop-buybox-base>${formatEur(item.package.priceEur, locale)}</span>
-            ${period ? `<span class="shop-plan-period">${period}</span>` : ''}
+            ${
+              item.package.purchaseMode === 'quote'
+                ? `<span class="shop-plan-amount shop-plan-amount--quote">${shop.priceOnRequest}</span>`
+                : `<span class="shop-plan-amount" data-shop-buybox-base>${formatEur(item.package.priceEur, locale)}</span>
+            ${period ? `<span class="shop-plan-period">${period}</span>` : ''}`
+            }
           </p>
           ${addonPicker}
-          <p class="shop-buybox-total">
+          ${
+            item.package.purchaseMode === 'quote'
+              ? ''
+              : cartable
+                ? `<p class="shop-buybox-total">
             <span>${shop.buyboxTotal}</span>
-            <strong data-shop-buybox-total>${formatEur(item.package.priceEur, locale)}</strong>
+            <strong data-shop-buybox-total>${formatEur(item.package.priceEur, locale)}${period ? ` ${period}` : ''}</strong>
           </p>
+          <p class="shop-note shop-note--vat">${shop.vatNote}</p>`
+                : `<p class="shop-note shop-note--vat">${shop.vatNote}</p>
+          <p class="shop-note">${shop.orientationAmountNote}</p>`
+          }
           <p class="shop-note">${priceAmountNote(locale, item.package.purchaseMode)}</p>
           <div class="shop-detail-actions">
             <span class="glowborder">${buyPrimary}</span>
             ${buySecondary ? `<span class="glowborder">${buySecondary}</span>` : ''}
             ${quoteLink}
             <a class="shop-secondary-cta" href="${serviceHref}">${shop.viewService}</a>
+            <button type="button" class="shop-secondary-cta" data-shop-print>${shop.printSummary}</button>
             <p class="shop-cart-feedback" data-shop-cart-feedback role="status" aria-live="polite" hidden></p>
           </div>
         </aside>
@@ -424,12 +471,19 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
 
 function renderCartPanel(locale: Locale, lines: CartLine[]): string {
   const shop = t(locale).shopPage
-  const total = cartTotalEur(lines)
+  const split = cartSplitTotals(lines)
+  const summary = formatCartMoneySummary(
+    split,
+    (n) => formatEur(n, locale),
+    shop.monthSuffix,
+    ' · ',
+  )
+  const mixed = cartHasMixedBilling(lines)
   return `
     <section class="shop-cart" id="cart" data-shop-cart>
       <div class="shop-cart-head">
         <h2>${shop.cartTitle}</h2>
-        <p class="shop-results">${shop.cartCount(lines.length)} · ${formatEur(total, locale)}</p>
+        <p class="shop-results">${shop.cartCount(lines.length)} · ${summary}</p>
       </div>
       ${
         lines.length === 0
@@ -440,27 +494,42 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
           ${lines
             .map((line) => {
               const copy = packageCopy(locale, line.service, line.packageId)
+              const mode = linePurchaseMode(line)
               const lineTotal = cartTotalEur([line])
+              const period = mode === 'subscription' ? ` ${shop.monthSuffix}` : ''
               const addonLabels = line.addonIds
                 .map((id) => addonCopy(locale, line.service, id)?.title ?? id)
                 .filter(Boolean)
               const editHref = `/shop.html?service=${encodeURIComponent(line.service)}&package=${encodeURIComponent(line.packageId)}`
+              const editLabel =
+                mode === 'checkout' && shopFor(line.service).addons.length
+                  ? shop.cartEdit
+                  : shop.cartViewPackage
               return `
               <li class="shop-cart-line">
                 <div>
                   <strong>${copy?.title ?? line.packageId}</strong>
-                  <span>${serviceTitle(locale, line.service)}</span>
+                  <span>${serviceTitle(locale, line.service)}${mode ? ` · ${shop.modeBadge[mode]}` : ''}</span>
                   ${addonLabels.length ? `<span class="shop-cart-addons">${addonLabels.join(' · ')}</span>` : ''}
-                  <a class="shop-cart-edit" href="${editHref}">${shop.cartEdit}</a>
+                  <a class="shop-cart-edit" href="${editHref}">${editLabel}</a>
                 </div>
                 <div class="shop-cart-line-actions">
-                  <span>${formatEur(lineTotal, locale)}</span>
+                  <span>${formatEur(lineTotal, locale)}${period}</span>
                   <button type="button" class="shop-cart-remove" data-shop-remove="${line.service}:${line.packageId}">${shop.cartRemove}</button>
                 </div>
               </li>`
             })
             .join('')}
         </ul>
+        ${
+          split.oneTimeEur > 0 || split.monthlyEur > 0
+            ? `<dl class="shop-cart-split">
+                ${split.oneTimeEur > 0 ? `<div><dt>${shop.cartOnceLabel}</dt><dd>${formatEur(split.oneTimeEur, locale)}</dd></div>` : ''}
+                ${split.monthlyEur > 0 ? `<div><dt>${shop.cartMonthlyLabel}</dt><dd>${formatEur(split.monthlyEur, locale)} ${shop.monthSuffix}</dd></div>` : ''}
+              </dl>`
+            : ''
+        }
+        ${mixed ? `<p class="shop-note shop-note--warn">${shop.cartMixedBilling}</p>` : ''}
         <div class="shop-cart-toolbar">
           <button type="button" class="booking-back" data-shop-clear-cart>${shop.cartClear}</button>
         </div>
@@ -473,10 +542,11 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
             <span>${shop.cartEmail} <em>*</em></span>
             <input type="email" name="email" required autocomplete="email" maxlength="254" />
           </label>
+          <p class="shop-note shop-note--vat">${shop.vatNote}</p>
           <p class="booking-hint">${shop.cartPayHint}</p>
           <p class="booking-error" data-shop-cart-error hidden></p>
           <span class="glowborder">
-            <button type="submit" class="ts-btn pink solid" data-shop-cart-submit>${shop.cartCheckout}</button>
+            <button type="submit" class="ts-btn pink solid" data-shop-cart-submit ${mixed ? 'disabled' : ''}>${shop.cartCheckout}</button>
           </span>
         </form>`
       }
@@ -502,6 +572,16 @@ function renderShopFaq(locale: Locale): string {
     </section>`
 }
 
+function resolveQuotePackageLabel(locale: Locale, packageHint: string): string {
+  if (!packageHint) return ''
+  const [service, packageId] = packageHint.split(':')
+  if (!service || !packageId || !isBookingServiceKey(service)) return packageHint
+  const item = findShopPackage(service, packageId)
+  if (!item) return packageHint
+  const copy = packageCopy(locale, service, packageId)
+  return copy?.title ? `${copy.title} (${serviceTitle(locale, service)})` : packageHint
+}
+
 function renderQuoteForm(locale: Locale, prefillService = '', prefillPackage = ''): string {
   const m = t(locale)
   const shop = m.shopPage
@@ -509,47 +589,97 @@ function renderQuoteForm(locale: Locale, prefillService = '', prefillPackage = '
     ['', m.contact.servicePlaceholder],
     ...SHOP_CATEGORY_IDS.map((id) => [id, shop.categories[id].title] as const),
   ]
+  const packageLabel = resolveQuotePackageLabel(locale, prefillPackage)
+  const packageChip = packageLabel
+    ? `<p class="shop-quote-selected" data-shop-quote-package>
+        <span class="shop-quote-selected-label">${shop.quoteSelectedPackage}</span>
+        <strong>${packageLabel}</strong>
+      </p>`
+    : ''
   return `
     <section class="shop-quote" id="quote">
-      <h2>${shop.quoteTitle}</h2>
-      <p class="lead">${shop.quoteLead}</p>
-      <form class="contact-form shop-quote-form" data-shop-quote novalidate>
-        <input type="hidden" name="packageHint" value="${prefillPackage}" />
-        <label class="contact-field">
-          <span>${shop.quoteName} <em>*</em></span>
-          <input type="text" name="name" required autocomplete="name" maxlength="120" />
-        </label>
-        <label class="contact-field">
-          <span>${shop.quoteEmail} <em>*</em></span>
-          <input type="email" name="email" required autocomplete="email" maxlength="254" />
-        </label>
-        <label class="contact-field">
-          <span>${shop.quotePhone}</span>
-          <input type="tel" name="phone" autocomplete="tel" />
-        </label>
-        <label class="contact-field">
-          <span>${shop.quoteService}</span>
-          <select name="area">
-            ${options
-              .map(([value, label]) => {
-                const selected =
-                  value === prefillService || (!prefillService && value === '') ? ' selected' : ''
-                return `<option value="${value}"${selected}>${label}</option>`
-              })
-              .join('')}
-          </select>
-        </label>
-        <label class="contact-field">
-          <span>${shop.quoteMessage} <em>*</em></span>
-          <textarea name="message" rows="4" required></textarea>
-        </label>
-        <p class="booking-hint">${shop.quoteHint}</p>
-        <p class="booking-error" data-shop-quote-error hidden></p>
-        <p class="shop-quote-ok" data-shop-quote-ok hidden>${shop.quoteSuccess}</p>
-        <span class="glowborder">
-          <button type="submit" class="ts-btn pink solid">${shop.quoteSubmit}</button>
-        </span>
-      </form>
+      <div class="shop-quote-panel">
+        <aside class="shop-quote-aside">
+          <p class="shop-quote-eyebrow">${shop.quoteEyebrow}</p>
+          <h2>${shop.quoteTitle}</h2>
+          <p class="shop-quote-lead">${shop.quoteLead}</p>
+          <h3 class="shop-quote-aside-title">${shop.quoteAsideTitle}</h3>
+          <ol class="shop-quote-steps">
+            ${shop.quoteSteps.map((step) => `<li>${step}</li>`).join('')}
+          </ol>
+          <p class="shop-quote-note">${shop.quoteResponseNote}</p>
+          <p class="shop-quote-email">${shop.quoteEmailVisible} <a href="mailto:info@bditec.com">info@bditec.com</a></p>
+        </aside>
+        <form class="contact-form shop-quote-form" data-shop-quote novalidate>
+          <input type="hidden" name="packageHint" value="${prefillPackage}" />
+          ${packageChip}
+          <div class="booking-row">
+            <label class="contact-field">
+              <span>${shop.quoteName} <em>*</em></span>
+              <input type="text" name="name" required autocomplete="name" maxlength="120" />
+            </label>
+            <label class="contact-field">
+              <span>${shop.quoteEmail} <em>*</em></span>
+              <input type="email" name="email" required autocomplete="email" maxlength="254" />
+            </label>
+          </div>
+          <div class="booking-row">
+            <label class="contact-field">
+              <span>${shop.quoteCompany}</span>
+              <input type="text" name="company" autocomplete="organization" maxlength="160" />
+            </label>
+            <label class="contact-field">
+              <span>${shop.quotePhone}</span>
+              <input type="tel" name="phone" autocomplete="tel" maxlength="40" />
+            </label>
+          </div>
+          <label class="contact-field">
+            <span>${shop.quoteService}</span>
+            <select name="area">
+              ${options
+                .map(([value, label]) => {
+                  const selected =
+                    value === prefillService || (!prefillService && value === '') ? ' selected' : ''
+                  return `<option value="${value}"${selected}>${label}</option>`
+                })
+                .join('')}
+            </select>
+          </label>
+          <div class="booking-row">
+            <label class="contact-field">
+              <span>${shop.quoteBudget}</span>
+              <select name="budget">
+                ${shop.quoteBudgetOptions
+                  .map(({ value, label }) => `<option value="${value}">${label}</option>`)
+                  .join('')}
+              </select>
+            </label>
+            <label class="contact-field">
+              <span>${shop.quoteTiming}</span>
+              <select name="timing">
+                ${shop.quoteTimingOptions
+                  .map(({ value, label }) => `<option value="${value}">${label}</option>`)
+                  .join('')}
+              </select>
+            </label>
+          </div>
+          <label class="contact-field">
+            <span>${shop.quoteMessage} <em>*</em></span>
+            <textarea name="message" rows="5" required maxlength="4000"></textarea>
+            <span class="shop-quote-field-hint">${shop.quoteMessageHint}</span>
+          </label>
+          <p class="booking-hint">${shop.quoteHint}</p>
+          <p class="booking-error" data-shop-quote-error hidden></p>
+          <p class="shop-quote-ok" data-shop-quote-ok hidden>${shop.quoteSuccess}</p>
+          <pre class="shop-quote-summary" data-shop-quote-summary hidden></pre>
+          <div class="shop-quote-actions">
+            <span class="glowborder">
+              <button type="submit" class="ts-btn pink solid">${shop.quoteSubmit}</button>
+            </span>
+            <button type="button" class="booking-back" data-shop-quote-copy hidden>${shop.quoteCopySummary}</button>
+          </div>
+        </form>
+      </div>
     </section>`
 }
 
@@ -609,7 +739,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
   const cartBar = `
     <div class="wrap shop-cart-bar" data-shop-cart-bar>
       <p class="shop-cart-bar-status" data-shop-cart-bar-status role="status" aria-live="polite" hidden></p>
-      <a class="shop-cart-bar-link" href="#cart">${shop.cartOpen} · ${shop.cartCount(cartLines.length)}</a>
+      <a class="shop-cart-bar-link" href="#cart">${shop.cartOpen} · ${shop.cartCount(cartLines.length)}${cartLines.length ? ` · ${formatCartMoneySummary(cartSplitTotals(cartLines), (n) => formatEur(n, locale), shop.monthSuffix, ' · ')}` : ''}</a>
     </div>`
 
   if (detail) {
@@ -644,6 +774,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
           <p class="shop-eyebrow">${shop.eyebrow}</p>
           <h1>${shop.title}</h1>
           <p class="lead">${shop.lead}</p>
+          <p class="shop-note shop-taxonomy-note">${shop.taxonomyNote}</p>
         </div>
       </header>
       ${cartBar}
@@ -690,7 +821,25 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
         <p class="shop-note shop-note--soft">${shop.vatNote} ${shop.missingTerms}</p>
       </div>
 
+      <div class="wrap shop-compare-dock" data-shop-compare-dock hidden>
+        <p data-shop-compare-status></p>
+        <button type="button" class="ts-btn pink solid" data-shop-compare-open>${shop.compareOpen}</button>
+        <button type="button" class="booking-back" data-shop-compare-clear>${shop.compareClear}</button>
+      </div>
+      <div class="shop-compare-panel wrap" data-shop-compare-panel hidden tabindex="-1" role="dialog" aria-labelledby="shop-compare-title">
+        <div class="shop-compare-panel-head">
+          <h2 id="shop-compare-title">${shop.compareTitle}</h2>
+          <button type="button" class="booking-back" data-shop-compare-close>${shop.compareClose}</button>
+        </div>
+        <div class="shop-compare-table-wrap" data-shop-compare-body></div>
+      </div>
+
       <div class="wrap">
+        <section class="shop-after" aria-labelledby="shop-after-title">
+          <h2 id="shop-after-title">${shop.afterOrderTitle}</h2>
+          <ol class="shop-after-order">${shop.afterOrderSteps.map((step) => `<li>${step}</li>`).join('')}</ol>
+          <p class="shop-note">${shop.afterOrderNote}</p>
+        </section>
         ${renderCartPanel(locale, cartLines)}
         ${renderShopFaq(locale)}
         ${renderQuoteForm(locale)}
@@ -705,6 +854,7 @@ export function initShopPage(
   locale: Locale,
   onRerender: (state: ShopFilterState) => void,
 ) {
+  const shop = t(locale).shopPage
   const rawPackage = (new URLSearchParams(location.search).get('package') || '').trim()
   let state = readFiltersFromUrl()
   const host = root.querySelector<HTMLElement>('[data-shop-root]')
@@ -807,6 +957,7 @@ export function initShopPage(
 
   host.querySelectorAll<HTMLAnchorElement>('[data-shop-quote-prefill]').forEach((link) => {
     link.addEventListener('click', () => {
+      const shop = t(locale).shopPage
       const raw = link.dataset.shopQuotePrefill || ''
       const [service, packageId] = raw.split(':')
       const form = host.querySelector<HTMLFormElement>('[data-shop-quote]')
@@ -817,6 +968,17 @@ export function initShopPage(
       if (area && service && isBookingServiceKey(service)) {
         const item = findShopPackage(service, packageId || '')
         if (item) area.value = item.package.shopCategory
+      }
+      const packageLabel = resolveQuotePackageLabel(locale, raw)
+      let chip = form.querySelector<HTMLElement>('[data-shop-quote-package]')
+      if (packageLabel) {
+        if (!chip) {
+          chip = document.createElement('p')
+          chip.className = 'shop-quote-selected'
+          chip.dataset.shopQuotePackage = ''
+          form.prepend(chip)
+        }
+        chip.innerHTML = `<span class="shop-quote-selected-label">${shop.quoteSelectedPackage}</span><strong>${packageLabel}</strong>`
       }
       const msg = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]')
       if (msg && !msg.value.trim() && service && packageId) {
@@ -859,7 +1021,10 @@ export function initShopPage(
       addonIds.push(input.value)
     })
     const totalEl = buybox.querySelector<HTMLElement>('[data-shop-buybox-total]')
-    if (totalEl) totalEl.textContent = formatEur(base + extra, locale)
+    const period = (buybox.dataset.period || '').trim()
+    if (totalEl) {
+      totalEl.textContent = `${formatEur(base + extra, locale)}${period ? ` ${period}` : ''}`
+    }
     if (bookingCta) {
       const service = bookingCta.dataset.service || ''
       const packageId = bookingCta.dataset.package || ''
@@ -941,6 +1106,13 @@ export function initShopPage(
       err.hidden = true
       err.textContent = ''
     }
+    if (cartHasMixedBilling(items)) {
+      if (err) {
+        err.hidden = false
+        err.textContent = shop.cartMixedBilling
+      }
+      return
+    }
     if (submit) {
       submit.disabled = true
       submit.textContent = shop.cartProcessing
@@ -959,7 +1131,9 @@ export function initShopPage(
     }
     if (err) {
       err.hidden = false
-      err.textContent = result.error || shop.cartError
+      const unavailable =
+        !result.error || /unavailable|not reachable|Price ID|subscription/i.test(result.error)
+      err.textContent = unavailable ? shop.checkoutUnavailable : result.error || shop.cartError
     }
     if (submit) {
       submit.disabled = false
@@ -970,11 +1144,15 @@ export function initShopPage(
   const form = host.querySelector<HTMLFormElement>('[data-shop-quote]')
   form?.addEventListener('submit', (event) => {
     event.preventDefault()
+    const shop = t(locale).shopPage
     const data = new FormData(form)
     const name = String(data.get('name') || '').trim()
     const email = String(data.get('email') || '').trim()
     const phone = String(data.get('phone') || '').trim()
+    const company = String(data.get('company') || '').trim()
     const area = String(data.get('area') || '').trim()
+    const budget = String(data.get('budget') || '').trim()
+    const timing = String(data.get('timing') || '').trim()
     const message = String(data.get('message') || '').trim()
     const packageHint = String(data.get('packageHint') || '').trim()
     const err = host.querySelector<HTMLElement>('[data-shop-quote-error]')
@@ -984,24 +1162,166 @@ export function initShopPage(
       return
     }
     const areaLabel =
-      area && isShopCategoryId(area) ? t(locale).shopPage.categories[area].title : area || '—'
+      area && isShopCategoryId(area) ? shop.categories[area].title : area || '—'
+    const packageLabel = resolveQuotePackageLabel(locale, packageHint)
+    const budgetLabel =
+      shop.quoteBudgetOptions.find((o) => o.value === budget)?.label || budget
+    const timingLabel =
+      shop.quoteTimingOptions.find((o) => o.value === timing)?.label || timing
     const body = [
       `Name: ${name}`,
       `Email: ${email}`,
+      company ? `Company: ${company}` : '',
       phone ? `Phone: ${phone}` : '',
       `Area: ${areaLabel}`,
-      packageHint ? `Package: ${packageHint}` : '',
+      packageLabel ? `Package: ${packageLabel}` : packageHint ? `Package: ${packageHint}` : '',
+      budget ? `Budget (orientation): ${budgetLabel}` : '',
+      timing ? `Timeline: ${timingLabel}` : '',
       '',
       message,
     ]
       .filter(Boolean)
       .join('\n')
-    const subject = encodeURIComponent(`BDITEC quote request — ${areaLabel}`)
+    const subject = encodeURIComponent(
+      packageLabel
+        ? `BDITEC quote — ${packageLabel}`
+        : `BDITEC quote request — ${areaLabel}`,
+    )
     const mailto = `mailto:info@bditec.com?subject=${subject}&body=${encodeURIComponent(body)}`
-    trackEvent('shop_quote_mailto', { locale, area: area || 'none', package: packageHint || 'none' })
+    trackEvent('shop_quote_mailto', {
+      locale,
+      area: area || 'none',
+      package: packageHint || 'none',
+      budget: budget || 'none',
+      timing: timing || 'none',
+    })
+    const summary = host.querySelector<HTMLElement>('[data-shop-quote-summary]')
+    const copyBtn = host.querySelector<HTMLButtonElement>('[data-shop-quote-copy]')
+    if (summary) {
+      summary.hidden = false
+      summary.textContent = body
+    }
+    if (copyBtn) {
+      copyBtn.hidden = false
+      copyBtn.onclick = async () => {
+        try {
+          await navigator.clipboard.writeText(body)
+          copyBtn.textContent = shop.quoteCopied
+        } catch {
+          copyBtn.textContent = shop.quoteCopyFailed
+        }
+      }
+    }
     window.location.href = mailto
     if (err) err.hidden = true
-    if (ok) ok.hidden = false
+    if (ok) {
+      ok.hidden = false
+      ok.textContent = shop.quoteSuccess
+    }
+  })
+
+  host.querySelector<HTMLButtonElement>('[data-shop-print]')?.addEventListener('click', () => {
+    trackEvent('shop_print_summary', { locale })
+    window.print()
+  })
+
+  const compareDock = host.querySelector<HTMLElement>('[data-shop-compare-dock]')
+  const compareStatus = host.querySelector<HTMLElement>('[data-shop-compare-status]')
+  const comparePanel = host.querySelector<HTMLElement>('[data-shop-compare-panel]')
+  const compareBody = host.querySelector<HTMLElement>('[data-shop-compare-body]')
+  const maxCompare = 3
+
+  const selectedCompare = (): string[] =>
+    [...host.querySelectorAll<HTMLInputElement>('[data-shop-compare]:checked')].map((el) => el.value)
+
+  const syncCompareDock = () => {
+    const ids = selectedCompare()
+    if (compareDock) compareDock.hidden = ids.length < 2
+    if (compareStatus) {
+      compareStatus.textContent = shop.compareCount(ids.length)
+    }
+  }
+
+  host.querySelectorAll<HTMLInputElement>('[data-shop-compare]').forEach((input) => {
+    input.addEventListener('change', () => {
+      const ids = selectedCompare()
+      if (ids.length > maxCompare) {
+        input.checked = false
+        return
+      }
+      trackEvent('shop_compare_toggle', {
+        locale,
+        package: input.value,
+        selected: ids.length,
+      })
+      syncCompareDock()
+    })
+  })
+  syncCompareDock()
+
+  host.querySelector('[data-shop-compare-clear]')?.addEventListener('click', () => {
+    host.querySelectorAll<HTMLInputElement>('[data-shop-compare]').forEach((el) => {
+      el.checked = false
+    })
+    if (comparePanel) comparePanel.hidden = true
+    syncCompareDock()
+  })
+
+  host.querySelector('[data-shop-compare-close]')?.addEventListener('click', () => {
+    if (comparePanel) comparePanel.hidden = true
+  })
+
+  host.querySelector('[data-shop-compare-open]')?.addEventListener('click', () => {
+    const ids = selectedCompare()
+    if (ids.length < 2 || !compareBody || !comparePanel) return
+    const rows = ids
+      .map((raw) => {
+        const [service, packageId] = raw.split(':')
+        if (!service || !packageId || !isBookingServiceKey(service)) return null
+        return findShopPackage(service, packageId)
+      })
+      .filter(Boolean) as ShopListingItem[]
+    if (rows.length < 2) return
+    trackEvent('shop_compare_open', { locale, count: rows.length })
+    const head = rows
+      .map((item) => {
+        const copy = packageCopy(locale, item.service, item.package.id)
+        const period = pricePeriod(locale, item.package.purchaseMode)
+        const price =
+          item.package.purchaseMode === 'quote'
+            ? shop.priceOnRequest
+            : `${formatEur(item.package.priceEur, locale)}${period ? ` ${period}` : ''}`
+        return `<th scope="col">${copy?.title ?? item.package.id}<br /><span class="shop-compare-price">${price}</span></th>`
+      })
+      .join('')
+    const featureRows = [0, 1, 2, 3, 4]
+      .map((i) => {
+        const cells = rows
+          .map((item) => {
+            const copy = packageCopy(locale, item.service, item.package.id)
+            const line = copy?.highlights?.[i] || '—'
+            return `<td>${line}</td>`
+          })
+          .join('')
+        return `<tr><th scope="row">${shop.compareFeature} ${i + 1}</th>${cells}</tr>`
+      })
+      .join('')
+    const modeRow = `<tr><th scope="row">${shop.filterModeLabel}</th>${rows
+      .map((item) => `<td>${shop.modeBadge[item.package.purchaseMode]}</td>`)
+      .join('')}</tr>`
+    const ctaRow = `<tr><th scope="row"></th>${rows
+      .map((item) => {
+        const href = `/shop.html?service=${encodeURIComponent(item.service)}&package=${encodeURIComponent(item.package.id)}`
+        return `<td><a href="${href}">${shop.viewDetails}</a></td>`
+      })
+      .join('')}</tr>`
+    compareBody.innerHTML = `
+      <table class="shop-compare-table">
+        <thead><tr><th scope="col">${shop.compareFeature}</th>${head}</tr></thead>
+        <tbody>${modeRow}${featureRows}${ctaRow}</tbody>
+      </table>`
+    comparePanel.hidden = false
+    comparePanel.focus()
   })
 
   if (!shopPopBound) {

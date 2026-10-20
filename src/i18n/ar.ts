@@ -157,22 +157,21 @@ export const ar: Messages = {
     monthlyLabel: 'المبلغ الشهري (توجيهي)',
     depositHint: 'ابدأوا أونلاين بباقة وإضافات اختيارية. المزيد لاحقاً حسب الحاجة.',
     monthlyHint:
-      'الأتعاب الشهرية بلا ميزانية إعلان/استضافة ما لم تُذكر. الإضافات لمرة واحدة. الاشتراكات تحتاج Stripe Price IDs.',
+      'الأتعاب الشهرية بلا ميزانية إعلان/استضافة ما لم تُذكر. الإضافات لمرة واحدة وغير قابلة للجمع مع الباقات الشهرية.',
     extrasOnceLabel: 'إضافات (مرة واحدة)',
     quotePackagesHeading: 'بعرض سعر فقط',
     quotePackageCta: 'طلب عرض بالبريد',
     quoteMailtoSubject: 'عرض BDITEC — {{service}} / {{package}}',
     quoteMailtoBody:
-      'الخدمة: {{service}}\nالباقة: {{title}}\nالتوجيهي: {{price}}\n\nوصف مختصر:\n',
+      'الخدمة: {{service}}\nالباقة: {{title}}\nالسعر: عند الطلب\n\nوصف مختصر:\n',
     summaryTitle: 'طلبكم',
     payCta: 'ادفع الآن',
     paySecure: 'دفع أونلاين آمن (بطاقة / Stripe)',
     paySecureDemo: 'دفع تجريبي — بلا خصم حقيقي على البطاقة',
     paySecurePending:
-      'يؤكد الخادم وضع الدفع عند الدفع: تجريبي بدون sk_test_/sk_live_، وإلا Stripe Checkout.',
+      'يؤكد الخادم عند الدفع إن كان الوضع تجريبياً (بلا خصم حقيقي) أو Stripe Checkout.',
     payProcessing: 'جارٍ تجهيز الدفع…',
-    payUnavailable:
-      'الدفع غير متاح. الباقات الشهرية تحتاج Stripe Price IDs بلا إضافات لمرة واحدة — أو الخادم/العرض غير متاح.',
+    payUnavailable: 'الحجز أونلاين غير متاح حالياً. يُرجى طلب عرض سعر.',
     successTitle: 'اكتمل الطلب',
     successBody:
       'تم استلام الدفع. التأكيد بالبريد — والمتابعة رقمية بلا موعد شخصي.',
@@ -180,7 +179,7 @@ export const ar: Messages = {
       'تم تسجيل طلب تجريبي (بلا خصم حقيقي). سنتواصل بالبريد — والمتابعة رقمية.',
     successAgain: 'طلب آخر',
     demoPayNote:
-      'إطلاق تجريبي: بدون مفتاح Stripe سري صالح (sk_test_…) يبقى الدفع تجريبياً — بلا خصم حقيقي.',
+      'إطلاق تجريبي: قد يعمل الدفع كعرض تجريبي — بلا خصم حقيقي. الطلبات التجريبية مُعلَّمة بوضوح.',
   },
   bookingShop: bookingShopAr,
   shopPage: shopPageAr,
@@ -191,7 +190,7 @@ export const ar: Messages = {
     related: 'خدمات أخرى',
     cta: 'اطلب أونلاين',
     ctaSecondary: 'إلى الدفع',
-    ctaShop: 'الباقات في المتجر',
+    ctaShop: 'عرض الباقات',
     overview: 'نظرة عامة',
     details: 'اعرف المزيد',
     included: 'ما يشمله العرض',

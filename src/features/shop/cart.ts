@@ -1,9 +1,10 @@
 import {
   calcOrderTotalEur,
-  canAddToCart,
+  canPurchaseDirect,
   findShopPackage,
 } from '../booking/shop-catalog'
 import { isBookingServiceKey, type BookingServiceKey } from '../booking/catalog'
+import { sanitizeCartLines } from './cart-rules'
 
 export const SHOP_CART_KEY = 'bditec-shop-cart'
 export const SHOP_CART_FLASH_KEY = 'bditec-shop-cart-flash'
@@ -25,7 +26,7 @@ export function readCart(): CartLine[] {
     if (!raw) return []
     const parsed = JSON.parse(raw) as CartLine[]
     if (!Array.isArray(parsed)) return []
-    return parsed
+    const capped = parsed
       .filter(
         (line) =>
           line &&
@@ -34,6 +35,9 @@ export function readCart(): CartLine[] {
           Array.isArray(line.addonIds),
       )
       .slice(0, CART_MAX_ITEMS)
+    const { lines, changed } = sanitizeCartLines(capped)
+    if (changed) writeCart(lines)
+    return lines
   } catch {
     return []
   }
@@ -88,7 +92,7 @@ export function addToCart(
   if (!item || !isBookingServiceKey(service)) {
     return { ok: false, reason: 'not-found', cart: readCart() }
   }
-  if (!canAddToCart(item.package.purchaseMode)) {
+  if (!canPurchaseDirect(item.package)) {
     return { ok: false, reason: 'quote-only', cart: readCart() }
   }
   const cart = readCart()

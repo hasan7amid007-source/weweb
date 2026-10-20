@@ -13,9 +13,28 @@
   "web-hosting": {
     "packages": [
       { "id": "shared", "priceEur": 79, "purchaseMode": "checkout", "shopCategory": "hosting-support" },
-      { "id": "care", "priceEur": 59, "purchaseMode": "subscription", "shopCategory": "hosting-support" },
-      { "id": "care-pro", "priceEur": 99, "purchaseMode": "subscription", "shopCategory": "hosting-support" },
-      { "id": "vps", "priceEur": 129, "recommended": true, "purchaseMode": "subscription", "shopCategory": "hosting-support" },
+      {
+        "id": "care",
+        "priceEur": 59,
+        "purchaseMode": "subscription",
+        "shopCategory": "hosting-support",
+        "directCheckout": false
+      },
+      {
+        "id": "care-pro",
+        "priceEur": 99,
+        "purchaseMode": "subscription",
+        "shopCategory": "hosting-support",
+        "directCheckout": false
+      },
+      {
+        "id": "vps",
+        "priceEur": 129,
+        "recommended": true,
+        "purchaseMode": "subscription",
+        "shopCategory": "hosting-support",
+        "directCheckout": false
+      },
       { "id": "dedicated", "priceEur": 249, "purchaseMode": "quote", "shopCategory": "hosting-support" }
     ],
     "addons": [
@@ -64,10 +83,34 @@
     "packages": [
       { "id": "audit", "priceEur": 99, "purchaseMode": "checkout", "shopCategory": "seo-analytics" },
       { "id": "campaign", "priceEur": 199, "recommended": true, "purchaseMode": "checkout", "shopCategory": "digital-marketing" },
-      { "id": "sea", "priceEur": 299, "purchaseMode": "subscription", "shopCategory": "digital-marketing" },
-      { "id": "seo-pflege", "priceEur": 490, "purchaseMode": "subscription", "shopCategory": "seo-analytics" },
-      { "id": "social", "priceEur": 499, "purchaseMode": "subscription", "shopCategory": "digital-marketing" },
-      { "id": "retainer", "priceEur": 349, "purchaseMode": "subscription", "shopCategory": "digital-marketing" }
+      {
+        "id": "sea",
+        "priceEur": 299,
+        "purchaseMode": "subscription",
+        "shopCategory": "digital-marketing",
+        "directCheckout": false
+      },
+      {
+        "id": "seo-pflege",
+        "priceEur": 490,
+        "purchaseMode": "subscription",
+        "shopCategory": "seo-analytics",
+        "directCheckout": false
+      },
+      {
+        "id": "social",
+        "priceEur": 499,
+        "purchaseMode": "subscription",
+        "shopCategory": "digital-marketing",
+        "directCheckout": false
+      },
+      {
+        "id": "retainer",
+        "priceEur": 349,
+        "purchaseMode": "subscription",
+        "shopCategory": "digital-marketing",
+        "directCheckout": false
+      }
     ],
     "addons": [
       { "id": "ads-setup", "priceEur": 69 },

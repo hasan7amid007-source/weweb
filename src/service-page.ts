@@ -5,6 +5,7 @@ import { initTelemetry } from './lib/telemetry'
 import { initAccordions } from './features/accordion'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader, siteLinks } from './features/shell'
 import { applyHreflang, detectLocale, setLocale, t, type Locale } from './i18n'
+import { shopServiceHref } from './features/booking/shop-catalog'
 
 const root = document.querySelector<HTMLDivElement>('#app')
 if (!root) throw new Error('#app not found')
@@ -134,7 +135,7 @@ function render(locale: Locale) {
   const page = m.servicePages[serviceId]
   const links = siteLinks('service')
   const bookingHref = `/?service=${serviceId}#booking`
-  const shopHref = `/shop.html?service=${encodeURIComponent(serviceId)}`
+  const shopHref = shopServiceHref(serviceId)
   const related = SERVICE_IDS.filter((id) => id !== serviceId)
 
   app.innerHTML = `

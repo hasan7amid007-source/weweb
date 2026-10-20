@@ -165,6 +165,9 @@ export const de: Messages = {
     extrasOnceLabel: 'Extras (einmalig)',
     quotePackagesHeading: 'Nur auf Anfrage',
     quotePackageCta: 'Angebot per E-Mail',
+    quoteMailtoSubject: 'BDITEC Angebot — {{service}} / {{package}}',
+    quoteMailtoBody:
+      'Service: {{service}}\nPaket: {{title}}\nRichtwert: {{price}}\n\nKurzbeschreibung:\n',
     summaryTitle: 'Ihre Bestellung',
     payCta: 'Jetzt bezahlen',
     paySecure: 'Sichere Online-Zahlung (Karte / Stripe)',

@@ -13,6 +13,7 @@ export type OrderPageCopy = {
   addonsLabel: string
   itemsLabel: string
   totalLabel: string
+  totalLabelMonthly: string
   nextTitle: string
   nextBody: string
   briefingTitle: string
@@ -53,6 +54,7 @@ export const orderPageDe: OrderPageCopy = {
   addonsLabel: 'Extras',
   itemsLabel: 'Positionen',
   totalLabel: 'Startbetrag',
+  totalLabelMonthly: 'Monatsbetrag',
   nextTitle: 'Nächste Schritte',
   nextBody:
     '1) Briefing ausfüllen · 2) Zugänge/Dateien nennen · 3) Wir melden uns digital. Kein Vor-Ort-Termin nötig.',
@@ -94,6 +96,7 @@ export const orderPageEn: OrderPageCopy = {
   addonsLabel: 'Extras',
   itemsLabel: 'Line items',
   totalLabel: 'Start amount',
+  totalLabelMonthly: 'Monthly amount',
   nextTitle: 'Next steps',
   nextBody:
     '1) Complete briefing · 2) Share access/files · 3) We continue digitally. No on-site meeting required.',
@@ -135,6 +138,7 @@ export const orderPageAr: OrderPageCopy = {
   addonsLabel: 'إضافات',
   itemsLabel: 'البنود',
   totalLabel: 'مبلغ البداية',
+  totalLabelMonthly: 'المبلغ الشهري',
   nextTitle: 'الخطوات التالية',
   nextBody:
     '1) أكمل الإحاطة · 2) شارك الملفات/الوصول · 3) نكمل رقمياً. لا موعد حضورياً.',

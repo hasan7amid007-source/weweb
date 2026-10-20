@@ -162,6 +162,9 @@ export const en: Messages = {
     extrasOnceLabel: 'Extras (one-time)',
     quotePackagesHeading: 'Quote only',
     quotePackageCta: 'Email for a quote',
+    quoteMailtoSubject: 'BDITEC quote — {{service}} / {{package}}',
+    quoteMailtoBody:
+      'Service: {{service}}\nPackage: {{title}}\nIndicative: {{price}}\n\nShort description:\n',
     summaryTitle: 'Your order',
     payCta: 'Pay now',
     paySecure: 'Secure online payment (card / Stripe)',

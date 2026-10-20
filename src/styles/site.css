@@ -1122,6 +1122,12 @@ body.nav-open .nav-toggle-bars::after {
   color: #4a4a55;
 }
 
+.booking-quote-list li.is-highlighted {
+  border-color: #e91e8c;
+  border-style: solid;
+  background: #fff5fa;
+}
+
 .booking-quote-link {
   font-weight: 600;
   color: var(--pink, #e91e8c);

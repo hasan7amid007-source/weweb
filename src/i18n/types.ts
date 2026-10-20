@@ -175,6 +175,8 @@ export type Messages = {
     extrasOnceLabel: string
     quotePackagesHeading: string
     quotePackageCta: string
+    quoteMailtoSubject: string
+    quoteMailtoBody: string
     summaryTitle: string
     payCta: string
     paySecure: string

@@ -92,7 +92,9 @@ export function addToCart(
     return { ok: false, reason: 'quote-only', cart: readCart() }
   }
   const cart = readCart()
-  const cleanAddons = addonIds.filter(Boolean)
+  // Monthly plans cannot mix one-time add-ons (Stripe subscription Checkout constraint).
+  const cleanAddons =
+    item.package.purchaseMode === 'subscription' ? [] : addonIds.filter(Boolean)
   const nextLine: CartLine = {
     service,
     packageId,

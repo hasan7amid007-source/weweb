@@ -78,6 +78,7 @@ export type ShopPageCopy = {
   cartFull: string
   buyboxTotal: string
   extrasSelectHint: string
+  subscriptionNoExtras: string
   cartRemove: string
   cartEdit: string
   cartClear: string
@@ -205,6 +206,8 @@ export const shopPageDe: ShopPageCopy = {
   cartFull: 'Warenkorb voll (max. 8)',
   buyboxTotal: 'Zwischensumme',
   extrasSelectHint: 'Optionale Extras — Betrag aktualisiert sich sofort.',
+  subscriptionNoExtras:
+    'Monatspakete ohne einmalige Extras im Warenkorb — Add-ons nur bei Startbetrag-Paketen.',
   cartRemove: 'Entfernen',
   cartEdit: 'Extras bearbeiten',
   cartClear: 'Leeren',
@@ -347,6 +350,8 @@ export const shopPageEn: ShopPageCopy = {
   cartFull: 'Cart full (max 8)',
   buyboxTotal: 'Subtotal',
   extrasSelectHint: 'Optional extras — total updates instantly.',
+  subscriptionNoExtras:
+    'Monthly plans exclude one-time extras in the cart — add-ons are only for start-amount packages.',
   cartRemove: 'Remove',
   cartEdit: 'Edit extras',
   cartClear: 'Clear',
@@ -489,6 +494,8 @@ export const shopPageAr: ShopPageCopy = {
   cartFull: 'السلة ممتلئة (حد أقصى 8)',
   buyboxTotal: 'المجموع الفرعي',
   extrasSelectHint: 'إضافات اختيارية — يتحدث المجموع فوراً.',
+  subscriptionNoExtras:
+    'الباقات الشهرية بدون إضافات لمرة واحدة في السلة — الإضافات فقط لحزم مبلغ البداية.',
   cartRemove: 'إزالة',
   cartEdit: 'تعديل الإضافات',
   cartClear: 'تفريغ',

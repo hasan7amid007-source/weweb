@@ -302,7 +302,11 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
     (line) => line.service === item.service && line.packageId === item.package.id,
   )
   const selectedAddons = new Set(existingLine?.addonIds ?? [])
-  const checkoutHref = bookingHref(item.service, item.package.id, [...selectedAddons])
+  const checkoutHref = bookingHref(
+    item.service,
+    item.package.id,
+    item.package.purchaseMode === 'checkout' ? [...selectedAddons] : [],
+  )
   const buyPrimary = cartable
     ? `<button type="button" class="ts-btn pink solid" data-shop-add-cart data-shop-detail-cart data-service="${item.service}" data-package="${item.package.id}" data-base-price="${item.package.priceEur}">${shop.cartAdd}</button>`
     : `<a class="ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
@@ -315,8 +319,9 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
       : `<a class="shop-secondary-cta" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
 
   const period = pricePeriod(locale, item.package.purchaseMode)
+  // One-time packages only: subscription + add-ons would break Billing Checkout.
   const addonPicker =
-    cartable && addons.length
+    item.package.purchaseMode === 'checkout' && addons.length
       ? `
         <fieldset class="shop-buybox-extras" data-shop-addon-picker>
           <legend>${booking.addonsHeading}</legend>
@@ -337,8 +342,10 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
             })
             .join('')}
         </fieldset>`
-      : addons.length
-        ? `
+      : item.package.purchaseMode === 'subscription'
+        ? `<p class="shop-note">${shop.subscriptionNoExtras}</p>`
+        : addons.length
+          ? `
         <section class="shop-buybox-extras">
           <h3>${shop.extrasTitle}</h3>
           <p class="shop-note">${shop.extrasBody}</p>
@@ -351,7 +358,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
               .join('')}
           </ul>
         </section>`
-        : ''
+          : ''
 
   return `
     <nav class="shop-breadcrumb" aria-label="${shop.breadcrumbNav}">

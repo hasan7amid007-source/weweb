@@ -129,7 +129,7 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
             <span class="booking-option-card-inner">
               <span class="booking-option-top">
                 <span class="booking-option-name">${copy?.title ?? pkg.id}</span>
-                <span class="booking-option-badge">${page.modeBadge[pkg.purchaseMode]}</span>
+                <span class="booking-option-badge shop-mode-badge shop-mode-badge--${pkg.purchaseMode}">${page.modeBadge[pkg.purchaseMode]}</span>
                 ${pkg.recommended ? `<span class="booking-option-badge">${shop.recommended}</span>` : ''}
                 <span class="booking-option-price">${formatEur(pkg.priceEur, locale)}${period ? ` ${period}` : ''}</span>
               </span>
@@ -147,13 +147,22 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
       ${quoteOnly
         .map((pkg) => {
           const copy = shop.packages[service][pkg.id]
-          const subject = encodeURIComponent(`BDITEC Angebot — ${service} / ${pkg.id}`)
-          const body = encodeURIComponent(
-            `Service: ${service}\nPaket: ${copy?.title ?? pkg.id}\nRichtwert: ${formatEur(pkg.priceEur, locale)}\n\nKurzbeschreibung:\n`,
+          const title = copy?.title ?? pkg.id
+          const price = formatEur(pkg.priceEur, locale)
+          const subject = encodeURIComponent(
+            m.contact.quoteMailtoSubject
+              .replaceAll('{{service}}', service)
+              .replaceAll('{{package}}', pkg.id),
           )
-          return `<li>
-            <span>${copy?.title ?? pkg.id} · ${page.priceKindQuote} ${formatEur(pkg.priceEur, locale)}</span>
-            <a class="booking-quote-link" href="mailto:info@bditec.com?subject=${subject}&body=${body}">${m.contact.quotePackageCta}</a>
+          const body = encodeURIComponent(
+            m.contact.quoteMailtoBody
+              .replaceAll('{{service}}', service)
+              .replaceAll('{{title}}', title)
+              .replaceAll('{{price}}', price),
+          )
+          return `<li data-booking-quote="${pkg.id}">
+            <span>${title} · ${page.priceKindQuote} ${price}</span>
+            <a class="booking-quote-link" data-booking-quote-mailto data-service="${service}" data-package="${pkg.id}" href="mailto:info@bditec.com?subject=${subject}&body=${body}">${m.contact.quotePackageCta}</a>
           </li>`
         })
         .join('')}
@@ -226,6 +235,15 @@ function renderOptionsPanel(root: HTMLElement, locale: Locale, service: BookingS
   })
   host.querySelectorAll('input[name="addon"]').forEach((input) => {
     input.addEventListener('change', syncTotal)
+  })
+  host.querySelectorAll<HTMLAnchorElement>('[data-booking-quote-mailto]').forEach((link) => {
+    link.addEventListener('click', () => {
+      trackEvent('booking_quote_mailto', {
+        service: link.dataset.service || 'none',
+        package: link.dataset.package || 'none',
+        locale,
+      })
+    })
   })
   syncTotal()
 }
@@ -464,31 +482,50 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     )
     if (serviceRadio?.checked) {
       go(2)
-      if (wantedPackage && isPackageId(wanted, wantedPackage)) {
-        const pkgRadio = form.querySelector<HTMLInputElement>(
-          `input[name="package"][value="${wantedPackage}"]`,
+      const wantedMode =
+        wantedPackage && isPackageId(wanted, wantedPackage)
+          ? packageMode(wanted, wantedPackage)
+          : null
+      if (wantedMode === 'quote' && wantedPackage) {
+        const quoteRow = wizard.querySelector<HTMLElement>(
+          `[data-booking-quote="${wantedPackage}"]`,
         )
-        if (pkgRadio) {
-          pkgRadio.checked = true
-          pkgRadio.dispatchEvent(new Event('change', { bubbles: true }))
+        quoteRow?.classList.add('is-highlighted')
+        quoteRow?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+        trackEvent('booking_quote_deeplink', {
+          service: wanted,
+          package: wantedPackage,
+          locale,
+        })
+      } else {
+        if (wantedPackage && isPackageId(wanted, wantedPackage)) {
+          const pkgRadio = form.querySelector<HTMLInputElement>(
+            `input[name="package"][value="${wantedPackage}"]`,
+          )
+          if (pkgRadio) {
+            pkgRadio.checked = true
+            pkgRadio.dispatchEvent(new Event('change', { bubbles: true }))
+          }
         }
-      }
-      const addonIds = wantedAddons.filter((id) => isAddonId(wanted, id))
-      for (const id of addonIds) {
-        const addonInput = form.querySelector<HTMLInputElement>(
-          `input[name="addon"][value="${id}"]`,
-        )
-        if (addonInput) {
-          addonInput.checked = true
-          addonInput.dispatchEvent(new Event('change', { bubbles: true }))
+        const mode = packageMode(wanted, readForm(form).packageId)
+        const addonIds =
+          mode === 'checkout' ? wantedAddons.filter((id) => isAddonId(wanted, id)) : []
+        for (const id of addonIds) {
+          const addonInput = form.querySelector<HTMLInputElement>(
+            `input[name="addon"][value="${id}"]`,
+          )
+          if (addonInput) {
+            addonInput.checked = true
+            addonInput.dispatchEvent(new Event('change', { bubbles: true }))
+          }
         }
+        trackEvent('booking_shop_deeplink', {
+          service: wanted,
+          package: wantedPackage || 'none',
+          addons: addonIds.join('|') || 'none',
+          locale,
+        })
       }
-      trackEvent('booking_shop_deeplink', {
-        service: wanted,
-        package: wantedPackage || 'none',
-        addons: addonIds.join('|') || 'none',
-        locale,
-      })
     }
   }
 

@@ -36,7 +36,7 @@ npm run preview
 │   ├── i18n/                  # DE / EN / AR copy
 │   ├── styles/                # Global CSS
 │   └── ui/                    # Shared SVG / UI snippets
-├── .env.example               # Stripe Payment Links (live pay)
+├── .env.example               # Stripe server env checklist (Checkout/Billing)
 └── .brainum/                  # Brainum project config
 ```
 
@@ -46,7 +46,7 @@ npm run preview
 2. Enter details (receipt)  
 3. Pay online  
 
-Live card payments (optional later): copy `.env.example` → `.env` and set Stripe Payment Link URLs. Success redirect: `/?booking=success#booking`. Until then, local/demo checkout works without Stripe.
+Soft-launch uses `/api/create-checkout` (demo without `sk_test_`/`sk_live_`). Live/test Stripe Checkout is server-owned once Vercel secrets and Price IDs are set — see `.env.example`.
 
 ## Deploy (Vercel)
 

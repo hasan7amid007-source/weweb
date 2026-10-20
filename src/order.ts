@@ -1,6 +1,7 @@
 import './styles/site.css'
 import './styles/effects.css'
 import { formatEur, isBookingServiceKey, ORDER_BRIEFING_KEY } from './features/booking/catalog'
+import { shopFor } from './features/booking/shop-catalog'
 import { initTelemetry, trackEvent } from './lib/telemetry'
 import { bindLangSwitch, bindNavToggle, renderFooter, renderHeader } from './features/shell'
 import { detectLocale, setLocale, t, type Locale } from './i18n'
@@ -133,9 +134,23 @@ function render(locale: Locale) {
 
   const hasMeta = !!(order.service || order.packageId || order.orderId || order.sessionId)
   const multi = order.items.length > 1
+  const linesForMode = order.items.length
+    ? order.items
+    : order.service && order.packageId
+      ? [{ service: order.service, packageId: order.packageId, addonIds: order.addons }]
+      : []
+  const allSubscription =
+    linesForMode.length > 0 &&
+    linesForMode.every((line) => {
+      if (!isBookingServiceKey(line.service)) return false
+      const pkg = shopFor(line.service).packages.find((p) => p.id === line.packageId)
+      return pkg?.purchaseMode === 'subscription'
+    })
+  const totalLabel = allSubscription ? o.totalLabelMonthly : o.totalLabel
+  const monthSuffix = allSubscription ? ` ${m.shopPage.monthSuffix}` : ''
   const totalText =
     order.total && /^\d+$/.test(order.total)
-      ? formatEur(Number(order.total), locale)
+      ? `${formatEur(Number(order.total), locale)}${monthSuffix}`
       : order.total || '—'
   const refId = escapeHtml(order.orderId || order.sessionId)
   const emailAttr = escapeHtml(order.email)
@@ -174,7 +189,7 @@ function render(locale: Locale) {
           }
           ${
             order.total
-              ? `<div><dt>${o.totalLabel}</dt><dd>${escapeHtml(totalText)}</dd></div>`
+              ? `<div><dt>${totalLabel}</dt><dd>${escapeHtml(totalText)}</dd></div>`
               : ''
           }
         </dl>

@@ -161,6 +161,9 @@ export const ar: Messages = {
     extrasOnceLabel: 'إضافات (مرة واحدة)',
     quotePackagesHeading: 'بعرض سعر فقط',
     quotePackageCta: 'طلب عرض بالبريد',
+    quoteMailtoSubject: 'عرض BDITEC — {{service}} / {{package}}',
+    quoteMailtoBody:
+      'الخدمة: {{service}}\nالباقة: {{title}}\nالتوجيهي: {{price}}\n\nوصف مختصر:\n',
     summaryTitle: 'طلبكم',
     payCta: 'ادفع الآن',
     paySecure: 'دفع أونلاين آمن (بطاقة / Stripe)',

@@ -222,6 +222,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const cancelUrl = safeSameSiteUrl(body.cancelUrl, `${origin}/shop.html#cart`)
 
     const secret = (process.env.STRIPE_SECRET_KEY || '').trim()
+    if (secret.startsWith('pk_')) {
+      return res.status(500).json({
+        error: 'Checkout failed',
+        detail:
+          'STRIPE_SECRET_KEY is a publishable key (pk_…). Use the secret key sk_test_… (Test mode) from Stripe Dashboard → API keys.',
+      })
+    }
     if (!secret) {
       const demoId = `demo_${Date.now().toString(36)}`
       const demoUrl = new URL(`${origin}/order.html`)

@@ -378,7 +378,7 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
         </aside>
       </div>
       ${renderRelated(locale, item)}
-      <p class="shop-note shop-note--soft">${shop.missingTerms}</p>
+      <p class="shop-note shop-note--soft">${shop.vatNote} ${shop.missingTerms}</p>
     </div>`
 }
 
@@ -642,7 +642,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
 
       <div class="wrap shop-catalog" data-shop-grid>
         ${catalogBody}
-        <p class="shop-note shop-note--soft">${shop.missingTerms}</p>
+        <p class="shop-note shop-note--soft">${shop.vatNote} ${shop.missingTerms}</p>
       </div>
 
       <div class="wrap">

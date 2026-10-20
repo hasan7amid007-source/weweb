@@ -32,6 +32,7 @@ export type ShopPageCopy = {
   viewService: string
   planIncludes: string
   startAmountNote: string
+  vatNote: string
   missingTerms: string
   detailBack: string
   breadcrumbShop: string
@@ -141,8 +142,9 @@ export const shopPageDe: ShopPageCopy = {
   viewService: 'Zur Service-Seite',
   planIncludes: 'Enthalten im Start',
   startAmountNote: 'Angezeigter Betrag ist ein Start-/Anzahlungswert in EUR und wird auf das Projekt angerechnet.',
+  vatNote: 'Alle Beträge in EUR zzgl. MwSt., sofern nicht anders angegeben.',
   missingTerms:
-    'Preise und Konditionen sind Orientierungswerte — finale Vereinbarung im Briefing. Soft-Launch kann Demo-Checkout nutzen.',
+    'Preise und Konditionen sind Orientierungswerte (kein Festpreis wie bei manchen Agenturen) — finale Vereinbarung im Briefing. Soft-Launch kann Demo-Checkout nutzen.',
   detailBack: 'Alle Pläne',
   breadcrumbShop: 'Shop',
   relatedTitle: 'Weitere Pläne in diesem Service',
@@ -272,8 +274,9 @@ export const shopPageEn: ShopPageCopy = {
   viewService: 'Service page',
   planIncludes: 'Included to start',
   startAmountNote: 'Shown amount is a start / deposit value in EUR and is credited toward the project.',
+  vatNote: 'All amounts in EUR excl. VAT unless stated otherwise.',
   missingTerms:
-    'Listed amounts are orientation prices — final scope is confirmed in the briefing. Soft-launch may use demo checkout.',
+    'Listed amounts are orientation start prices (not full agency Festpreise) — final scope is confirmed in the briefing. Soft-launch may use demo checkout.',
   detailBack: 'All plans',
   breadcrumbShop: 'Shop',
   relatedTitle: 'More plans in this service',
@@ -403,8 +406,9 @@ export const shopPageAr: ShopPageCopy = {
   viewService: 'صفحة الخدمة',
   planIncludes: 'يشمل للبداية',
   startAmountNote: 'المبلغ المعروض قيمة بداية / عربون باليورو ويُحتسب ضمن المشروع.',
+  vatNote: 'جميع المبالغ باليورو بدون ضريبة القيمة المضافة ما لم يُذكر خلاف ذلك.',
   missingTerms:
-    'المبالغ توجيهية — النطاق النهائي يُؤكد في الإحاطة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
+    'المبالغ توجيهية لمبالغ البداية (وليست أسعار مشاريع كاملة) — النطاق النهائي يُؤكد في الإحاطة. الإطلاق التجريبي قد يستخدم دفعاً تجريبياً.',
   detailBack: 'كل الخطط',
   breadcrumbShop: 'المتجر',
   relatedTitle: 'خطط أخرى في هذه الخدمة',

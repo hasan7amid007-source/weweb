@@ -3730,6 +3730,10 @@ html[dir='rtl'] .brand {
   .shop-plan-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .shop-plan-row:has(.shop-plan:nth-child(4)) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .shop-plan {

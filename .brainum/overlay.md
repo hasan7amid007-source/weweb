@@ -76,7 +76,10 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Shop logic audit (2026-10-20, Brainum) — catalog SSOT + server price validation PASS; fixed calcOrderTotalEur invalid-id fallback + multi-cart API-fail silent first-line checkout; residual: shop UI cannot pick addons; mixed sub+one-time → payment mode until Stripe Price IDs
 - [x] Shop detail addon picker (2026-10-20) — buy-box extras with live subtotal; cart lines show addons; replace-on-readd from detail; server still validates addon prices
 - [x] Soft-launch order/cart continuity (2026-10-20) — demo items encode addons; order page shows extras + multi-line items; empty cart browse link
-- [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links
+- [x] Stuttgart/DE competitor parity (2026-10-20) — analysis vs Gaul / Website Stuttgart / Neckaralb / BAT; added Care (Wartung) + SEA monthly plans; richer DSGVO/shop/Festpreis framing + MwSt. note; BDITEC stays start/deposit model (not copying €1.5k–€7k Festpreise without approval)
+- [ ] Business: approve shop prices / inclusions / subscription terms before live Payment Links (incl. new Care €59/mo + SEA €299/mo orientation starts)
 - [x] Brainum continuous mode confirmed (2026-10-20) — owner: continue using Brainum; code soft-launch gaps until human gates only remain
+- [x] Domain ownership check (2026-10-20) — `weweb-weld.vercel.app` is production alias of Vercel project `hh-7/weweb` (this repo); webhook URL = `https://weweb-weld.vercel.app/api/stripe-webhook` (not `weweb-hh-7`, which is same app but `X-Robots-Tag: noindex`)
+- [ ] Ops: Stripe TEST verify blocked — Production `STRIPE_SECRET_KEY` is currently a **publishable** `pk_live_…` key (must be `sk_test_…`); `STRIPE_WEBHOOK_SECRET` is `whsec_…` (endpoint returns 400 without signature). Replace secret key, keep live payments off, then re-verify Checkout + Dashboard webhook delivery
 - [ ] Ops: add Stripe **test** account to MCP/session; set Vercel `STRIPE_SECRET_KEY` (sk_test) + `STRIPE_WEBHOOK_SECRET`; create EUR Products/Prices; enable Customer Portal; attach KV/Upstash for webhook durability (checklist in `.env.example`)
 - [ ] Connect marketplace — deferred until Payments + Billing are live

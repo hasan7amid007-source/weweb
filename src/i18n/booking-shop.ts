@@ -53,6 +53,11 @@ export const bookingShopDe: BookingShopCopy = {
         blurb: 'Mehr Leistung & Kontrolle',
         highlights: ['Mehr Ressourcen', 'Mehr Kontrolle', 'Betrieb & Härtung Start', 'Digitales Briefing'],
       },
+      care: {
+        title: 'Care',
+        blurb: 'Wartung, Updates & Support',
+        highlights: ['Updates & Backups', 'Sicherheits-Checks', 'Support-Kanal', 'Monatliche Betreuung'],
+      },
       dedicated: {
         title: 'Dedicated',
         blurb: 'Hohe Last & Isolation',
@@ -80,29 +85,29 @@ export const bookingShopDe: BookingShopCopy = {
       landing: {
         title: 'Landing',
         blurb: 'Eine starke Einstiegsseite',
-        highlights: ['Eine Einstiegsseite', 'Responsive Layout', 'Kontakt- / Lead-Form', 'Digitales Briefing'],
+        highlights: ['Eine Einstiegsseite', 'Responsive & schnell', 'Kontakt- / Lead-Form', 'DSGVO-Grundlage', 'Digitales Briefing'],
       },
       business: {
         title: 'Business',
         blurb: 'Mehrseitige Firmenwebsite',
-        highlights: ['Mehrseitige Struktur', 'CMS-fähige Basis', 'Tech-SEO Grundlagen', 'Digitales Briefing'],
+        highlights: ['Mehrseitige Struktur', 'CMS-fähige Basis', 'Tech-SEO Grundlagen', 'Analytics-Start', 'Digitales Briefing'],
       },
       custom: {
         title: 'Custom',
         blurb: 'Individuelle Web-App',
-        highlights: ['Individueller Scope', 'App- / Datenmodell Start', 'Maßgeschneiderte Flows', 'Angebot zur Feinabstimmung'],
+        highlights: ['Individueller Scope', 'App- / Datenmodell Start', 'Schnittstellen möglich', 'Angebot zur Feinabstimmung'],
       },
     },
     'e-commerce': {
       starter: {
         title: 'Starter',
         blurb: 'Shop-Grundsetup',
-        highlights: ['Shop-Grundsetup', 'Katalogstruktur Start', 'Checkout-Basis', 'Digitales Briefing'],
+        highlights: ['Shop-Grundsetup', 'Katalogstruktur Start', 'Checkout-Basis', 'Rechtstexte-Hinweis', 'Digitales Briefing'],
       },
       growth: {
         title: 'Growth',
         blurb: 'Checkout & Conversion',
-        highlights: ['Checkout & Zahlungen', 'Conversion-Fokus', 'Produktstruktur', 'Digitales Briefing'],
+        highlights: ['Checkout & Zahlungen', 'Conversion-Fokus', 'Produktstruktur', 'Versandregeln Start', 'Digitales Briefing'],
       },
       scale: {
         title: 'Scale',
@@ -121,10 +126,15 @@ export const bookingShopDe: BookingShopCopy = {
         blurb: 'Kampagnen-Startpaket',
         highlights: ['Kampagnen-Start', 'Konten & Tracking Start', 'Content-Grundlage', 'Digitales Briefing'],
       },
+      sea: {
+        title: 'SEA',
+        blurb: 'Google Ads Betreuung',
+        highlights: ['Kampagnen-Steuerung', 'Budget-Optimierung', 'Conversion-Fokus', 'Monatliches Reporting', 'Werbebudget separat'],
+      },
       retainer: {
         title: 'Retainer',
         blurb: 'Laufende Performance',
-        highlights: ['Laufende Betreuung', 'Performance-Fokus', 'Reporting-Start', 'Monatliche Abrechnung'],
+        highlights: ['SEO & Content-Fokus', 'Laufende Betreuung', 'Reporting-Start', 'Monatliche Abrechnung'],
       },
     },
     'offline-marketing': {
@@ -221,6 +231,11 @@ export const bookingShopEn: BookingShopCopy = {
         blurb: 'More power & control',
         highlights: ['More resources', 'More control', 'Ops & hardening start', 'Digital briefing'],
       },
+      care: {
+        title: 'Care',
+        blurb: 'Maintenance, updates & support',
+        highlights: ['Updates & backups', 'Security checks', 'Support channel', 'Monthly care'],
+      },
       dedicated: {
         title: 'Dedicated',
         blurb: 'High load & isolation',
@@ -248,29 +263,29 @@ export const bookingShopEn: BookingShopCopy = {
       landing: {
         title: 'Landing',
         blurb: 'One strong entry page',
-        highlights: ['One entry page', 'Responsive layout', 'Contact / lead form', 'Digital briefing'],
+        highlights: ['One entry page', 'Responsive & fast', 'Contact / lead form', 'GDPR foundations', 'Digital briefing'],
       },
       business: {
         title: 'Business',
         blurb: 'Multi-page company site',
-        highlights: ['Multi-page structure', 'CMS-ready base', 'Tech-SEO foundations', 'Digital briefing'],
+        highlights: ['Multi-page structure', 'CMS-ready base', 'Tech-SEO foundations', 'Analytics start', 'Digital briefing'],
       },
       custom: {
         title: 'Custom',
         blurb: 'Tailored web app',
-        highlights: ['Custom scope', 'App / data model start', 'Tailored flows', 'Quote for fine-tuning'],
+        highlights: ['Custom scope', 'App / data model start', 'Integrations possible', 'Quote for fine-tuning'],
       },
     },
     'e-commerce': {
       starter: {
         title: 'Starter',
         blurb: 'Shop foundation',
-        highlights: ['Shop foundation', 'Catalogue structure start', 'Checkout base', 'Digital briefing'],
+        highlights: ['Shop foundation', 'Catalogue structure start', 'Checkout base', 'Legal-text guidance', 'Digital briefing'],
       },
       growth: {
         title: 'Growth',
         blurb: 'Checkout & conversion',
-        highlights: ['Checkout & payments', 'Conversion focus', 'Product structure', 'Digital briefing'],
+        highlights: ['Checkout & payments', 'Conversion focus', 'Product structure', 'Shipping rules start', 'Digital briefing'],
       },
       scale: {
         title: 'Scale',
@@ -289,10 +304,15 @@ export const bookingShopEn: BookingShopCopy = {
         blurb: 'Campaign start pack',
         highlights: ['Campaign kickoff', 'Accounts & tracking start', 'Content foundation', 'Digital briefing'],
       },
+      sea: {
+        title: 'SEA',
+        blurb: 'Google Ads management',
+        highlights: ['Campaign steering', 'Budget optimisation', 'Conversion focus', 'Monthly reporting', 'Ad spend separate'],
+      },
       retainer: {
         title: 'Retainer',
         blurb: 'Ongoing performance',
-        highlights: ['Ongoing care', 'Performance focus', 'Reporting start', 'Billed monthly'],
+        highlights: ['SEO & content focus', 'Ongoing care', 'Reporting start', 'Billed monthly'],
       },
     },
     'offline-marketing': {
@@ -389,6 +409,11 @@ export const bookingShopAr: BookingShopCopy = {
         blurb: 'أداء وتحكم أكبر',
         highlights: ['موارد أكبر', 'تحكم أكثر', 'بداية تشغيل وتأمين', 'إحاطة رقمية'],
       },
+      care: {
+        title: 'رعاية',
+        blurb: 'صيانة وتحديثات ودعم',
+        highlights: ['تحديثات ونسخ احتياطي', 'فحوصات أمان', 'قناة دعم', 'رعاية شهرية'],
+      },
       dedicated: {
         title: 'مخصص',
         blurb: 'حمل عالٍ وعزل',
@@ -416,29 +441,29 @@ export const bookingShopAr: BookingShopCopy = {
       landing: {
         title: 'صفحة هبوط',
         blurb: 'صفحة دخول قوية',
-        highlights: ['صفحة دخول واحدة', 'تصميم متجاوب', 'نموذج تواصل / عملاء', 'إحاطة رقمية'],
+        highlights: ['صفحة دخول واحدة', 'متجاوب وسريع', 'نموذج تواصل / عملاء', 'أساس GDPR', 'إحاطة رقمية'],
       },
       business: {
         title: 'أعمال',
         blurb: 'موقع شركة متعدد الصفحات',
-        highlights: ['هيكل متعدد الصفحات', 'أساس جاهز لـ CMS', 'أساسيات SEO تقني', 'إحاطة رقمية'],
+        highlights: ['هيكل متعدد الصفحات', 'أساس جاهز لـ CMS', 'أساسيات SEO تقني', 'بداية التحليلات', 'إحاطة رقمية'],
       },
       custom: {
         title: 'مخصص',
         blurb: 'تطبيق ويب حسب الطلب',
-        highlights: ['نطاق مخصص', 'بداية نموذج التطبيق / البيانات', 'مسارات مخصّصة', 'عرض سعر للضبط'],
+        highlights: ['نطاق مخصص', 'بداية نموذج التطبيق / البيانات', 'تكاملات ممكنة', 'عرض سعر للضبط'],
       },
     },
     'e-commerce': {
       starter: {
         title: 'بداية',
         blurb: 'أساس المتجر',
-        highlights: ['أساس المتجر', 'بداية هيكل الكتالوج', 'أساس الدفع', 'إحاطة رقمية'],
+        highlights: ['أساس المتجر', 'بداية هيكل الكتالوج', 'أساس الدفع', 'إرشاد النصوص القانونية', 'إحاطة رقمية'],
       },
       growth: {
         title: 'نمو',
         blurb: 'دفع وتحويل',
-        highlights: ['دفع ومدفوعات', 'تركيز التحويل', 'هيكل المنتجات', 'إحاطة رقمية'],
+        highlights: ['دفع ومدفوعات', 'تركيز التحويل', 'هيكل المنتجات', 'بداية قواعد الشحن', 'إحاطة رقمية'],
       },
       scale: {
         title: 'توسّع',
@@ -457,10 +482,15 @@ export const bookingShopAr: BookingShopCopy = {
         blurb: 'حزمة بدء الحملة',
         highlights: ['انطلاق الحملة', 'بداية حسابات وتتبع', 'أساس المحتوى', 'إحاطة رقمية'],
       },
+      sea: {
+        title: 'SEA',
+        blurb: 'إدارة إعلانات Google',
+        highlights: ['توجيه الحملات', 'تحسين الميزانية', 'تركيز التحويل', 'تقارير شهرية', 'ميزانية الإعلان منفصلة'],
+      },
       retainer: {
         title: 'اشتراك',
         blurb: 'أداء مستمر',
-        highlights: ['رعاية مستمرة', 'تركيز الأداء', 'بداية التقارير', 'فوترة شهرية'],
+        highlights: ['تركيز SEO ومحتوى', 'رعاية مستمرة', 'بداية التقارير', 'فوترة شهرية'],
       },
     },
     'offline-marketing': {

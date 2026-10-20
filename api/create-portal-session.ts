@@ -43,6 +43,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const secret = (process.env.STRIPE_SECRET_KEY || '').trim()
+    if (secret.startsWith('pk_')) {
+      return res.status(500).json({
+        error: 'Portal session failed',
+        detail:
+          'STRIPE_SECRET_KEY is a publishable key (pk_…). Use the secret key sk_test_… (Test mode).',
+      })
+    }
     if (!secret) {
       return res.status(503).json({
         error: 'Portal unavailable until STRIPE_SECRET_KEY is configured (use test key first)',

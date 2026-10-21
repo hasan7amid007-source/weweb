@@ -16,7 +16,8 @@ Primary public site: https://weweb-weld.vercel.app
 - /services/*.html — service detail pages
 - /impressum.html — legal notice (draft)
 - /datenschutz.html — privacy (draft)
-- /order.html — post-checkout briefing (noindex)
+- /order.html — post-checkout confirmation (noindex)
+- /briefing.html — project briefing wizard before pay/quote (noindex)
 
 ## Checkout
 - Server-validated totals via POST /api/create-checkout

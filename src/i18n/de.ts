@@ -3,6 +3,7 @@ import { bookingShopDe } from './booking-shop'
 import { servicePagesDe } from './service-pages-de'
 import { orderPageDe } from './order-page'
 import { shopPageDe } from './shop-page'
+import { briefingPageDe } from './briefing-page'
 
 export const de: Messages = {
   meta: {
@@ -188,6 +189,7 @@ export const de: Messages = {
   },
   bookingShop: bookingShopDe,
   shopPage: shopPageDe,
+  briefingPage: briefingPageDe,
   orderPage: orderPageDe,
   serviceUi: {
     back: 'Alle Services',

@@ -2,6 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /order.html
 Disallow: /order
+Disallow: /briefing.html
+Disallow: /briefing
 
 Sitemap: https://weweb-weld.vercel.app/sitemap.xml
 # Agent summary: /llms.txt

@@ -1,4 +1,5 @@
 import type { BookingShopCopy } from './booking-shop'
+import type { BriefingPageCopy } from './briefing-page'
 import type { OrderPageCopy } from './order-page'
 import type { ShopPageCopy } from './shop-page'
 
@@ -192,6 +193,7 @@ export type Messages = {
   }
   bookingShop: BookingShopCopy
   shopPage: ShopPageCopy
+  briefingPage: BriefingPageCopy
   orderPage: OrderPageCopy
   serviceUi: {
     back: string

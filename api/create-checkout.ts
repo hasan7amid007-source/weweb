@@ -3,6 +3,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyApiCors, safeSameSiteUrl } from './_lib/cors.js'
+import { authorizeBriefingForCheckout } from './_lib/briefing-store.js'
 
 /**
  * Checkout with server-side price validation from api/shop-catalog.json.
@@ -72,6 +73,10 @@ type Body = {
   locale?: string
   successUrl?: string
   cancelUrl?: string
+  /** Opaque briefing reference (BRF_…) — required for checkout */
+  briefingRef?: string
+  /** One-time access token issued only on durable submit — never log */
+  briefingToken?: string
 }
 
 type ResolvedLine = {
@@ -251,6 +256,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (email.length > 254 || name.length > 120) {
       return res.status(400).json({ error: 'Name or email too long' })
     }
+
+    // Soft-launch reliability: one catalog line per checkout (multi-item briefs not durable yet).
+    if (lines.length > 1) {
+      return res.status(400).json({
+        error: 'Multi-item checkout unavailable',
+        detail:
+          'Please keep a single service/package in the cart, complete its briefing, then checkout. Multi-item briefs are not enabled yet.',
+      })
+    }
+
+    const primaryLine = lines[0]!
+    const briefAuth = await authorizeBriefingForCheckout({
+      referenceId: String(body.briefingRef || ''),
+      accessToken: String(body.briefingToken || ''),
+      service: primaryLine.service,
+      packageId: primaryLine.packageId,
+      addonIds: primaryLine.addonIds,
+      email,
+    })
+    if (!briefAuth.ok) {
+      return res.status(briefAuth.status).json({
+        error: briefAuth.error,
+        detail: 'Complete a durable project briefing that matches this package before checkout.',
+      })
+    }
+
     const totalEur = lines.reduce((sum, line) => sum + line.lineTotal, 0)
     const locale = String(body.locale || 'de').slice(0, 5)
     const origin = originFromReq(req)
@@ -273,12 +304,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       demoUrl.searchParams.set('name', name)
       demoUrl.searchParams.set('items', encodeCartItems(lines))
       if (primary.addonIds.length) demoUrl.searchParams.set('addons', primary.addonIds.join(','))
+      demoUrl.searchParams.set('briefing', briefAuth.referenceId)
       return res.status(200).json({
         mode: 'demo',
         url: demoUrl.toString(),
         totalEur,
         orderId: demoId,
         itemCount: lines.length,
+        briefingRef: briefAuth.referenceId,
       })
     }
 
@@ -352,6 +385,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         locale,
         totalEur: String(totalEur),
         checkoutMode,
+        briefingRef: briefAuth.referenceId.slice(0, 64),
       },
     })
 

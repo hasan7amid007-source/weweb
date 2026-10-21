@@ -11,6 +11,8 @@ import {
   type ShopListingItem,
 } from '../booking/shop-catalog'
 import { startCartCheckout } from '../booking/checkout-client'
+import { briefingHref } from '../briefing/href'
+import { briefingMatchesCart, readSubmittedBriefing } from '../briefing/draft'
 import { formatEur, isBookingServiceKey, type BookingServiceKey } from '../booking/catalog'
 import {
   addToCart,
@@ -226,9 +228,15 @@ function renderPlanCard(locale: Locale, item: ShopListingItem): string {
       ? `<span class="shop-plan-amount shop-plan-amount--quote">${shop.priceOnRequest}</span>`
       : `<span class="shop-plan-amount">${formatEur(item.package.priceEur, locale)}</span>
         ${period ? `<span class="shop-plan-period">${period}</span>` : ''}`
+  const briefingQuote = briefingHref({
+    service: item.service,
+    packageId: item.package.id,
+    intent: cartable ? 'checkout' : 'quote',
+    from: 'shop-card',
+  })
   const primaryCta = cartable
     ? `<button type="button" class="shop-plan-cta ts-btn pink solid" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
-    : `<a class="shop-plan-cta ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
+    : `<a class="shop-plan-cta ts-btn pink solid" href="${briefingQuote}">${shop.ctaBriefing}</a>`
   const compareId = `${item.service}:${item.package.id}`
   return `
     <article class="shop-plan${featured}" data-shop-plan="${compareId}">
@@ -330,16 +338,22 @@ function renderDetail(locale: Locale, item: ShopListingItem): string {
     item.package.id,
     item.package.purchaseMode === 'checkout' ? [...selectedAddons] : [],
   )
+  const briefingCheckout = briefingHref({
+    service: item.service,
+    packageId: item.package.id,
+    addonIds: item.package.purchaseMode === 'checkout' ? [...selectedAddons] : [],
+    intent: cartable ? 'checkout' : 'quote',
+    from: 'shop-detail',
+  })
   const buyPrimary = cartable
     ? `<button type="button" class="ts-btn pink solid" data-shop-add-cart data-shop-detail-cart data-service="${item.service}" data-package="${item.package.id}" data-base-price="${item.package.priceEur}">${shop.cartAdd}</button>`
-    : `<a class="ts-btn pink solid" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
+    : `<a class="ts-btn pink solid" href="${briefingCheckout}">${shop.ctaBriefing}</a>`
   const buySecondary = cartable
-    ? `<a class="ts-btn pink" href="${checkoutHref}" data-shop-booking-cta data-service="${item.service}" data-package="${item.package.id}">${item.package.purchaseMode === 'subscription' ? shop.ctaSubscription : shop.ctaCheckout}</a>`
+    ? `<a class="ts-btn pink" href="${briefingCheckout}" data-shop-briefing-cta data-service="${item.service}" data-package="${item.package.id}">${shop.ctaBriefing}</a>`
     : ''
-  const quoteLink =
-    item.package.purchaseMode === 'quote' || !cartable
-      ? ''
-      : `<a class="shop-secondary-cta" href="#quote" data-shop-quote-prefill="${item.service}:${item.package.id}">${shop.ctaQuote}</a>`
+  const quoteLink = cartable
+    ? `<a class="shop-secondary-cta" href="${checkoutHref}" data-shop-booking-cta>${item.package.purchaseMode === 'subscription' ? shop.ctaSubscription : shop.ctaCheckout}</a>`
+    : ''
 
   const period = pricePeriod(locale, item.package.purchaseMode)
   // One-time packages only: subscription + add-ons would break Billing Checkout.
@@ -530,6 +544,7 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
             : ''
         }
         ${mixed ? `<p class="shop-note shop-note--warn">${shop.cartMixedBilling}</p>` : ''}
+        ${lines.length > 1 ? `<p class="shop-note shop-note--warn">${shop.cartSingleItemOnly}</p>` : ''}
         <div class="shop-cart-toolbar">
           <button type="button" class="booking-back" data-shop-clear-cart>${shop.cartClear}</button>
         </div>
@@ -546,7 +561,7 @@ function renderCartPanel(locale: Locale, lines: CartLine[]): string {
           <p class="booking-hint">${shop.cartPayHint}</p>
           <p class="booking-error" data-shop-cart-error hidden></p>
           <span class="glowborder">
-            <button type="submit" class="ts-btn pink solid" data-shop-cart-submit ${mixed ? 'disabled' : ''}>${shop.cartCheckout}</button>
+            <button type="submit" class="ts-btn pink solid" data-shop-cart-submit ${mixed || lines.length > 1 ? 'disabled' : ''}>${shop.cartCheckout}</button>
           </span>
         </form>`
       }
@@ -1113,11 +1128,48 @@ export function initShopPage(
       }
       return
     }
+    if (items.length > 1) {
+      if (err) {
+        err.hidden = false
+        err.textContent = shop.cartSingleItemOnly
+      }
+      return
+    }
+    const primary = items[0]!
+    const submitted = readSubmittedBriefing()
+    if (!briefingMatchesCart(submitted, primary.service, primary.packageId, primary.addonIds)) {
+      const href = briefingHref({
+        service: primary.service,
+        packageId: primary.packageId,
+        addonIds: primary.addonIds,
+        intent: 'checkout',
+        from: 'cart',
+        lang: locale === 'de' ? undefined : locale,
+      })
+      try {
+        sessionStorage.setItem(
+          'bditec-briefing-cart-handoff',
+          JSON.stringify({ email, name, items }),
+        )
+      } catch {
+        /* ignore */
+      }
+      trackEvent('shop_cart_briefing_redirect', { locale, service: primary.service })
+      window.location.href = href
+      return
+    }
     if (submit) {
       submit.disabled = true
       submit.textContent = shop.cartProcessing
     }
-    const result = await startCartCheckout({ items, email, name, locale })
+    const result = await startCartCheckout({
+      items,
+      email,
+      name,
+      locale,
+      briefingRef: submitted!.referenceId,
+      briefingToken: submitted!.accessToken,
+    })
     if (result.mode === 'stripe' || result.mode === 'demo') {
       trackEvent('shop_cart_checkout', {
         locale,

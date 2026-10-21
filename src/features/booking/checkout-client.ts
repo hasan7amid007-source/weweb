@@ -1,5 +1,4 @@
 import type { BookingServiceKey } from './catalog'
-import { calcOrderTotalEur } from './shop-catalog'
 import type { CartLine } from '../shop/cart'
 
 export type CheckoutRequest = {
@@ -9,6 +8,8 @@ export type CheckoutRequest = {
   email: string
   name: string
   locale: string
+  briefingRef?: string
+  briefingToken?: string
 }
 
 export type CheckoutResult =
@@ -63,26 +64,22 @@ export async function startCheckout(req: CheckoutRequest): Promise<CheckoutResul
     name: req.name,
     locale: req.locale,
     cancelUrl,
+    briefingRef: req.briefingRef,
+    briefingToken: req.briefingToken,
   })
   if (api) return api
 
-  const totalEur = calcOrderTotalEur(req.service, req.packageId, req.addonIds)
-  const demoId = `demo_${Date.now().toString(36)}`
-  const demoUrl = new URL(`${origin}/order.html`)
-  demoUrl.searchParams.set('demo', '1')
-  demoUrl.searchParams.set('order', demoId)
-  demoUrl.searchParams.set('service', req.service)
-  demoUrl.searchParams.set('package', req.packageId)
-  demoUrl.searchParams.set('total', String(totalEur))
-  demoUrl.searchParams.set('email', req.email)
-  demoUrl.searchParams.set('name', req.name)
-  const itemsBase = `${req.service}:${req.packageId}`
-  demoUrl.searchParams.set(
-    'items',
-    req.addonIds.length ? `${itemsBase}:${req.addonIds.join('+')}` : itemsBase,
-  )
-  if (req.addonIds.length) demoUrl.searchParams.set('addons', req.addonIds.join(','))
-  return { mode: 'demo', url: demoUrl.toString(), totalEur, orderId: demoId }
+  // Without API (or when API rejects), do not invent a local demo that bypasses briefing auth.
+  if (!req.briefingRef || !req.briefingToken) {
+    return {
+      mode: 'unavailable',
+      error: 'Briefing authorization required before checkout',
+    }
+  }
+  return {
+    mode: 'unavailable',
+    error: 'Checkout unavailable — complete a retained briefing or retry when the API is reachable',
+  }
 }
 
 /** Multi-package cart checkout via server-validated items[]. */
@@ -91,8 +88,17 @@ export async function startCartCheckout(input: {
   email: string
   name: string
   locale: string
+  briefingRef?: string
+  briefingToken?: string
 }): Promise<CheckoutResult> {
   if (!input.items.length) return { mode: 'unavailable', error: 'Cart is empty' }
+  if (input.items.length > 1) {
+    return {
+      mode: 'unavailable',
+      error:
+        'Multi-item checkout unavailable — keep one package in the cart, complete its briefing, then pay',
+    }
+  }
   const origin = window.location.origin
   const primary = input.items[0]!
   const cancelUrl = `${origin}/shop.html#cart`
@@ -107,13 +113,11 @@ export async function startCartCheckout(input: {
     name: input.name,
     locale: input.locale,
     cancelUrl,
+    briefingRef: input.briefingRef,
+    briefingToken: input.briefingToken,
   })
   if (api) return api
 
-  // Multi-item carts require server validation — do not silently charge only the first line.
-  if (input.items.length > 1) {
-    return { mode: 'unavailable', error: 'Cart checkout unavailable' }
-  }
   return startCheckout({
     service: primary.service,
     packageId: primary.packageId,
@@ -121,5 +125,7 @@ export async function startCartCheckout(input: {
     email: input.email,
     name: input.name,
     locale: input.locale,
+    briefingRef: input.briefingRef,
+    briefingToken: input.briefingToken,
   })
 }

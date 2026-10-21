@@ -3,6 +3,7 @@ import { bookingShopAr } from './booking-shop'
 import { servicePagesAr } from './service-pages-ar'
 import { orderPageAr } from './order-page'
 import { shopPageAr } from './shop-page'
+import { briefingPageAr } from './briefing-page'
 
 export const ar: Messages = {
   meta: {
@@ -183,6 +184,7 @@ export const ar: Messages = {
   },
   bookingShop: bookingShopAr,
   shopPage: shopPageAr,
+  briefingPage: briefingPageAr,
   orderPage: orderPageAr,
   serviceUi: {
     back: 'كل الخدمات',

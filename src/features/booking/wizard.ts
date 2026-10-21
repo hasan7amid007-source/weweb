@@ -5,6 +5,8 @@ import {
   type BookingServiceKey,
 } from './catalog'
 import { startCheckout } from './checkout-client'
+import { briefingHref } from '../briefing/href'
+import { briefingMatchesCart, readSubmittedBriefing } from '../briefing/draft'
 import {
   calcOrderTotalEur,
   canPurchaseDirect,
@@ -401,6 +403,10 @@ export function renderBookingFormMarkup(locale: Locale): string {
 
         <div data-booking-step="4" hidden>
           <div data-booking-summary class="booking-summary"></div>
+          <p class="booking-hint">
+            <a href="#" data-booking-briefing-link>${m.briefingPage.title}</a>
+            — ${m.briefingPage.lead}
+          </p>
           <p class="booking-secure" data-booking-secure>${m.contact.paySecure}</p>
           <p class="booking-hint" data-booking-demo-note hidden>${m.contact.demoPayNote}</p>
           <p class="booking-error" data-booking-error hidden></p>
@@ -601,6 +607,22 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     })
   })
 
+  wizard.querySelector<HTMLAnchorElement>('[data-booking-briefing-link]')?.addEventListener(
+    'click',
+    (event) => {
+      event.preventDefault()
+      const draft = readForm(form)
+      window.location.href = briefingHref({
+        service: draft.service,
+        packageId: draft.packageId,
+        addonIds: draft.addonIds,
+        intent: packageMode(draft.service, draft.packageId) === 'quote' ? 'quote' : 'checkout',
+        from: 'booking',
+        lang: locale === 'de' ? undefined : locale,
+      })
+    },
+  )
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault()
     const draft = readForm(form)
@@ -624,6 +646,19 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
     const payDraft = { ...draft, addonIds }
     saveDraft(payDraft)
 
+    const submitted = readSubmittedBriefing()
+    if (!briefingMatchesCart(submitted, payDraft.service, payDraft.packageId, payDraft.addonIds)) {
+      window.location.href = briefingHref({
+        service: payDraft.service,
+        packageId: payDraft.packageId,
+        addonIds: payDraft.addonIds,
+        intent: 'checkout',
+        from: 'booking',
+        lang: locale === 'de' ? undefined : locale,
+      })
+      return
+    }
+
     if (err) {
       err.hidden = true
       err.textContent = ''
@@ -641,6 +676,8 @@ export function initBookingWizard(root: ParentNode, locale: Locale) {
       email: payDraft.email,
       name: payDraft.name,
       locale,
+      briefingRef: submitted!.referenceId,
+      briefingToken: submitted!.accessToken,
     })
 
     if (checkout.mode === 'stripe') {

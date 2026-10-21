@@ -57,6 +57,7 @@ export type ShopPageCopy = {
   ctaSubscription: string
   ctaSubscriptionShort: string
   ctaQuote: string
+  ctaBriefing: string
   ctaService: string
   quoteTitle: string
   quoteLead: string
@@ -101,6 +102,7 @@ export type ShopPageCopy = {
   cartOnceLabel: string
   cartMonthlyLabel: string
   cartMixedBilling: string
+  cartSingleItemOnly: string
   cartClear: string
   cartCheckout: string
   cartOpen: string
@@ -218,6 +220,7 @@ export const shopPageDe: ShopPageCopy = {
   ctaSubscription: 'Abo starten (Checkout)',
   ctaSubscriptionShort: 'Abo wählen',
   ctaQuote: 'Angebot anfragen',
+  ctaBriefing: 'Erzählen Sie uns von Ihrem Projekt',
   ctaService: 'Service-Seite',
   quoteTitle: 'Individuelles Angebot anfragen',
   quoteLead:
@@ -288,6 +291,8 @@ export const shopPageDe: ShopPageCopy = {
   cartMonthlyLabel: 'Monatlich',
   cartMixedBilling:
     'Einmalige und monatliche Pakete können nicht in einem Checkout kombiniert werden. Bitte den Warenkorb auf eine Kaufart beschränken oder ein Angebot anfragen.',
+  cartSingleItemOnly:
+    'Der Soft-Launch erlaubt aktuell nur ein Paket pro Bestellung. Bitte entfernen Sie weitere Positionen, schließen Sie das Briefing ab und zahlen Sie dann — nichts wird stillschweigend weggelassen.',
   cartClear: 'Leeren',
   cartCheckout: 'Zur Kasse',
   cartOpen: 'Warenkorb öffnen',
@@ -436,6 +441,7 @@ export const shopPageEn: ShopPageCopy = {
   ctaSubscription: 'Start subscription (checkout)',
   ctaSubscriptionShort: 'Choose subscription',
   ctaQuote: 'Request a quote',
+  ctaBriefing: 'Tell us about your project',
   ctaService: 'Service page',
   quoteTitle: 'Request a custom quote',
   quoteLead:
@@ -506,6 +512,8 @@ export const shopPageEn: ShopPageCopy = {
   cartMonthlyLabel: 'Monthly',
   cartMixedBilling:
     'One-time and monthly packages cannot share a single checkout. Keep the cart to one billing type or request a quote.',
+  cartSingleItemOnly:
+    'Soft-launch checkout allows one package per order. Remove extra lines, complete the briefing, then pay — nothing is silently dropped.',
   cartClear: 'Clear',
   cartCheckout: 'Proceed to checkout',
   cartOpen: 'Open cart',
@@ -653,6 +661,7 @@ export const shopPageAr: ShopPageCopy = {
   ctaSubscription: 'بدء الاشتراك (دفع)',
   ctaSubscriptionShort: 'اختر الاشتراك',
   ctaQuote: 'طلب عرض سعر',
+  ctaBriefing: 'أخبرنا عن مشروعك',
   ctaService: 'صفحة الخدمة',
   quoteTitle: 'طلب عرض سعر مخصص',
   quoteLead:
@@ -723,6 +732,8 @@ export const shopPageAr: ShopPageCopy = {
   cartMonthlyLabel: 'شهرياً',
   cartMixedBilling:
     'لا يمكن دمج باقات لمرة واحدة وشهرية في دفع واحد. اقتصر السلة على نوع واحد أو اطلب عرض سعر.',
+  cartSingleItemOnly:
+    'الإطلاق الناعم يسمح بباقة واحدة لكل طلب. أزل العناصر الإضافية، أكمل الإحاطة، ثم ادفع — لن يُتجاهل شيء بصمت.',
   cartClear: 'تفريغ',
   cartCheckout: 'المتابعة للدفع',
   cartOpen: 'فتح السلة',

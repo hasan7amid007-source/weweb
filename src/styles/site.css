@@ -4854,3 +4854,227 @@ html[dir='rtl'] .brand {
   gap: 1rem;
   margin-top: 2rem;
 }
+
+/* —— Project briefing wizard —— */
+.briefing-page {
+  padding: 1.5rem 0 3rem;
+}
+
+.briefing-hero h1 {
+  margin: 0.35rem 0 0.65rem;
+  font-family: 'Bodoni Moda', Georgia, serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.briefing-layout {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .briefing-layout {
+    grid-template-columns: minmax(14rem, 0.85fr) minmax(0, 1.4fr);
+    gap: 2rem;
+  }
+}
+
+.briefing-aside {
+  padding: clamp(1.1rem, 2.5vw, 1.5rem);
+  border: 1px solid #e4e2ea;
+  background:
+    linear-gradient(160deg, rgba(91, 46, 245, 0.06), transparent 55%),
+    #f7f6f9;
+  position: sticky;
+  top: 5rem;
+}
+
+.briefing-steps {
+  list-style: none;
+  margin: 1rem 0 0.75rem;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.briefing-step {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  color: #6a6a75;
+  font-size: 0.9rem;
+}
+
+.briefing-step[aria-current='step'] {
+  color: #2c2c36;
+  font-weight: 700;
+}
+
+.briefing-step.is-done {
+  color: #3a3a44;
+}
+
+.briefing-step-num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid #d8d8e0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.briefing-step[aria-current='step'] .briefing-step-num {
+  border-color: var(--header);
+  color: var(--header);
+}
+
+.briefing-progress {
+  margin: 0.5rem 0 0.75rem;
+  font-size: 0.85rem;
+  color: #6a6a75;
+}
+
+.briefing-step-title {
+  margin: 0 0 1rem;
+  font-family: 'Bodoni Moda', Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.briefing-optional {
+  font-weight: 500;
+  color: #8a8a95;
+  font-size: 0.85em;
+}
+
+.briefing-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.briefing-fieldset legend {
+  margin-bottom: 0.45rem;
+  color: #3a3a44;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.briefing-choice-grid {
+  display: grid;
+  gap: 0.45rem;
+}
+
+@media (min-width: 560px) {
+  .briefing-choice-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.briefing-choice {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #e4e2ea;
+  background: #fafafb;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.briefing-choice:has(input:checked) {
+  border-color: var(--header);
+  background: rgba(91, 46, 245, 0.06);
+}
+
+.briefing-choice input {
+  margin-top: 0.2rem;
+}
+
+.briefing-color-row {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.briefing-color-row input[type='color'] {
+  width: 3rem;
+  height: 2.75rem;
+  padding: 0.2rem;
+  border: 1px solid #d8d8e0;
+  background: #fff;
+}
+
+.briefing-change {
+  margin: 0.85rem 0;
+  font-size: 0.9rem;
+}
+
+.briefing-change-form {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.briefing-orphan {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #e8d9a8;
+  background: #fff9eb;
+  font-size: 0.9rem;
+}
+
+.briefing-review section {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eceaf0;
+}
+
+.briefing-review h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin: 0 0 0.45rem;
+  font-size: 1.05rem;
+}
+
+.briefing-edit {
+  border: 0;
+  background: none;
+  color: var(--pink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+}
+
+.briefing-error-summary {
+  margin-bottom: 0.75rem;
+}
+
+@media print {
+  .briefing-aside,
+  .briefing-change,
+  .shop-quote-actions,
+  header.site-header,
+  footer.site-footer {
+    display: none !important;
+  }
+
+  .briefing-layout {
+    display: block;
+  }
+}
+
+@media (max-width: 899px) {
+  .briefing-aside {
+    position: static;
+  }
+}

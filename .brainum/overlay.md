@@ -92,3 +92,5 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [x] Soft-launch continuity batch (2026-10-20) — shop hides subscription add-ons; quote booking deeplink highlight; drop dead Payment Link client path; order monthly total label; booking quote mailto i18n + `booking_quote_mailto`
 - [ ] Shop retainers gated (`directCheckout: false`) until owner approves Kündigung/Mindestlaufzeit/scope — Care/Care Pro/VPS/SEA/SEO Pflege/Social/Retainer (prices unchanged)
 - [ ] Taxonomy decision: E-Commerce filter vs web-design category; SEO filter vs Digital Marketing service group
+- [x] Project briefing wizard (2026-10-20) — `/briefing.html` service-conditional steps → review → checkout or quote mailto; `POST /api/submit-briefing`; no fake uploads (honest fallback)
+- [x] Briefing reliability (2026-10-20) — durable-only BRF (KV/Upstash); opaque access token; create-checkout verifies selection fingerprint; no unlock without retention; single-item cart until multi-brief; full DE/EN/AR field copy + AR RTL

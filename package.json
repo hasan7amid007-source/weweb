@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/shop-rules.test.mjs"
+    "test": "node --test scripts/shop-rules.test.mjs scripts/briefing-rules.test.mjs scripts/briefing-durability.test.mjs scripts/briefing-verification.test.mjs"
   },
   "devDependencies": {
     "@vercel/node": "^24.0.3",

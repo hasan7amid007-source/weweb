@@ -18,6 +18,7 @@ Primary public site: https://weweb-weld.vercel.app
 - /datenschutz.html — privacy (draft)
 - /order.html — post-checkout confirmation (noindex)
 - /briefing.html — project briefing wizard before pay/quote (noindex)
+- /staff-briefing.html — internal staff viewer (noindex; staff token required)
 
 ## Checkout
 - Server-validated totals via POST /api/create-checkout

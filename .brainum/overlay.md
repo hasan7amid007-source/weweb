@@ -94,3 +94,8 @@ Tech showcase marketing site inspired by Slider Revolution Tech Showcase: device
 - [ ] Taxonomy decision: E-Commerce filter vs web-design category; SEO filter vs Digital Marketing service group
 - [x] Project briefing wizard (2026-10-20) — `/briefing.html` service-conditional steps → review → checkout or quote mailto; `POST /api/submit-briefing`; no fake uploads (honest fallback)
 - [x] Briefing reliability (2026-10-20) — durable-only BRF (KV/Upstash); opaque access token; create-checkout verifies selection fingerprint; no unlock without retention; single-item cart until multi-brief; full DE/EN/AR field copy + AR RTL
+- [x] Staff briefing viewer scaffold (2026-10-21) — `/staff-briefing` + `GET /api/staff-briefing` gated by `BRIEFING_STAFF_TOKEN` (no IdP in project); ref alone never grants access; needs KV + token env before real ops
+- [x] Staff viewer security review (2026-10-21, local) — auth every GET; Cache-Control no-store; no secrets in query/logs; fail-closed; Logout clears session token; noindex documented as non-ACL; still uncommitted
+- [x] Ops doc: `docs/briefing-preview-setup.md` — no existing KV/Upstash on `weweb`; provider choice A/B; Preview-separate DB; verification procedure
+- [ ] Ops (owner): approve Upstash Marketplace vs manual; attach Preview Redis; set Preview env names; redeploy Preview; then REAL verify (no live pay)
+- [ ] Ship staff viewer to main — deferred (keep local until owner approves)

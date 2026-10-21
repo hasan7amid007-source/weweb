@@ -14,6 +14,7 @@
   "rewrites": [
     { "source": "/shop", "destination": "/shop.html" },
     { "source": "/briefing", "destination": "/briefing.html" },
+    { "source": "/staff-briefing", "destination": "/staff-briefing.html" },
     { "source": "/order", "destination": "/order.html" },
     { "source": "/services/(.*)", "destination": "/services/$1" }
   ],

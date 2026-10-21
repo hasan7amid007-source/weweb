@@ -18,6 +18,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         shop: resolve(__dirname, 'shop.html'),
         briefing: resolve(__dirname, 'briefing.html'),
+        staffBriefing: resolve(__dirname, 'staff-briefing.html'),
         order: resolve(__dirname, 'order.html'),
         impressum: resolve(__dirname, 'impressum.html'),
         datenschutz: resolve(__dirname, 'datenschutz.html'),

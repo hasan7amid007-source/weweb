@@ -4,6 +4,8 @@ Disallow: /order.html
 Disallow: /order
 Disallow: /briefing.html
 Disallow: /briefing
+Disallow: /staff-briefing.html
+Disallow: /staff-briefing
 
 Sitemap: https://weweb-weld.vercel.app/sitemap.xml
 # Agent summary: /llms.txt

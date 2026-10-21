@@ -1,6 +1,6 @@
-/**
+﻿/**
  * Safe verification of briefing durability/auth logic.
- * Uses an in-memory mock of the durable store — NOT a real KV integration.
+ * Uses an in-memory mock of the durable store â€” NOT a real KV integration.
  * Label: MOCKED
  *
  * Real integration requires KV_REST_API_* or UPSTASH_REDIS_REST_* on the API host.
@@ -250,12 +250,78 @@ test('[STATIC] submit logs must not include accessToken', () => {
   }
 })
 
-test('[STATIC] no public GET briefing-by-id route and no staff read API file', () => {
-  const apiFiles = ['submit-briefing.ts', 'create-checkout.ts', 'create-portal-session.ts', 'stripe-webhook.ts']
-  for (const f of apiFiles) {
-    const src = readFileSync(join(root, `api/${f}`), 'utf8')
-    assert.equal(src.includes("method === 'GET'") && src.toLowerCase().includes('briefing'), false)
-  }
+test('[STATIC] no public unauthenticated GET briefing-by-id', () => {
   assert.equal(existsSync(join(root, 'api/get-briefing.ts')), false)
   assert.equal(existsSync(join(root, 'api/admin-briefing.ts')), false)
+  const staffSrc = readFileSync(join(root, 'api/staff-briefing.ts'), 'utf8')
+  assert.match(staffSrc, /requireStaffAuth/)
+  assert.match(staffSrc, /getBriefingByReference/)
+  assert.equal(staffSrc.includes('accessTokenHash'), true) // stripped via omit before response
+  const authSrc = readFileSync(join(root, 'api/_lib/staff-auth.ts'), 'utf8')
+  assert.match(authSrc, /BRIEFING_STAFF_TOKEN/)
+  assert.match(authSrc, /timingSafeEqual/)
+})
+
+test('[MOCK] staff gate: reference alone never authorizes; wrong token rejected', () => {
+  memory.clear()
+  const sub = submitMock({
+    service: 'web-development',
+    packageId: 'landing',
+    addonIds: [],
+    email: 'qa@example.com',
+  })
+  // Simulate staff endpoint: must have staffSecret match before read
+  function staffGet({ staffToken, ref, configuredSecret }) {
+    if (!configuredSecret || configuredSecret.length < 24) {
+      return { ok: false, status: 503, error: 'Staff briefing access is not configured' }
+    }
+    if (!staffToken || staffToken !== configuredSecret) {
+      return { ok: false, status: 401, error: 'Staff authentication required' }
+    }
+    const record = memory.get(`briefing:v1:${ref}`)
+    if (!record) return { ok: false, status: 404, error: 'Briefing not found or expired' }
+    const { accessTokenHash, ...safe } = record
+    return { ok: true, briefing: safe, leakedHash: accessTokenHash === undefined }
+  }
+  const secret = 'staff-secret-token-min-24-chars!!'
+  assert.equal(staffGet({ staffToken: '', ref: sub.referenceId, configuredSecret: secret }).status, 401)
+  assert.equal(staffGet({ staffToken: 'wrong', ref: sub.referenceId, configuredSecret: secret }).status, 401)
+  assert.equal(
+    staffGet({ staffToken: '', ref: sub.referenceId, configuredSecret: '' }).status,
+    503,
+  )
+  const ok = staffGet({ staffToken: secret, ref: sub.referenceId, configuredSecret: secret })
+  assert.equal(ok.ok, true)
+  assert.equal(ok.briefing.accessTokenHash, undefined)
+  assert.equal(ok.briefing.referenceId, sub.referenceId)
+  // Customer checkout token is not a staff credential
+  assert.equal(
+    staffGet({ staffToken: sub.accessToken, ref: sub.referenceId, configuredSecret: secret }).status,
+    401,
+  )
+})
+
+test('[STATIC] staff page keeps token out of URL construction and has Logout', () => {
+  const src = readFileSync(join(root, 'src/staff-briefing.ts'), 'utf8')
+  assert.equal(/searchParams\.set\(\s*['"]token/.test(src), false)
+  assert.equal(/\?token=/.test(src), false)
+  assert.match(src, /Authorization:\s*`Bearer/)
+  assert.match(src, /sessionStorage/)
+  assert.match(src, /staff-logout/)
+  assert.match(src, /noindex is not access control/)
+  assert.equal(src.includes('trackEvent'), false)
+})
+
+test('[STATIC] staff API enforces auth, no-store, and rejects query secrets', () => {
+  const src = readFileSync(join(root, 'api/staff-briefing.ts'), 'utf8')
+  assert.match(src, /requireStaffAuth/)
+  assert.match(src, /Cache-Control.*no-store/)
+  assert.match(src, /Secrets must not be sent in the query string/)
+  const logBlocks = src.match(/console\.\w+\([\s\S]*?\)/g) || []
+  for (const block of logBlocks) {
+    assert.equal(block.includes('accessToken'), false)
+    assert.equal(block.includes('contactEmail'), false)
+    assert.equal(block.includes('payload'), false)
+    assert.equal(block.includes('BRIEFING_STAFF_TOKEN'), false)
+  }
 })

@@ -8,7 +8,8 @@
     "dev": "vite --host 127.0.0.1 --port 5173",
     "build": "tsc && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.api.json",
+    "typecheck:api": "tsc --noEmit -p tsconfig.api.json",
     "test": "node --test scripts/shop-rules.test.mjs scripts/briefing-rules.test.mjs scripts/briefing-durability.test.mjs scripts/briefing-verification.test.mjs"
   },
   "devDependencies": {

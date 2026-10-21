@@ -1,5 +1,5 @@
-import { timingSafeEqual } from 'node:crypto'
 import type { VercelRequest } from '@vercel/node'
+import { timingSafeEqualBytes, utf8Bytes } from './secure-equal.js'
 
 /**
  * Soft-launch staff gate: shared secret in BRIEFING_STAFF_TOKEN.
@@ -29,11 +29,11 @@ function extractBearer(req: VercelRequest): string {
 }
 
 function safeEqualUtf8(a: string, b: string): boolean {
-  const ba = Buffer.from(a, 'utf8')
-  const bb = Buffer.from(b, 'utf8')
-  if (ba.length !== bb.length) return false
+  const ba = utf8Bytes(a)
+  const bb = utf8Bytes(b)
+  if (ba.byteLength !== bb.byteLength) return false
   try {
-    return timingSafeEqual(ba, bb)
+    return timingSafeEqualBytes(ba, bb)
   } catch {
     return false
   }

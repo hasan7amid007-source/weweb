@@ -3,7 +3,8 @@
  * In-memory is intentionally NOT treated as durable — serverless instances do not share it.
  */
 
-import { createHash, randomBytes, timingSafeEqual } from 'node:crypto'
+import { createHash, randomBytes } from 'node:crypto'
+import { hexBytes, timingSafeEqualBytes } from './secure-equal.js'
 
 export const BRIEFING_SCHEMA_VERSION = 1
 const TTL_SECONDS = 60 * 60 * 24 * 30 // 30 days
@@ -53,11 +54,11 @@ export function hashToken(token: string): string {
 }
 
 export function tokensMatch(storedHash: string, providedToken: string): boolean {
-  const a = Buffer.from(storedHash, 'hex')
-  const b = Buffer.from(hashToken(providedToken), 'hex')
-  if (a.length !== b.length) return false
+  const a = hexBytes(storedHash)
+  const b = hexBytes(hashToken(providedToken))
+  if (a.byteLength !== b.byteLength) return false
   try {
-    return timingSafeEqual(a, b)
+    return timingSafeEqualBytes(a, b)
   } catch {
     return false
   }

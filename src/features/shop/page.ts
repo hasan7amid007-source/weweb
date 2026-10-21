@@ -210,6 +210,98 @@ function planIncludesLabel(locale: Locale, mode: PurchaseMode): string {
   return mode === 'subscription' ? shop.planIncludesSubscription : shop.planIncludes
 }
 
+/** Six public shop services (excludes general consult-only). */
+const SHOP_SERVICE_IDS: BookingServiceKey[] = [
+  'web-development',
+  'e-commerce',
+  'mobile-app',
+  'digital-marketing',
+  'web-hosting',
+  'offline-marketing',
+]
+
+function serviceFromPriceDisplay(locale: Locale, service: BookingServiceKey): string | null {
+  const shop = t(locale).shopPage
+  const pkgs = shopFor(service).packages
+  const priced = pkgs.filter((p) => p.purchaseMode !== 'quote')
+  if (!priced.length) return null
+  const min = priced.reduce((a, b) => (a.priceEur <= b.priceEur ? a : b))
+  const period =
+    min.purchaseMode === 'subscription' ? ` ${shop.monthSuffix.trim()}` : ''
+  return `${shop.servicesFrom} ${formatEur(min.priceEur, locale)}${period}`
+}
+
+function renderServiceDiscovery(locale: Locale): string {
+  const shop = t(locale).shopPage
+  const cards = SHOP_SERVICE_IDS.map((service) => {
+    const page = t(locale).servicePages[service as ServiceId]
+    const from = serviceFromPriceDisplay(locale, service)
+    const highlights = (page.highlights || []).slice(0, 3)
+    const href = `/shop.html?service=${encodeURIComponent(service)}#catalog`
+    return `
+      <article class="shop-service-card">
+        <div class="shop-service-card-media">
+          <img src="${iconFor(service)}" width="40" height="40" alt="" />
+        </div>
+        <h3 class="shop-service-card-title">${serviceTitle(locale, service)}</h3>
+        <p class="shop-service-card-blurb">${page.lead}</p>
+        ${
+          highlights.length
+            ? `<ul class="shop-service-card-outcomes">${highlights.map((h) => `<li>${h}</li>`).join('')}</ul>`
+            : ''
+        }
+        ${from ? `<p class="shop-service-card-from">${from}</p>` : `<p class="shop-service-card-from">${shop.priceOnRequest}</p>`}
+        <a class="shop-service-card-cta ts-btn pink" href="${href}">${shop.servicesExplore}</a>
+      </article>`
+  }).join('')
+  return `
+    <section class="shop-services wrap" id="services" aria-labelledby="shop-services-title">
+      <header class="shop-section-head">
+        <h2 id="shop-services-title">${shop.servicesTitle}</h2>
+        <p class="lead">${shop.servicesLead}</p>
+      </header>
+      <div class="shop-services-grid">${cards}</div>
+    </section>`
+}
+
+function renderProcess(locale: Locale): string {
+  const shop = t(locale).shopPage
+  return `
+    <section class="shop-process wrap" id="process" aria-labelledby="shop-process-title">
+      <header class="shop-section-head">
+        <h2 id="shop-process-title">${shop.processTitle}</h2>
+        <p class="lead">${shop.processLead}</p>
+      </header>
+      <ol class="shop-process-steps">
+        ${shop.processSteps
+          .map(
+            (step, i) => `
+          <li class="shop-process-step">
+            <span class="shop-process-num" aria-hidden="true">${i + 1}</span>
+            <div>
+              <h3>${step.title}</h3>
+              <p>${step.body}</p>
+            </div>
+          </li>`,
+          )
+          .join('')}
+      </ol>
+    </section>`
+}
+
+function renderFinalCta(locale: Locale): string {
+  const shop = t(locale).shopPage
+  return `
+    <section class="shop-final-cta wrap" aria-labelledby="shop-final-cta-title">
+      <h2 id="shop-final-cta-title">${shop.finalCtaTitle}</h2>
+      <p class="lead">${shop.finalCtaLead}</p>
+      <div class="shop-hero-actions">
+        <a class="ts-btn pink solid" href="#catalog">${shop.finalCtaCatalog}</a>
+        <a class="ts-btn pink" href="${briefingHref({ service: 'general', intent: 'quote', from: 'shop-final' })}">${shop.finalCtaBriefing}</a>
+      </div>
+    </section>`
+}
+
 function renderPlanCard(locale: Locale, item: ShopListingItem): string {
   const shop = t(locale).shopPage
   const copy = packageCopy(locale, item.service, item.package.id)
@@ -237,6 +329,9 @@ function renderPlanCard(locale: Locale, item: ShopListingItem): string {
   const primaryCta = cartable
     ? `<button type="button" class="shop-plan-cta ts-btn pink solid" data-shop-add-cart data-service="${item.service}" data-package="${item.package.id}">${shop.cartAdd}</button>`
     : `<a class="shop-plan-cta ts-btn pink solid" href="${briefingQuote}">${shop.ctaBriefing}</a>`
+  const secondaryCta = cartable
+    ? `<a class="shop-plan-details" href="${briefingQuote}">${shop.ctaBriefing}</a>`
+    : `<a class="shop-plan-details" href="${href}">${shop.viewDetails}</a>`
   const compareId = `${item.service}:${item.package.id}`
   return `
     <article class="shop-plan${featured}" data-shop-plan="${compareId}">
@@ -260,7 +355,8 @@ function renderPlanCard(locale: Locale, item: ShopListingItem): string {
       </label>
       <div class="shop-plan-actions">
         ${primaryCta}
-        <a class="shop-plan-details" href="${href}">${shop.viewDetails}</a>
+        ${secondaryCta}
+        ${cartable ? `<a class="shop-plan-details shop-plan-details--muted" href="${href}">${shop.viewDetails}</a>` : ''}
       </div>
     </article>`
 }
@@ -789,52 +885,66 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
           <p class="shop-eyebrow">${shop.eyebrow}</p>
           <h1>${shop.title}</h1>
           <p class="lead">${shop.lead}</p>
+          <div class="shop-hero-actions">
+            <a class="ts-btn pink solid" href="#catalog">${shop.heroPrimaryCta}</a>
+            <a class="ts-btn pink" href="${briefingHref({ service: 'general', intent: 'quote', from: 'shop-hero' })}">${shop.heroSecondaryCta}</a>
+          </div>
           <p class="shop-note shop-taxonomy-note">${shop.taxonomyNote}</p>
         </div>
       </header>
       ${cartBar}
+      ${renderServiceDiscovery(locale)}
+      ${renderProcess(locale)}
 
-      <div class="wrap shop-toolbar">
-        <label class="shop-search">
-          <span class="visually-hidden">${shop.searchLabel}</span>
-          <input type="search" name="q" value="${state.query.replace(/"/g, '&quot;')}" placeholder="${shop.searchPlaceholder}" data-shop-search />
-        </label>
-        <div class="shop-cat-filters" role="group" aria-label="${shop.filterAll}">
-          <button type="button" class="shop-chip${state.category === 'all' ? ' is-active' : ''}" data-shop-cat="all" aria-pressed="${state.category === 'all'}">${shop.filterAll}</button>
-          ${SHOP_CATEGORY_IDS.map(
-            (id) => `
-            <button type="button" class="shop-chip${state.category === id ? ' is-active' : ''}" data-shop-cat="${id}" aria-pressed="${state.category === id}">${shop.categories[id].title}</button>`,
-          ).join('')}
+      <section class="shop-catalog-section" id="catalog" aria-labelledby="shop-catalog-title">
+        <div class="wrap">
+          <header class="shop-section-head">
+            <h2 id="shop-catalog-title">${shop.catalogTitle}</h2>
+            <p class="lead">${shop.catalogLead}</p>
+          </header>
         </div>
-        <div class="shop-mode-filters" role="group" aria-label="${shop.filterModeLabel}">
-          ${modeFilters
-            .map(
-              (f) => `
-            <button type="button" class="shop-chip shop-chip--mode${state.mode === f.id ? ' is-active' : ''}" data-shop-mode="${f.id}" aria-pressed="${state.mode === f.id}">${f.label}</button>`,
-            )
-            .join('')}
-        </div>
-        ${renderActiveFilters(locale, state)}
-        <div class="shop-toolbar-meta">
-          <p class="shop-results" data-shop-count>${shop.results(items.length)}</p>
-          <label class="shop-sort">
-            <span>${shop.sortLabel}</span>
-            <select data-shop-sort>
-              ${sortOptions
-                .map(
-                  (opt) =>
-                    `<option value="${opt.id}"${state.sort === opt.id ? ' selected' : ''}>${opt.label}</option>`,
-                )
-                .join('')}
-            </select>
+        <div class="wrap shop-toolbar">
+          <label class="shop-search">
+            <span class="visually-hidden">${shop.searchLabel}</span>
+            <input type="search" name="q" value="${state.query.replace(/"/g, '&quot;')}" placeholder="${shop.searchPlaceholder}" data-shop-search />
           </label>
+          <div class="shop-cat-filters" role="group" aria-label="${shop.filterAll}">
+            <button type="button" class="shop-chip${state.category === 'all' ? ' is-active' : ''}" data-shop-cat="all" aria-pressed="${state.category === 'all'}">${shop.filterAll}</button>
+            ${SHOP_CATEGORY_IDS.map(
+              (id) => `
+              <button type="button" class="shop-chip${state.category === id ? ' is-active' : ''}" data-shop-cat="${id}" aria-pressed="${state.category === id}">${shop.categories[id].title}</button>`,
+            ).join('')}
+          </div>
+          <div class="shop-mode-filters" role="group" aria-label="${shop.filterModeLabel}">
+            ${modeFilters
+              .map(
+                (f) => `
+              <button type="button" class="shop-chip shop-chip--mode${state.mode === f.id ? ' is-active' : ''}" data-shop-mode="${f.id}" aria-pressed="${state.mode === f.id}">${f.label}</button>`,
+              )
+              .join('')}
+          </div>
+          ${renderActiveFilters(locale, state)}
+          <div class="shop-toolbar-meta">
+            <p class="shop-results" data-shop-count>${shop.results(items.length)}</p>
+            <label class="shop-sort">
+              <span>${shop.sortLabel}</span>
+              <select data-shop-sort>
+                ${sortOptions
+                  .map(
+                    (opt) =>
+                      `<option value="${opt.id}"${state.sort === opt.id ? ' selected' : ''}>${opt.label}</option>`,
+                  )
+                  .join('')}
+              </select>
+            </label>
+          </div>
         </div>
-      </div>
 
-      <div class="wrap shop-catalog" data-shop-grid>
-        ${catalogBody}
-        <p class="shop-note shop-note--soft">${shop.vatNote} ${shop.missingTerms}</p>
-      </div>
+        <div class="wrap shop-catalog" data-shop-grid>
+          ${catalogBody}
+          <p class="shop-note shop-note--soft">${shop.vatNote} ${shop.missingTerms}</p>
+        </div>
+      </section>
 
       <div class="wrap shop-compare-dock" data-shop-compare-dock hidden>
         <p data-shop-compare-status></p>
@@ -857,6 +967,7 @@ export function renderShopMarkup(locale: Locale, state: ShopFilterState): string
         </section>
         ${renderCartPanel(locale, cartLines)}
         ${renderShopFaq(locale)}
+        ${renderFinalCta(locale)}
         ${renderQuoteForm(locale)}
       </div>
     </div>`

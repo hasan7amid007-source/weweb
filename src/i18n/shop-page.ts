@@ -6,6 +6,21 @@ export type ShopPageCopy = {
   eyebrow: string
   title: string
   lead: string
+  heroPrimaryCta: string
+  heroSecondaryCta: string
+  servicesTitle: string
+  servicesLead: string
+  servicesExplore: string
+  servicesFrom: string
+  catalogTitle: string
+  catalogLead: string
+  processTitle: string
+  processLead: string
+  processSteps: { title: string; body: string }[]
+  finalCtaTitle: string
+  finalCtaLead: string
+  finalCtaBriefing: string
+  finalCtaCatalog: string
   searchLabel: string
   searchPlaceholder: string
   filterAll: string
@@ -134,9 +149,46 @@ export const shopPageDe: ShopPageCopy = {
   metaTitle: 'Shop — BDITEC Agentur-Pakete',
   metaDescription:
     'BDITEC Shop: feste Startpakete online bestellen oder individuelles Angebot anfragen — Web, Marketing, SEO, Hosting, Apps und Offline.',
-  eyebrow: 'BDITEC Plans',
-  title: 'Pläne & Pakete',
-  lead: 'Starterpläne nach Service vergleichen. Online starten und bezahlen — oder für größeren Leistungsumfang ein individuelles Angebot anfragen.',
+  eyebrow: 'BDITEC Shop',
+  title: 'Digitale & Marketing-Lösungen mit klaren Paketen',
+  lead:
+    'Wählen Sie ein Startpaket für Web, Shop, App, Marketing, Hosting oder Offline — dann beschreiben Sie Ihr Projekt im Briefing. Beträge sind Orientierung bzw. Startwerte aus dem Katalog; der Server prüft Preise vor dem Checkout.',
+  heroPrimaryCta: 'Pakete ansehen',
+  heroSecondaryCta: 'Projekt beschreiben',
+  servicesTitle: 'Leistungsbereiche',
+  servicesLead: 'Sechs Service-Linien — jeweils mit Paketen aus dem aktuellen Katalog.',
+  servicesExplore: 'Pakete öffnen',
+  servicesFrom: 'ab',
+  catalogTitle: 'Pakete vergleichen',
+  catalogLead: 'Filter und Sortierung nutzen — oder nach Service gruppieren.',
+  processTitle: 'So starten Sie',
+  processLead: 'Der Soft-Launch-Ablauf, wie er heute im Shop und Briefing abgebildet ist.',
+  processSteps: [
+    {
+      title: 'Service & Paket wählen',
+      body: 'Vergleichen Sie Startbetrag, Monatlich oder Angebot — nur freigegebene Pakete lassen sich online kaufen.',
+    },
+    {
+      title: 'Projekt beschreiben',
+      body: 'Das Briefing sichert Ihre Angaben dauerhaft (wenn Speicher konfiguriert ist) und verknüpft sie mit dem gewählten Paket.',
+    },
+    {
+      title: 'Prüfung & Abstimmung',
+      body: 'Wir prüfen das Briefing. Bei Bedarf folgt ein Angebot oder eine Feinabstimmung des Umfangs.',
+    },
+    {
+      title: 'Checkout oder Angebot',
+      body: 'Passendes Briefing + Zugangstoken freigeben den Demo-/Test-Checkout. Sonst Angebot per E-Mail — ohne erfundene Zahlung im Soft-Launch.',
+    },
+    {
+      title: 'Umsetzung digital',
+      body: 'Abstimmung und Lieferung erfolgen digital; konkrete Termine nach Briefing — keine festen Lieferzeiten auf dieser Seite.',
+    },
+  ],
+  finalCtaTitle: 'Bereit für den nächsten Schritt?',
+  finalCtaLead: 'Pakete vergleichen oder direkt mit dem Projekt-Briefing starten.',
+  finalCtaBriefing: 'Projekt beschreiben',
+  finalCtaCatalog: 'Zu den Paketen',
   searchLabel: 'Pakete suchen',
   searchPlaceholder: 'z. B. Audit, Landing, Hosting…',
   filterAll: 'Alle Kategorien',
@@ -307,15 +359,15 @@ export const shopPageDe: ShopPageCopy = {
   termsGateNote:
     'Online-Kauf für dieses Monats-Paket ist vorübergehend nur über Angebot möglich — bis Mindestlaufzeit, Kündigung und verbindlicher Leistungsumfang freigegeben sind. Der angezeigte Betrag ist Orientierung.',
   orientationAmountNote: 'Orientierungsbetrag — noch kein Online-Checkout für dieses Paket.',
-  afterOrderTitle: 'Nach der Bestellung',
+  afterOrderTitle: 'Nach Bestellung oder Angebot',
   afterOrderSteps: [
-    'Bestätigung / Demo-Kennzeichnung erhalten',
-    'Digitales Briefing und benötigte Dateien/Zugänge (keine Passwörter in Formularen)',
+    'Bestätigung bzw. klar gekennzeichnete Demo-Kennzeichnung',
+    'Digitales Briefing und Datei-/Zugangshinweise (keine Passwörter in Formularen)',
     'Abstimmung des Leistungsumfangs',
     'Umsetzung und Rückmeldung',
   ],
   afterOrderNote:
-    'Eine Aufruf der Erfolgsseite allein beweist keine Zahlung. Demo-Aufträge sind klar gekennzeichnet. Liefertermine starten erst nach abgestimmtem Briefing — sofern nicht anders vereinbart.',
+    'Der Aufruf einer Erfolgsseite allein beweist keine Zahlung. Demo-Aufträge sind klar gekennzeichnet. Liefertermine starten erst nach abgestimmtem Briefing — sofern nicht anders vereinbart.',
   printSummary: 'Zusammenfassung drucken',
   compareAdd: 'Vergleichen',
   compareOpen: 'Vergleich öffnen',
@@ -326,27 +378,35 @@ export const shopPageDe: ShopPageCopy = {
   compareCount: (n) => `${n} Pakete ausgewählt (max. 3)`,
   taxonomyNote:
     'Hinweis: Shops (E-Commerce) liegen unter der Filterkategorie „Webdesign & Entwicklung“. SEO-Pakete nutzen den Filter „SEO & Analytics“, gehören aber zum Service Digitales Marketing.',
-  faqTitle: 'Shop FAQ',
+  faqTitle: 'Häufige Fragen',
   faq: [
     {
-      q: 'Was bedeuten die Startbeträge?',
-      a: 'Einmalige Pakete zeigen einen Online-Start-/Anzahlungswert — kein Festpreis für das Gesamtprojekt. Monatliche Pakete sind Orientierungshonorare pro Monat; Werbebudget und Hosting sind nur inklusive, wenn ausdrücklich genannt.',
+      q: 'Was ist in einem Paket enthalten?',
+      a: 'Die Punkte auf der Paketkarte und in der Detailansicht beschreiben den Orientierungs-Leistungsumfang vor der Bestellung. Feinabstimmung erfolgt im Briefing — ohne dass hier Festpreise für das Gesamtprojekt zugesichert werden.',
     },
     {
-      q: 'Sind Texte, Hosting und Domains inklusive?',
-      a: 'Nur wenn im Paket ausdrücklich genannt. Ansonsten separat oder im Angebot klären.',
+      q: 'Welche Angaben sollte ich vorbereiten?',
+      a: 'Ziele, Ist-Zustand, gewünschte Ergebnisse und — falls vorhanden — Links zu Markenmaterial. Keine Passwörter oder Zugangsgeheimnisse in Formularen eintragen.',
     },
     {
-      q: 'Ist Werbebudget inklusive?',
-      a: 'Nein — Werbeausgaben (z. B. Google/Meta) zahlt der Kunde an die Plattform, sofern nicht ausdrücklich anders vereinbart.',
+      q: 'Kann der Umfang angepasst werden?',
+      a: 'Ja. Abweichungen und Sonderwünsche werden im Briefing oder Angebot geklärt und sind nicht automatisch im Katalogpreis enthalten.',
+    },
+    {
+      q: 'Wie funktionieren monatliche Leistungen?',
+      a: 'Monatsbeträge sind Orientierungshonorare pro Monat. Zeitkontingente und Ausschlüsse stehen in den Paketpunkten. Ohne freigegebene Kündigung/Mindestlaufzeit führt der Shop zum Angebot statt zum Sofortkauf.',
+    },
+    {
+      q: 'Wann brauche ich ein Angebot?',
+      a: 'Bei Angebot-Paketen, bei gesperrten Retainern und wenn Ihr Umfang über den Startpaket-Rahmen hinausgeht. Dann keine Online-Sofortzahlung.',
+    },
+    {
+      q: 'Wie funktioniert das Briefing?',
+      a: 'Sie beschreiben das Projekt schrittweise. Bei konfiguriertem Speicher erhalten Sie eine Briefing-Referenz und ein Zugangstoken für den passenden Checkout. Schlägt die Speicherung fehl, gibt es keinen Erfolg und keinen Checkout-Freigabe.',
     },
     {
       q: 'Ist die Online-Zahlung live?',
       a: 'Der Soft-Launch kann einen Demo-Checkout ohne echte Kartenzahlung nutzen. Live-Zahlung folgt nach Freigabe. Demo-Aufträge sind klar als Demo gekennzeichnet.',
-    },
-    {
-      q: 'Wie funktionieren Monats-Pakete?',
-      a: 'Monatsbeträge wiederholen sich monatlich. Enthaltenes Zeitkontingent und Ausschlüsse stehen in den Paketpunkten. Ohne freigegebene Kündigung/Mindestlaufzeit führt der Shop zum Angebot statt zum Sofortkauf.',
     },
   ],
 }
@@ -355,9 +415,46 @@ export const shopPageEn: ShopPageCopy = {
   metaTitle: 'Shop — BDITEC agency packages',
   metaDescription:
     'BDITEC shop: order scoped starter packages online or request a custom quote — web, marketing, SEO, hosting, apps, and offline.',
-  eyebrow: 'BDITEC Plans',
-  title: 'Plans & packages',
-  lead: 'Compare starter plans by service. Pay online to begin — or request a custom quote for larger scope.',
+  eyebrow: 'BDITEC Shop',
+  title: 'Digital & marketing solutions with clear packages',
+  lead:
+    'Choose a starter package for web, shop, app, marketing, hosting, or offline — then describe your project in the briefing. Amounts are orientation or start values from the catalog; the server validates prices before checkout.',
+  heroPrimaryCta: 'Browse packages',
+  heroSecondaryCta: 'Tell us about your project',
+  servicesTitle: 'Service areas',
+  servicesLead: 'Six service lines — each with packages from the current catalog.',
+  servicesExplore: 'View packages',
+  servicesFrom: 'from',
+  catalogTitle: 'Compare packages',
+  catalogLead: 'Use filters and sorting — or browse by service.',
+  processTitle: 'How to get started',
+  processLead: 'The soft-launch flow as implemented in the shop and briefing today.',
+  processSteps: [
+    {
+      title: 'Choose a service & package',
+      body: 'Compare start amount, monthly, or quote — only approved packages can be purchased online.',
+    },
+    {
+      title: 'Describe your project',
+      body: 'The briefing stores your answers durably (when storage is configured) and links them to the selected package.',
+    },
+    {
+      title: 'Review & align',
+      body: 'We review the briefing. A quote or scope fine-tuning follows when needed.',
+    },
+    {
+      title: 'Checkout or quote',
+      body: 'A matching briefing plus access token unlocks demo/test checkout. Otherwise quote by email — no live card charge in soft launch.',
+    },
+    {
+      title: 'Delivery online',
+      body: 'Coordination and delivery are digital; concrete dates follow the briefing — no fixed delivery times on this page.',
+    },
+  ],
+  finalCtaTitle: 'Ready for the next step?',
+  finalCtaLead: 'Compare packages or start the project briefing now.',
+  finalCtaBriefing: 'Tell us about your project',
+  finalCtaCatalog: 'Browse packages',
   searchLabel: 'Search packages',
   searchPlaceholder: 'e.g. audit, landing, hosting…',
   filterAll: 'All categories',
@@ -527,10 +624,10 @@ export const shopPageEn: ShopPageCopy = {
   termsGateNote:
     'Online purchase for this monthly package is temporarily quote-only until minimum term, cancellation, and binding deliverables are approved. The amount shown is orientation only.',
   orientationAmountNote: 'Orientation amount — online checkout is not open for this package yet.',
-  afterOrderTitle: 'After ordering',
+  afterOrderTitle: 'After order or quote',
   afterOrderSteps: [
-    'Receive confirmation / demo labeling',
-    'Digital briefing and required files/access (no passwords in forms)',
+    'Confirmation or clearly labeled demo marker',
+    'Digital briefing and file/access notes (no passwords in forms)',
     'Agree deliverables',
     'Delivery and feedback',
   ],
@@ -546,27 +643,35 @@ export const shopPageEn: ShopPageCopy = {
   compareCount: (n) => `${n} packages selected (max 3)`,
   taxonomyNote:
     'Note: E-Commerce packages use the “Web design & development” filter. SEO packages use “SEO & analytics” while belonging to the Digital marketing service.',
-  faqTitle: 'Shop FAQ',
+  faqTitle: 'Frequently asked questions',
   faq: [
     {
-      q: 'What do the start amounts mean?',
-      a: 'One-time packages show an online start/deposit — not a full-project Festpreis. Monthly packages are orientation retainers; ad spend and hosting are included only when explicitly stated.',
+      q: 'What is included in a package?',
+      a: 'The points on the package card and detail view describe orientation deliverables before purchase. Fine-tuning happens in the briefing — without promising a full-project Festpreis here.',
     },
     {
-      q: 'Are copy, hosting, and domains included?',
-      a: 'Only when the package explicitly says so. Otherwise agree separately or via quote.',
+      q: 'What information should I prepare?',
+      a: 'Goals, current state, desired outcomes, and — if available — links to brand materials. Do not enter passwords or access secrets in forms.',
     },
     {
-      q: 'Is advertising spend included?',
-      a: 'No — media spend (e.g. Google/Meta) is paid by the client to the platform unless explicitly agreed otherwise.',
+      q: 'Can the scope be customized?',
+      a: 'Yes. Deviations and special requests are clarified in the briefing or quote and are not automatically included in the catalog price.',
+    },
+    {
+      q: 'How do monthly services work?',
+      a: 'Monthly amounts are orientation retainers per month. Time allowances and exclusions are listed on the package. Without approved cancellation/minimum term, the shop routes to a quote instead of instant purchase.',
+    },
+    {
+      q: 'When is a quotation required?',
+      a: 'For quote packages, gated retainers, and when your scope exceeds the starter package. Then no instant online payment.',
+    },
+    {
+      q: 'How does the briefing work?',
+      a: 'You describe the project step by step. When storage is configured you receive a briefing reference and an access token for matching checkout. If storage fails, there is no success and no checkout unlock.',
     },
     {
       q: 'Is online payment live?',
       a: 'Soft-launch may use a demo checkout without a real card charge. Live payment follows approval. Demo orders are clearly labeled as demo.',
-    },
-    {
-      q: 'How do monthly packages work?',
-      a: 'Monthly amounts recur each month. Included time allowances and exclusions are listed on the package. Without approved cancellation/minimum term, the shop routes to a quote instead of instant purchase.',
     },
   ],
 }
@@ -575,9 +680,46 @@ export const shopPageAr: ShopPageCopy = {
   metaTitle: 'المتجر — باقات وكالة BDITEC',
   metaDescription:
     'متجر BDITEC: اطلب باقات البداية المحددة عبر الإنترنت أو اطلب عرض سعر مخصص — ويب، تسويق، SEO، استضافة، تطبيقات وأوفلاين.',
-  eyebrow: 'خطط BDITEC',
-  title: 'الخطط والباقات',
-  lead: 'قارن خطط البداية حسب الخدمة. ادفع أونلاين للبدء — أو اطلب عرض سعر مخصص لنطاق أكبر.',
+  eyebrow: 'متجر BDITEC',
+  title: 'حلول رقمية وتسويقية بباقات واضحة',
+  lead:
+    'اختر باقة بداية للويب أو المتجر أو التطبيق أو التسويق أو الاستضافة أو الأوفلاين — ثم صف مشروعك في الإحاطة. المبالغ توجيهية أو بداية من الكتالوج؛ يتحقق الخادم من الأسعار قبل الدفع.',
+  heroPrimaryCta: 'تصفح الباقات',
+  heroSecondaryCta: 'صف لنا مشروعك',
+  servicesTitle: 'مجالات الخدمة',
+  servicesLead: 'ستة خطوط خدمة — كل منها بباقات من الكتالوج الحالي.',
+  servicesExplore: 'عرض الباقات',
+  servicesFrom: 'من',
+  catalogTitle: 'قارن الباقات',
+  catalogLead: 'استخدم الفلاتر والترتيب — أو تصفح حسب الخدمة.',
+  processTitle: 'كيف تبدأ',
+  processLead: 'مسار الإطلاق الناعم كما هو مطبّق في المتجر والإحاطة اليوم.',
+  processSteps: [
+    {
+      title: 'اختر خدمة وباقة',
+      body: 'قارن مبلغ البداية أو الشهري أو العرض — فقط الباقات المعتمدة تُشترى أونلاين.',
+    },
+    {
+      title: 'صف مشروعك',
+      body: 'تحفظ الإحاطة إجاباتك بشكل دائم (عند تهيئة التخزين) وتربطها بالباقة المختارة.',
+    },
+    {
+      title: 'مراجعة وتنسيق',
+      body: 'نراجع الإحاطة. عند الحاجة يتبع عرض سعر أو ضبط دقيق للنطاق.',
+    },
+    {
+      title: 'الدفع أو العرض',
+      body: 'إحاطة مطابقة مع رمز وصول تفتح دفعاً تجريبياً. وإلا عرض بالبريد — بلا خصم بطاقة حي في الإطلاق الناعم.',
+    },
+    {
+      title: 'التنفيذ رقمياً',
+      body: 'التنسيق والتسليم رقميان؛ المواعيد بعد الإحاطة — بلا أوقات تسليم ثابتة في هذه الصفحة.',
+    },
+  ],
+  finalCtaTitle: 'جاهز للخطوة التالية؟',
+  finalCtaLead: 'قارن الباقات أو ابدأ إحاطة المشروع الآن.',
+  finalCtaBriefing: 'صف لنا مشروعك',
+  finalCtaCatalog: 'تصفح الباقات',
   searchLabel: 'البحث في الباقات',
   searchPlaceholder: 'مثل: تدقيق، صفحة هبوط، استضافة…',
   filterAll: 'كل الفئات',
@@ -747,10 +889,10 @@ export const shopPageAr: ShopPageCopy = {
   termsGateNote:
     'الشراء أونلاين لهذه الباقة الشهرية مؤقتاً عبر عرض سعر فقط حتى اعتماد المدة والإلغاء والنطاق الملزم. المبلغ المعروض توجيهي.',
   orientationAmountNote: 'مبلغ توجيهي — الدفع أونلاين غير مفتوح لهذه الباقة بعد.',
-  afterOrderTitle: 'بعد الطلب',
+  afterOrderTitle: 'بعد الطلب أو العرض',
   afterOrderSteps: [
-    'استلام التأكيد / وسم العرض التجريبي',
-    'إحاطة رقمية والملفات/الوصول المطلوب (بدون كلمات مرور في النماذج)',
+    'تأكيد أو وسم تجريبي واضح',
+    'إحاطة رقمية وملاحظات الملفات/الوصول (بدون كلمات مرور في النماذج)',
     'الاتفاق على نطاق الخدمة',
     'التنفيذ والملاحظات',
   ],
@@ -766,27 +908,35 @@ export const shopPageAr: ShopPageCopy = {
   compareCount: (n) => `${n} باقات محددة (حد أقصى 3)`,
   taxonomyNote:
     'ملاحظة: باقات التجارة الإلكترونية ضمن فلتر «تصميم وتطوير الويب». باقات SEO ضمن «SEO والتحليلات» وتنتمي لخدمة التسويق الرقمي.',
-  faqTitle: 'أسئلة المتجر',
+  faqTitle: 'أسئلة شائعة',
   faq: [
     {
-      q: 'ماذا تعني مبالغ البداية؟',
-      a: 'الباقات لمرة واحدة تعرض مبلغ بداية/عربون — وليس سعر مشروع كامل. الباقات الشهرية أتعاب توجيهية؛ ميزانية الإعلان والاستضافة فقط إن ذُكرت صراحة.',
+      q: 'ما المشمول في الباقة؟',
+      a: 'النقاط على بطاقة الباقة وفي التفاصيل تصف نطاقاً توجيهياً قبل الشراء. الضبط الدقيق في الإحاطة — دون وعد بسعر مشروع كامل هنا.',
     },
     {
-      q: 'هل النصوص والاستضافة والنطاق مشمولة؟',
-      a: 'فقط إن ذُكرت صراحة في الباقة. وإلا تُتفق منفصلاً أو عبر عرض سعر.',
+      q: 'ما المعلومات التي أجهّزها؟',
+      a: 'الأهداف، الوضع الحالي، النتائج المرغوبة، وروابط مواد العلامة إن وُجدت. لا تُدخل كلمات مرور أو أسرار وصول في النماذج.',
     },
     {
-      q: 'هل ميزانية الإعلان مشمولة؟',
-      a: 'لا — يدفع العميل الإنفاق الإعلاني للمنصة ما لم يُتفق خلاف ذلك صراحة.',
+      q: 'هل يمكن تخصيص النطاق؟',
+      a: 'نعم. الانحرافات والطلبات الخاصة تُوضح في الإحاطة أو العرض وليست مشمولة تلقائياً في سعر الكتالوج.',
+    },
+    {
+      q: 'كيف تعمل الخدمات الشهرية؟',
+      a: 'المبالغ الشهرية أتعاب توجيهية شهرياً. الوقت والاستثناءات في نقاط الباقة. بدون مدة/إلغاء معتمدين يوجّه المتجر لعرض سعر بدل الشراء الفوري.',
+    },
+    {
+      q: 'متى يلزم عرض سعر؟',
+      a: 'لباقات العرض والاحتفاظ المقيّد وعندما يتجاوز نطاقك باقة البداية. عندها لا دفع فوري أونلاين.',
+    },
+    {
+      q: 'كيف تعمل الإحاطة؟',
+      a: 'تصف المشروع خطوة بخطوة. عند تهيئة التخزين تحصل على مرجع إحاطة ورمز وصول للدفع المطابق. إن فشل التخزين فلا نجاح ولا فتح للدفع.',
     },
     {
       q: 'هل الدفع أونلاين فعّال؟',
-      a: 'الإطلاق التجريبي قد يستخدم دفعاً تجريبياً بلا خصم حقيقي. الدفع الحي بعد الموافقة. الطلبات التجريبية مُعلَّمة بوضوح.',
-    },
-    {
-      q: 'كيف تعمل الباقات الشهرية؟',
-      a: 'المبالغ تتكرر شهرياً. الوقت والاستثناءات في نقاط الباقة. بدون مدة/إلغاء معتمدة يوجّه المتجر لعرض السعر بدل الشراء الفوري.',
+      a: 'الإطلاق التجريبي قد يستخدم دفعاً تجريبياً بلا خصم بطاقة حقيقي. الدفع الحي بعد الموافقة. الطلبات التجريبية مُعلَّمة بوضوح.',
     },
   ],
 }

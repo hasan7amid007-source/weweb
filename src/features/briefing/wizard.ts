@@ -4,7 +4,9 @@ import {
   findShopPackage,
   listShopPackages,
   shopFor,
+  type PurchaseMode,
 } from '../booking/shop-catalog'
+import type { ShopPageCopy } from '../../i18n/shop-page'
 import { startCheckout } from '../booking/checkout-client'
 import { trackEvent } from '../../lib/telemetry'
 import { t, type Locale } from '../../i18n'
@@ -48,6 +50,12 @@ function resolveHint(copy: ReturnType<typeof t>['briefingPage'], hintKey?: strin
   if (!hintKey) return ''
   const key = hintKey.startsWith('hints.') ? hintKey.slice(6) : hintKey
   return copy.hints[key] || ''
+}
+
+function priceAmountNoteForMode(mode: PurchaseMode, shop: ShopPageCopy): string {
+  if (mode === 'subscription') return shop.subscriptionAmountNote
+  if (mode === 'quote') return shop.quoteAmountNote
+  return shop.startAmountNote
 }
 
 function fieldValue(
@@ -247,10 +255,30 @@ export function renderBriefingMarkup(locale: Locale, doc: BriefingDocument, step
   const profile = profileForService(doc.service, doc.packageId)
   const pkgLabel = packageTitle(locale, doc.service, doc.packageId)
   const svcLabel = serviceTitle(locale, doc.service)
+  const shop = t(locale).shopPage
   const amount =
     item && item.package.purchaseMode !== 'quote'
       ? formatEur(item.package.priceEur, locale)
-      : copy.noPackage
+      : item
+        ? shop.priceOnRequest
+        : copy.noPackage
+  const billingLabel = item
+    ? item.package.purchaseMode === 'subscription'
+      ? `${amount} ${shop.monthSuffix.trim()}`
+      : item.package.purchaseMode === 'quote'
+        ? shop.priceOnRequest
+        : amount
+    : ''
+  const pkgCopy = doc.packageId
+    ? t(locale).bookingShop.packages[doc.service]?.[doc.packageId]
+    : undefined
+  const asideHighlights = (pkgCopy?.highlights || []).slice(0, 4)
+  const asideIncludes =
+    asideHighlights.length > 0
+      ? `<ul class="briefing-aside-includes" aria-label="${shop.planIncludes}">
+          ${asideHighlights.map((line) => `<li>${line}</li>`).join('')}
+        </ul>`
+      : ''
 
   const stepNav = steps
     .map((id, i) => {
@@ -448,7 +476,19 @@ export function renderBriefingMarkup(locale: Locale, doc: BriefingDocument, step
           <h2 class="shop-quote-aside-title">${copy.summaryAsideTitle}</h2>
           <p><strong>${copy.serviceLabel}:</strong> ${svcLabel}</p>
           <p><strong>${copy.packageLabel}:</strong> ${pkgLabel}</p>
-          ${item && item.package.purchaseMode !== 'quote' ? `<p><strong>${amount}</strong> <span class="shop-mode-badge shop-mode-badge--${item.package.purchaseMode}">${t(locale).shopPage.modeBadge[item.package.purchaseMode]}</span></p>` : ''}
+          ${
+            item
+              ? `<p class="briefing-aside-price"><strong>${billingLabel}</strong>
+                  <span class="shop-mode-badge shop-mode-badge--${item.package.purchaseMode}">${shop.modeBadge[item.package.purchaseMode]}</span>
+                </p>
+                ${
+                  item.package.directCheckout === false
+                    ? `<p class="shop-note shop-note--gate">${shop.termsGateNote}</p>`
+                    : `<p class="booking-hint">${priceAmountNoteForMode(item.package.purchaseMode, shop)}</p>`
+                }
+                ${asideIncludes}`
+              : `<p class="booking-hint">${copy.pickPackage}</p>`
+          }
           ${changePanel}
           <ol class="briefing-steps" aria-label="${copy.progress(stepIndex + 1, steps.length)}">${stepNav}</ol>
           <p class="briefing-progress" aria-live="polite">${copy.progress(stepIndex + 1, steps.length)}</p>
